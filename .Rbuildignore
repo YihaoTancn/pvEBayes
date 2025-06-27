@@ -1,2 +1,4 @@
 ^pvEBayes\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^unused/*$
