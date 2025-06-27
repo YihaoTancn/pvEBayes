@@ -53,3 +53,5 @@ Suggests:
     testthat (>= 3.0.0),
     Rmosek
 Config/testthat/edition: 3
+URL: https://github.com/YihaoTancn/pvEBayes
+BugReports: https://github.com/YihaoTancn/pvEBayes/issues
