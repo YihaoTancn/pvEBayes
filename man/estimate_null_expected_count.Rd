@@ -28,8 +28,6 @@ This null value estimator is proposed by Tan et al. (2025).
 }
 \examples{
 
-set.seed(1)
-
 
 estimate_null_expected_count(statin2025_44)
 

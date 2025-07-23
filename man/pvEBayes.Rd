@@ -88,7 +88,7 @@ See \code{\link{pvEBayes_tune}} for details.
 }
 \examples{
 
-#' set.seed(1)
+set.seed(1)
 ref_table <- statin2025_44
 
 # set up signal matrix with one signal at entry (1,1)

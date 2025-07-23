@@ -148,7 +148,7 @@ rtruncnorm <- function(n, a = -0.4, b = 0, mean = 0, sd = 0.05) {
 #' )[[1]][[1]]
 #'
 #' @export
-
+#'
 generate_contin_table <- function(n_table = 1,
                                   ref_table,
                                   signal_mat = NULL,

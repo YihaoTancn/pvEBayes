@@ -29,11 +29,6 @@ a list of fitted models with hyperparameter alpha selected by AIC or BIC.
 Select hyperparameter alpha and obtain the optimal general-gamma model based
 on AIC and BIC
 }
-\examples{
-
-# selection_result <- tuning_general_gamma(statin2025_44)
-
-}
 \references{
 Akaike H. A new look at the statistical model identification. \emph{IEEE Transactions on Automatic Control.}
 2003; 19(6):716-23. \cr

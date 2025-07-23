@@ -33,16 +33,6 @@ a list of fitted models with hyperparameter alpha selected by AIC or BIC.
 Select hyperparameter (p, c0) and obtain the optimal efron model based
 on AIC and BIC
 }
-\examples{
-# selection_result <- tuning_efron(statin2025_44)
-
-valid_matrix <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8), nrow = 2)
-rownames(valid_matrix) <- c("AE_1", "AE_2")
-colnames(valid_matrix) <- c("drug_1", "drug_2", "drug_3", "drug_4")
-
-# selection_result <- tuning_efron(valid_matrix)
-
-}
 \references{
 Akaike H. A new look at the statistical model identification.
 \emph{IEEE Transactions on Automatic Control.}

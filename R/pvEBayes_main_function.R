@@ -29,12 +29,6 @@
 #'
 #' @keywords internal
 #'
-#' @examples
-#'
-#'
-#'
-#' # calculate_tilde_e(statin2025_44)
-#'
 calculate_tilde_e <- function(contin_table) {
   contin_table <- as.matrix(contin_table)
   stopifnot(
@@ -95,8 +89,6 @@ calculate_tilde_e <- function(contin_table) {
 #' @export
 #'
 #' @examples
-#'
-#' set.seed(1)
 #'
 #'
 #' estimate_null_expected_count(statin2025_44)
@@ -578,7 +570,7 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' @examples
 #'
-#' #' set.seed(1)
+#' set.seed(1)
 #' ref_table <- statin2025_44
 #'
 #' # set up signal matrix with one signal at entry (1,1)
@@ -861,11 +853,6 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
 #'
 #' @keywords internal
 #'
-#'
-#' @examples
-#'
-#' # selection_result <- tuning_general_gamma(statin2025_44)
-#'
 tuning_general_gamma <- function(contin_table,
                                  alpha_vec = NULL,
                                  return_all_fit = FALSE,
@@ -903,14 +890,14 @@ tuning_general_gamma <- function(contin_table,
 
   AIC_winner <- res$alpha[which.min(res$AIC)]
   BIC_winner <- res$alpha[which.min(res$BIC)]
-  cat(
+  message(
     glue::glue(
       "The alpha value selected under AIC is ", AIC_winner, ",\n",
       "The alpha value selected under BIC is ", BIC_winner, "."
     ),
     "\n"
   )
-  cat(utils::capture.output(res), sep = "\n")
+  message(paste(utils::capture.output(res), collapse = "\n"))
 
   out <- list(
     best_model_AIC = fits[[which.min(res$AIC)]],
@@ -972,15 +959,6 @@ tuning_general_gamma <- function(contin_table,
 #'
 #' @keywords internal
 #'
-#' @examples
-#' # selection_result <- tuning_efron(statin2025_44)
-#'
-#' valid_matrix <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8), nrow = 2)
-#' rownames(valid_matrix) <- c("AE_1", "AE_2")
-#' colnames(valid_matrix) <- c("drug_1", "drug_2", "drug_3", "drug_4")
-#'
-#' # selection_result <- tuning_efron(valid_matrix)
-#'
 tuning_efron <- function(contin_table,
                          p_vec = NULL,
                          c0_vec = NULL,
@@ -1026,7 +1004,7 @@ tuning_efron <- function(contin_table,
   BIC_winner <- (res[, 1:2][which.min(res$BIC), ]) %>%
     unlist() %>%
     unname()
-  cat(
+  message(
     glue::glue(
       "The hyperparameters selected under AIC is (p = ", AIC_winner[1],
       ", c0 = ", AIC_winner[2], ")", ",\n",
@@ -1035,7 +1013,7 @@ tuning_efron <- function(contin_table,
     ),
     "\n"
   )
-  cat(utils::capture.output(res), sep = "\n")
+  message(paste(utils::capture.output(res), collapse = "\n"))
 
   out <- list(
     best_model_AIC = fits[[which.min(res$AIC)]],

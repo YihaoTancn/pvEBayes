@@ -26,13 +26,6 @@ and estimation in spontaneous reporting system (SRS) data.
 \details{
 This null value estimator is proposed by Tan et al. (2025).
 }
-\examples{
-
-
-
-# calculate_tilde_e(statin2025_44)
-
-}
 \references{
 Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
 Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
