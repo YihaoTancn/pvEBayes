@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^unused/*$
+^cran-comments\.md$
+^NEWS\.md$
