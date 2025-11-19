@@ -1,0 +1,40 @@
+# Estimate expected null baseline count based on reference row and column
+
+This function estimates the expected null baseline count (\\E\_{ij}\\)
+for each AE-drug combination under the assumption of independence
+between rows and columns. The expected count is calculated using a
+reference row (other AEs) and reference column (other drugs). This null
+baseline is typically used in the empirical Bayes modeling of `pvEBayes`
+package for signal detection and estimation in spontaneous reporting
+system (SRS) data.
+
+## Usage
+
+``` r
+calculate_tilde_e(contin_table)
+```
+
+## Arguments
+
+- contin_table:
+
+  an IxJ contingency table showing pairwise counts of adverse events for
+  I AEs (along the rows) and J drugs (along the columns). The reference
+  row "Other AEs" and the reference column "Other drugs" need to be the
+  I-th row and J-th column respectively.
+
+## Value
+
+an `nrow(contin_table)` by `ncol(contin_table)` matrix.
+
+## Details
+
+This null value estimator is proposed by Tan et al. (2025).
+
+## References
+
+Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian
+Approaches to Pharmacovigilance for Simultaneous Signal Detection and
+Signal Strength Estimation in Spontaneous Reporting Systems Data.
+*Statistics in Medicine.* 2025; 44: 18-19,
+https://doi.org/10.1002/sim.70195.
