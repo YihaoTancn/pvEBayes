@@ -57,7 +57,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>‘pvEBayes’ is an R package that implements a suite of nonparametric empirical Bayes methods for pharmacovigilance including Gamma–Poisson Shrinker (GPS), K-gamma, general-gamma, Koenker–Mizera (KM), and Efron models. It provides tools for fitting these models to spontaneous reporting system (SRS) frequency tables, extracting summaries, performing hyperparameter tuning, and generating graphical summaries (eye plots and heatmaps) for signal detection and estimation.</p>
+<p>‘pvEBayes’ is an R package that implements a suite of nonparametric empirical Bayes methods for pharmacovigilance including Gamma-Poisson Shrinker (GPS), K-gamma, general-gamma, Koenker-Mizera (KM), and Efron models. It provides tools for fitting these models to spontaneous reporting system (SRS) frequency tables, extracting summaries, performing hyperparameter tuning, and generating graphical summaries (eye plots and heatmaps) for signal detection and estimation.</p>
 <p>For methodological details, see:</p>
 <p>Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation in Spontaneous Reporting Systems Data. <em>Statistics in Medicine.</em> 2025; 44: 18-19, <a href="https://doi.org/10.1002/sim.70195" class="external-link uri">https://doi.org/10.1002/sim.70195</a>.</p>
 <div class="section level2">
@@ -93,7 +93,7 @@
 <span><span class="co"># Obtain a logical matrix for the detected signal</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span>, return <span class="op">=</span> <span class="st">"detected signal"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Visualize posterior distributions for top AE–drug pairs</span></span>
+<span><span class="co"># Visualize posterior distributions for top AE-drug pairs</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"eyeplot"</span><span class="op">)</span></span></code></pre>
 <p>For a more detailed illustration, please see ‘Vignette’.</p>
 </div>

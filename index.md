@@ -1,8 +1,8 @@
 # R package ‘pvEBayes’
 
 ‘pvEBayes’ is an R package that implements a suite of nonparametric
-empirical Bayes methods for pharmacovigilance including Gamma–Poisson
-Shrinker (GPS), K-gamma, general-gamma, Koenker–Mizera (KM), and Efron
+empirical Bayes methods for pharmacovigilance including Gamma-Poisson
+Shrinker (GPS), K-gamma, general-gamma, Koenker-Mizera (KM), and Efron
 models. It provides tools for fitting these models to spontaneous
 reporting system (SRS) frequency tables, extracting summaries,
 performing hyperparameter tuning, and generating graphical summaries
@@ -51,7 +51,7 @@ with general-gamma model:
     # Obtain a logical matrix for the detected signal
     summary(fit, return = "detected signal")
 
-    # Visualize posterior distributions for top AE–drug pairs
+    # Visualize posterior distributions for top AE-drug pairs
     plot(fit, type = "eyeplot")
 
 For a more detailed illustration, please see ‘Vignette’.

@@ -42,9 +42,9 @@ $\widehat{\text{p}}\left( N_{ij} \right) = \int_{0}^{\infty}\widehat{g}\left( \l
 
 All empirical Bayes models implemented in ‘pvEBayes’ share the structure
 described above; they differ in their assumptions on the prior
-distribution. The Gamma–Poisson Shrinker (GPS) adopts a two-component
+distribution. The Gamma-Poisson Shrinker (GPS) adopts a two-component
 gamma mixture prior. The K-gamma model generalizes GPS by allowing a
-K-component gamma mixture, where K is user-specified. The Koenker–Mizera
+K-component gamma mixture, where K is user-specified. The Koenker-Mizera
 (KM) and Efron models use a nonparametric discrete mixture prior, with
 point masses on a pre-specified grid. The general-gamma model employs a
 nonparametric sparse gamma mixture distribution.
