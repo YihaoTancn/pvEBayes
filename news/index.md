@@ -8,7 +8,7 @@
 - Removed the suggested dependency on ‘Rmosek’.
 - Added support for supplying a prespecified expected‐null baseline
   estimator via the E argument in ‘pvEBayes()’.
-- Added a short package vignette.
+- Added a package vignette.
 - Added a CITATION file, enabling use of citation(“pvEBayes”).
 
 ## pvEBayes 0.1.2
