@@ -175,14 +175,72 @@ estimate_null_expected_count <- function(contin_table) {
   return(h)
 }
 
+.km_eb_fit <- function(x, v, exposure = NULL, eps = 1e-04, ...) {
+  n <- length(x)
+
+  m <- length(v)
+  d <- rep(1, length(v))
+  w <- rep(1, n) / n
+  A <- matrix(0, n, m)
+
+  for (i in seq_len(n)) {
+    A[i, ] <- vapply(
+      X = v * exposure[i],
+      FUN = function(lambda) {
+        stats::dpois(x[i], lambda)
+      },
+      FUN.VALUE = numeric(1L)
+    )
+  }
+
+  f <- .KWDual_CVXR(A, d, w, ...)
+  logLik <- n * sum(w * log(f$g))
+  dy <- as.vector((A %*% (f$f * d * v)) / f$g)
+  z <- list(
+    x = v, y = f$f, g = f$g, logLik = logLik,
+    status = f$status
+  )
+  return(z)
+}
+
+
+
+.KWDual_CVXR <- function(A, d, w, rtol = 1e-6, verb = FALSE) {
+  n <- nrow(A)
+  m <- ncol(A)
+
+  A_mat <- A
+  fvar <- CVXR::Variable(m)
+  gexpr <- A_mat %*% (fvar * d)
+
+  objective <- CVXR::Maximize(CVXR::sum_entries(w * log(gexpr)))
+  constraints <- list(
+    fvar >= 0,
+    CVXR::sum_entries(d * fvar) == 1
+  )
+
+  prob <- CVXR::Problem(objective, constraints)
+  res <- CVXR::solve(prob,
+    solver = "ECOS",
+    reltol = rtol,
+    verbose = verb
+  )
+
+  fhat <- as.vector(res$getValue(fvar))
+  fhat[fhat < 0] <- 0
+  ghat <- as.vector(A_mat %*% (fhat * d))
+
+  list(f = fhat, g = ghat, status = res$status)
+}
 
 
 .KM_fit <- function(N, E) {
-  if (!requireNamespace("Rmosek", quietly = TRUE)) {
-    stop("The 'Rmosek' package is required for KM model fitting. Please install it separately.")
+  n_draws <- prod(dim(N)) * 3
+  if (n_draws >= 1000) {
+    n_draws <- 1000
   }
-  grid <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = 3010)
-  fit <- REBayes::Pmix(as.vector(N),
+  grid <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = n_draws)
+  fit <- .km_eb_fit(as.vector(N),
     v = grid, exposure = as.vector(E),
     rtol = 1e-6
   )
@@ -499,6 +557,10 @@ estimate_null_expected_count <- function(contin_table) {
 #' @param eps a tolerance parameter used in the stopping rule of the ECM algorithm.
 #'  If the difference in marginal likelihood between two consecutive iterations is
 #'  less than eps, the ECM algorithm stops. Default to be 1e-4.
+#' @param E A matrix of expected counts under the null model for the SRS
+#' frequency table. If `NULL` (default), the expected counts are estimated
+#' from the SRS data using 'estimate_null_expected_count()'.
+#'
 #'
 #' @details
 #'
@@ -520,9 +582,8 @@ estimate_null_expected_count <- function(contin_table) {
 #' posterior inference that represents the strongest shrinkage of the "general-gamma"
 #' model.
 #'
-#' The implementation of the "KM" model relies on the \pkg{REBayes} package.
-#' The model fitting requires the MOSEK optimization solver. Please ensure that
-#' \pkg{Rmosek} is correctly installed and configured.
+#' Parameter estimation for the "KM" model is formulated as a convex
+#' optimization problem. In this package, it is solved using \pkg{CVXR}.
 #'
 #'
 #' The implementation of the "efron" model in this package is adapted from the
@@ -546,7 +607,8 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
 #' Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-#' in Spontaneous Reporting Systems Data. \emph{arXiv preprint.} 2025; arXiv:2502.09816.
+#' in Spontaneous Reporting Systems Data. \emph{Statistics in Medicine.} 2025;
+#' 44: 18-19, doi: https://doi.org/10.1002/sim.70195.
 #'
 #' Narasimhan B, Efron B. deconvolveR: A G-modeling program for deconvolution
 #' and empirical Bayes estimation. \emph{Journal of Statistical Software}.
@@ -554,6 +616,9 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' Koenker R, Gu J. REBayes: an R package for empirical Bayes mixture methods.
 #' \emph{Journal of Statistical Software}. 2017; 4;82:1-26.
+#'
+#' Fu, A, Narasimhan, B, Boyd, S. CVXR: An R Package for Disciplined Convex Optimization.
+#' \emph{Journal of Statistical Software}. 2020; 94;14:1-34.
 #'
 #'
 #'
@@ -601,7 +666,8 @@ pvEBayes <- function(contin_table, model = "general-gamma",
                      p = NULL, c0 = NULL,
                      maxi = NULL,
                      eps = 1e-4,
-                     n_posterior_draws = 1000) {
+                     n_posterior_draws = 1000,
+                     E = NULL) {
   h <- NULL
   if (.is_valid_contin_table(contin_table) == FALSE) {
     stop()
@@ -610,7 +676,10 @@ pvEBayes <- function(contin_table, model = "general-gamma",
     is.null(rownames(contin_table))) {
     contin_table <- .set_default_names(contin_table)
   }
-  E <- calculate_tilde_e(contin_table)
+  if (is.null(E)) {
+    E <- calculate_tilde_e(contin_table)
+  }
+
   stopifnot(
     length(model) == 1,
     (model %in% c("general-gamma", "K-gamma", "GPS", "KM", "efron"))
@@ -716,6 +785,9 @@ pvEBayes <- function(contin_table, model = "general-gamma",
 #' each fitted model under the selection. Default to be TRUE.
 #' @param return_all_BIC logical, indicating whether to return BIC values for
 #' each fitted model under the selection. Default to be TRUE.
+#' @param E A matrix of expected counts under the null model for the SRS
+#' frequency table. If `NULL` (default), the expected counts are estimated
+#' from the SRS data using 'estimate_null_expected_count()'.
 #'
 #'
 #'
@@ -750,7 +822,8 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
                           n_posterior_draws = 1000,
                           return_all_fit = FALSE,
                           return_all_AIC = TRUE,
-                          return_all_BIC = TRUE) {
+                          return_all_BIC = TRUE,
+                          E = NULL) {
   if (.is_valid_contin_table(contin_table) == FALSE) {
     stop()
   }
@@ -758,7 +831,9 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
     is.null(rownames(contin_table))) {
     contin_table <- .set_default_names(contin_table)
   }
-  E <- calculate_tilde_e(contin_table)
+  if (is.null(E)) {
+    E <- calculate_tilde_e(contin_table)
+  }
   stopifnot(
     length(model) == 1,
     (model %in% c("general-gamma", "K-gamma", "GPS", "KM", "efron"))

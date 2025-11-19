@@ -1,5 +1,3 @@
-
-
 test_that("pvEBayes", {
   valid_matrix <- matrix(c(70, 40, 44, 50, 52, 60, 70, 80), nrow = 2)
   rownames(valid_matrix) <- c("AE_1", "AE_2")
@@ -9,17 +7,25 @@ test_that("pvEBayes", {
 
   expect_equal(rownames(result), rownames(valid_matrix))
   expect_equal(colnames(result), colnames(valid_matrix))
-
+  E <- calculate_tilde_e(valid_matrix)
   # pseudo sample generation
   grid <- .grid_based_on_hist_log_scale_sobol(valid_matrix,
-                                              result, max_draws = 200)
+    result,
+    max_draws = 200
+  )
   expect_equal(length(grid), 200)
 
   # check the main function
   ## GPS
   fit_gps <- pvEBayes(contin_table = valid_matrix, model = "GPS")
   expect_equal(is.pvEBayes(fit_gps), TRUE)
-
+  qn_tmp <- .calc_qn_mix_gamma(fit_gps, valid_matrix, E, log = TRUE)
+  print_tmp <- print(fit_gps)
+  summary_tmp <- summary(fit_gps)
+  return_tmp <- summary(fit_gps, return = "prior parameters")
+  return_tmp <- summary(fit_gps, return = "likelihood")
+  return_tmp <- summary(fit_gps, return = "detected signal")
+  return_tmp <- summary(fit_gps, return = "posterior draws")
   ## K-gamma
   fit_4g <- pvEBayes(contin_table = valid_matrix, model = "K-gamma", K = 4)
   expect_equal(is.pvEBayes(fit_4g), TRUE)
@@ -31,22 +37,30 @@ test_that("pvEBayes", {
   )
   expect_equal(is.pvEBayes(fit_gg), TRUE)
 
-
+  ## KM
+  fit_km <- pvEBayes(
+    contin_table = valid_matrix,
+    model = "KM"
+  )
+  print_tmp <- print(fit_km)
+  summary_tmp <- summary(fit_km)
+  expect_equal(is.pvEBayes(fit_km), TRUE)
   ## efron
   fit_e <- pvEBayes(
     contin_table = valid_matrix,
     model = "efron", p = 40, c0 = 0.01
   )
+  print_tmp <- print(fit_e)
+  summary_tmp <- summary(fit_e)
   expect_equal(is.pvEBayes(fit_e), TRUE)
 
   # check hyperparameter alpha selection
   gg_selection <- pvEBayes_tune(valid_matrix, model = "general-gamma")
-  expect_equal(is.pvEBayes(gg_selection), TRUE )
+  expect_equal(is.pvEBayes(gg_selection), TRUE)
 
   # check hyperparameter alpha selection
   e_selection <- pvEBayes_tune(valid_matrix, model = "efron")
-  expect_equal(is.pvEBayes(e_selection), TRUE )
+  expect_equal(is.pvEBayes(e_selection), TRUE)
 
   #
-} )
-
+})

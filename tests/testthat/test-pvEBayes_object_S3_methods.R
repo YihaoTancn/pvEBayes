@@ -5,7 +5,9 @@ test_that("pvEBayes object associated functions", {
     contin_table = valid_matrix,
     model = "general-gamma", alpha = 0.1
   )
+  obj_redraw <- posterior_draws(obj)
   plot1 <- eyeplot_pvEBayes(obj, text_shift = 0.1)
+  plot1 <- eyeplot_pvEBayes(obj, text_shift = 0.1, log_scale = TRUE)
   expect_equal(inherits(plot1, "ggplot"), TRUE)
 
   plot2 <- heatmap_pvEBayes(obj)

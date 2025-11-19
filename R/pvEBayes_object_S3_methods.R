@@ -29,9 +29,10 @@ is.pvEBayes_tuned <- function(object) {
 #' rownames(valid_matrix) <- c("AE_1", "AE_2")
 #' colnames(valid_matrix) <- c("drug_1", "drug_2", "drug_3", "drug_4")
 #'
-#' tuned_object = pvEBayes_tune(valid_matrix,
-#'                             model = "general-gamma",
-#'                             return_all_fit = TRUE)
+#' tuned_object <- pvEBayes_tune(valid_matrix,
+#'   model = "general-gamma",
+#'   return_all_fit = TRUE
+#' )
 #' extract_all_fitted_models(tuned_object)
 #'
 extract_all_fitted_models <- function(object) {
@@ -74,7 +75,7 @@ extract_all_fitted_models <- function(object) {
 #' fit_with_draws <- posterior_draws(fit, n_posterior_draws = 1000)
 #'
 posterior_draws <- function(obj,
-                                     n_posterior_draws = 1000) {
+                            n_posterior_draws = 1000) {
   stopifnot(is.pvEBayes(obj))
 
   if (obj$model %in% c("KM", "efron")) {
@@ -203,7 +204,7 @@ eyeplot_pvEBayes <- function(x,
   }
   stopifnot(is.pvEBayes(x))
   if (is.null(x$posterior_draws)) {
-    x <- x %>% posterior_draws
+    x <- x %>% posterior_draws()
   }
 
   counts_long <- x$contin_table %>%
@@ -459,7 +460,7 @@ heatmap_pvEBayes <- function(x,
 
   stopifnot(is.pvEBayes(x))
   if (is.null(x$posterior_draws)) {
-    x <- x %>% posterior_draws
+    x <- x %>% posterior_draws()
   }
   counts_long <- x$contin_table %>%
     as.data.frame() %>%
@@ -467,8 +468,6 @@ heatmap_pvEBayes <- function(x,
     data.table::as.data.table() %>%
     data.table::melt(id.vars = "AE", variable.name = "drug", value.name = "N")
   Es_long <- x$E
-
-
   Es_long <- Es_long %>%
     round(2) %>%
     as.data.frame() %>%
@@ -717,7 +716,7 @@ print.pvEBayes <- function(x, ...) {
 #' )
 #'
 #' summary(obj)
-summary.pvEBayes <- function(object, return = NULL,...) {
+summary.pvEBayes <- function(object, return = NULL, ...) {
   stopifnot(is.pvEBayes(object))
   if (is.null(object$posterior_draws)) {
     object <- posterior_draws(object, n_posterior_draws = 1000)
@@ -741,19 +740,19 @@ summary.pvEBayes <- function(object, return = NULL,...) {
       h = object$h
     )
   }
-  if(!is.null(return)){
-    if(return == "prior parameters"){
+  if (!is.null(return)) {
+    if (return == "prior parameters") {
       estimated_prior
-    }else if(return == "likelihood"){
+    } else if (return == "likelihood") {
       object$loglik
-    }else if(return == "detected signal"){
+    } else if (return == "detected signal") {
       (.get_posterior_prob(object) >= 0.95)
-    }else if(return ==  "posterior draws"){
+    } else if (return == "posterior draws") {
       object$posterior_draws
-    }else{
+    } else {
       stop("Please provide a valid return argument.")
     }
-  }else{
+  } else {
     res <- list(
       estimated_prior = estimated_prior,
       log_marginal_likelihood = object$loglik,
@@ -762,8 +761,6 @@ summary.pvEBayes <- function(object, return = NULL,...) {
     )
     res
   }
-
-
 }
 
 

@@ -13,7 +13,8 @@ pvEBayes(
   c0 = NULL,
   maxi = NULL,
   eps = 1e-04,
-  n_posterior_draws = 1000
+  n_posterior_draws = 1000,
+  E = NULL
 )
 }
 \arguments{
@@ -40,6 +41,10 @@ less than eps, the ECM algorithm stops. Default to be 1e-4.}
 
 \item{n_posterior_draws}{number of posterior draws for each AE-drug
 combination.}
+
+\item{E}{A matrix of expected counts under the null model for the SRS
+frequency table. If \code{NULL} (default), the expected counts are estimated
+from the SRS data using 'estimate_null_expected_count()'.}
 }
 \value{
 The function returns an S3 object of class \code{pvEBayes} containing the
@@ -71,9 +76,8 @@ the Dirichlet distribution is an improper prior still offering a reasonable
 posterior inference that represents the strongest shrinkage of the "general-gamma"
 model.
 
-The implementation of the "KM" model relies on the \pkg{REBayes} package.
-The model fitting requires the MOSEK optimization solver. Please ensure that
-\pkg{Rmosek} is correctly installed and configured.
+Parameter estimation for the "KM" model is formulated as a convex
+optimization problem. In this package, it is solved using \pkg{CVXR}.
 
 The implementation of the "efron" model in this package is adapted from the
 \pkg{deconvolveR} package, developed by Bradley Efron and
@@ -122,7 +126,8 @@ application to the FDA spontaneous reporting system. \emph{The American Statisti
 
 Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
 Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-in Spontaneous Reporting Systems Data. \emph{arXiv preprint.} 2025; arXiv:2502.09816.
+in Spontaneous Reporting Systems Data. \emph{Statistics in Medicine.} 2025;
+44: 18-19, doi: https://doi.org/10.1002/sim.70195.
 
 Narasimhan B, Efron B. deconvolveR: A G-modeling program for deconvolution
 and empirical Bayes estimation. \emph{Journal of Statistical Software}.
@@ -130,4 +135,7 @@ and empirical Bayes estimation. \emph{Journal of Statistical Software}.
 
 Koenker R, Gu J. REBayes: an R package for empirical Bayes mixture methods.
 \emph{Journal of Statistical Software}. 2017; 4;82:1-26.
+
+Fu, A, Narasimhan, B, Boyd, S. CVXR: An R Package for Disciplined Convex Optimization.
+\emph{Journal of Statistical Software}. 2020; 94;14:1-34.
 }

@@ -15,7 +15,8 @@ pvEBayes_tune(
   n_posterior_draws = 1000,
   return_all_fit = FALSE,
   return_all_AIC = TRUE,
-  return_all_BIC = TRUE
+  return_all_BIC = TRUE,
+  E = NULL
 )
 }
 \arguments{
@@ -52,6 +53,10 @@ each fitted model under the selection. Default to be TRUE.}
 
 \item{return_all_BIC}{logical, indicating whether to return BIC values for
 each fitted model under the selection. Default to be TRUE.}
+
+\item{E}{A matrix of expected counts under the null model for the SRS
+frequency table. If \code{NULL} (default), the expected counts are estimated
+from the SRS data using 'estimate_null_expected_count()'.}
 }
 \value{
 The function returns an S3 object of class \code{pvEBayes} containing the selected
