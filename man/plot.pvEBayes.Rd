@@ -12,10 +12,11 @@
 
 \item{type}{character string determining the type of plot to show.
 Available choices are \code{"eyeplot"} which calls \link{eyeplot_pvEBayes} and
-\code{"heatmap"} which calls \link{heatmap_pvEBayes}, with the additional arguments
-supplied in ...}
+\code{"heatmap"} which calls \link{heatmap_pvEBayes}, with the additional
+arguments supplied in ...}
 
-\item{...}{additional arguments passed to heatmap_pvEBayes or eyeplot_pvEBayes.}
+\item{...}{additional arguments passed to heatmap_pvEBayes or
+eyeplot_pvEBayes.}
 }
 \value{
 A \link[ggplot2]{ggplot} object.

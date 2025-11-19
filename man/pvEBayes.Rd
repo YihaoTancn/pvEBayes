@@ -18,26 +18,28 @@ pvEBayes(
 )
 }
 \arguments{
-\item{contin_table}{an IxJ contingency table showing pairwise counts of adverse
-events for I AEs (along the rows) and J drugs (along the columns).}
+\item{contin_table}{an IxJ contingency table showing pairwise counts of
+adverse events for I AEs (along the rows) and J drugs (along the columns).}
 
 \item{model}{the model to fit. Available models are "general-gamma",
 "K-gamma", "GPS", "KM" and "efron". Default to "general-gamma".}
 
-\item{alpha}{numeric between 0 and 1. The hyperparameter of "general-gamma" model.
-It is needed if "general-gamma" model is used.}
+\item{alpha}{numeric between 0 and 1. The hyperparameter of "general-gamma"
+model. It is needed if "general-gamma" model is used.}
 
-\item{K}{integer greater than or equal to 2. It is needed if "K-gamma" model is used.}
+\item{K}{integer greater than or equal to 2. It is needed if "K-gamma" model
+is used.}
 
-\item{p}{integer greater than or equal to 2. It is needed if "efron" mode is used.}
+\item{p}{integer greater than or equal to 2. It is needed if "efron" mode is
+used.}
 
 \item{c0}{numeric and greater than 0. It is needed if "efron" mode is used.}
 
 \item{maxi}{upper limit of iteration for the ECM algorithm.}
 
-\item{eps}{a tolerance parameter used in the stopping rule of the ECM algorithm.
-If the difference in marginal likelihood between two consecutive iterations is
-less than eps, the ECM algorithm stops. Default to be 1e-4.}
+\item{eps}{a tolerance parameter used in the stopping rule of the ECM
+algorithm. If the difference in marginal likelihood between two consecutive
+iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.}
 
 \item{n_posterior_draws}{number of posterior draws for each AE-drug
 combination.}
@@ -59,35 +61,37 @@ specified hyperparameter, if is required. Supported models include the
 }
 \details{
 This function implements the ECM algorithm proposed by Tan et al. (2025),
-providing a stable and efficient implementation of Gamma-Poisson Shrinker(GPS),
-K-gamma and "general-gamma" methods for signal estimation and signal detection
-in Spontaneous Reporting System (SRS) data table.
+providing a stable and efficient implementation of Gamma-Poisson
+Shrinker(GPS), K-gamma and "general-gamma" methods for signal estimation and
+signal detection in Spontaneous Reporting System (SRS) data table.
 
 Method "GPS" is proposed by DuMouchel (1999) and it is a parametric empirical
 Bayes model with a two gamma mixture prior distribution.
 
-Methods "K-gamma" and "general-gamma" are non-parametric empirical Bayes models,
-introduced by Tan et al. (2025). The number of mixture components "K" needs
-to be prespecified when fitting a "K-gamma" model. For "general-gamma", the
-mixture weights are regularized by a Dirichlet hyper prior with hyperparameter
-\eqn{0 \leq \alpha < 1} that controls the shrinkage strength. As "alpha" approaches
-0, less non-empty mixture components exist in the fitted model. When \eqn{\alpha = 0},
-the Dirichlet distribution is an improper prior still offering a reasonable
-posterior inference that represents the strongest shrinkage of the "general-gamma"
-model.
+Methods "K-gamma" and "general-gamma" are non-parametric empirical Bayes
+models, introduced by Tan et al. (2025). The number of mixture components "K"
+needs to be prespecified when fitting a "K-gamma" model. For "general-gamma",
+the mixture weights are regularized by a Dirichlet hyper prior with
+hyperparameter \eqn{0 \leq \alpha < 1} that controls the shrinkage strength.
+As "alpha" approaches 0, less non-empty mixture components exist in the
+fitted model. When \eqn{\alpha = 0}, the Dirichlet distribution is an
+improper prior still offering a reasonable posterior inference that
+represents the strongest shrinkage of the "general-gamma" model.
 
 Parameter estimation for the "KM" model is formulated as a convex
-optimization problem. In this package, it is solved using \pkg{CVXR}.
+optimization problem. The objective function and constraints follow the same
+construction as in \pkg{REBayes}. Parameter estimation is performed using
+the open-source convex optimization package \pkg{CVXR}.
 
 The implementation of the "efron" model in this package is adapted from the
 \pkg{deconvolveR} package, developed by Bradley Efron and
 Balasubramanian Narasimhan. The original implementation in \pkg{deconvolveR}
 does not support an exposure or offset parameter in the Poisson model,
-which corresponds to the expected null value (\eqn{E_{ij}}) for each AE-drug combination.
-To address this, we modified the relevant code to allow for the inclusion
-of \eqn{E_{ij}} in the Poisson likelihood. In addition, we implemented a method for
-estimating the degrees of freedom, enabling AIC- or BIC-based hyperparameter
-selection for the "efron" model (Tan et al. 2025).
+which corresponds to the expected null value (\eqn{E_{ij}}) for each AE-drug
+combination. To address this, we modified the relevant code to allow for the
+inclusion of \eqn{E_{ij}} in the Poisson likelihood. In addition, we
+implemented a method for estimating the degrees of freedom, enabling AIC- or
+BIC-based hyperparameter selection for the "efron" model (Tan et al. 2025).
 See \code{\link{pvEBayes_tune}} for details.
 }
 \examples{
@@ -121,13 +125,14 @@ fit <- pvEBayes(
 }
 \references{
 DuMouchel W. Bayesian data mining in large frequency tables, with an
-application to the FDA spontaneous reporting system. \emph{The American Statistician.}
-1999; 1;53(3):177-90. \cr
+application to the FDA spontaneous reporting system.
+\emph{The American Statistician.} 1999; 1;53(3):177-90. \cr
 
-Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
-Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-in Spontaneous Reporting Systems Data. \emph{Statistics in Medicine.} 2025;
-44: 18-19, doi: https://doi.org/10.1002/sim.70195.
+Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+Estimation in Spontaneous Reporting Systems Data.
+\emph{Statistics in Medicine.} 2025; 44: 18-19,
+https://doi.org/10.1002/sim.70195.
 
 Narasimhan B, Efron B. deconvolveR: A G-modeling program for deconvolution
 and empirical Bayes estimation. \emph{Journal of Statistical Software}.
@@ -136,6 +141,6 @@ and empirical Bayes estimation. \emph{Journal of Statistical Software}.
 Koenker R, Gu J. REBayes: an R package for empirical Bayes mixture methods.
 \emph{Journal of Statistical Software}. 2017; 4;82:1-26.
 
-Fu, A, Narasimhan, B, Boyd, S. CVXR: An R Package for Disciplined Convex Optimization.
-\emph{Journal of Statistical Software}. 2020; 94;14:1-34.
+Fu, A, Narasimhan, B, Boyd, S. CVXR: An R Package for Disciplined Convex
+Optimization. \emph{Journal of Statistical Software}. 2020; 94;14:1-34.
 }

@@ -2,26 +2,29 @@
 #'
 #' @description
 #' This function estimates the expected null baseline count (\eqn{E_{ij}}) for
-#' each AE-drug combination under the assumption of independence between rows and
-#' columns. The expected count is calculated using a reference row (other AEs)
-#' and reference column (other drugs). This null baseline is typically used in
-#' the empirical Bayes modeling of \code{pvEBayes} package for signal detection
-#' and estimation in spontaneous reporting system (SRS) data.
+#' each AE-drug combination under the assumption of independence between rows
+#' and columns. The expected count is calculated using a reference row
+#' (other AEs) and reference column (other drugs). This null baseline is
+#' typically used in the empirical Bayes modeling of \code{pvEBayes} package
+#' for signal detection and estimation in spontaneous reporting system (SRS)
+#' data.
 #'
 #'
-#' @param contin_table an IxJ contingency table showing pairwise counts of adverse
-#' events for I AEs (along the rows) and J drugs (along the columns). The
-#' reference row "Other AEs" and the reference column "Other drugs" need to be the
-#' I-th row and J-th column respectively.
+#' @param contin_table an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' The reference row "Other AEs" and the reference column "Other drugs" need to
+#' be the I-th row and J-th column respectively.
 #'
 #' @details
 #' This null value estimator is proposed by Tan et al. (2025).
 #'
 #' @references
 #'
-#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
-#' Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-#' in Spontaneous Reporting Systems Data. \emph{arXiv preprint.} 2025; arXiv:2502.09816.
+#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+#' to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+#' Estimation in Spontaneous Reporting Systems Data.
+#' \emph{Statistics in Medicine.} 2025; 44: 18-19,
+#' https://doi.org/10.1002/sim.70195.
 #'
 #' @return
 #'
@@ -62,25 +65,27 @@ calculate_tilde_e <- function(contin_table) {
 #'
 #' @description
 #' This function estimates the expected null baseline count (\eqn{E_{ij}}) for
-#' each AE-drug combination under the assumption of independence between rows and
-#' columns. The expected count is calculated using a reference row (other AEs)
-#' and reference column (other drugs). This null baseline is typically used in
-#' empirical Bayes modeling of \code{pvEBayes} package for signal detection
-#' and estimation in spontaneous reporting system (SRS) data.
+#' each AE-drug combination under the assumption of independence between rows
+#' and columns. The expected count is calculated using a reference row
+#' (other AEs) and reference column (other drugs). This null baseline is
+#' typically used in empirical Bayes modeling of \code{pvEBayes} package for
+#' signal detection and estimation in spontaneous reporting system (SRS) data.
 #'
-#' @param contin_table an IxJ contingency table showing pairwise counts of adverse
-#' events for I AEs (along the rows) and J drugs (along the columns). The
-#' reference row "Other AEs" and the reference column "Other drugs" need to be the
-#' I-th row and J-th column respectively.
+#' @param contin_table an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' The reference row "Other AEs" and the reference column "Other drugs" need to
+#' be the I-th row and J-th column respectively.
 #'
 #' @details
 #' This null value estimator is proposed by Tan et al. (2025).
 #'
 #' @references
 #'
-#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
-#' Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-#' in Spontaneous Reporting Systems Data. \emph{arXiv preprint.} 2025; arXiv:2502.09816.
+#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+#' to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+#' Estimation in Spontaneous Reporting Systems Data.
+#' \emph{Statistics in Medicine.} 2025; 44: 18-19,
+#' https://doi.org/10.1002/sim.70195.
 #'
 #' @return
 #'
@@ -542,21 +547,23 @@ estimate_null_expected_count <- function(contin_table) {
 #' "general-gamma", "GPS", "K-gamma", "KM", and "efron".
 #'
 #'
-#' @param contin_table an IxJ contingency table showing pairwise counts of adverse
-#' events for I AEs (along the rows) and J drugs (along the columns).
+#' @param contin_table an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
 #' @param model the model to fit. Available models are "general-gamma",
 #' "K-gamma", "GPS", "KM" and "efron". Default to "general-gamma".
-#' @param alpha numeric between 0 and 1. The hyperparameter of "general-gamma" model.
-#' It is needed if "general-gamma" model is used.
-#' @param K integer greater than or equal to 2. It is needed if "K-gamma" model is used.
-#' @param p integer greater than or equal to 2. It is needed if "efron" mode is used.
+#' @param alpha numeric between 0 and 1. The hyperparameter of "general-gamma"
+#' model. It is needed if "general-gamma" model is used.
+#' @param K integer greater than or equal to 2. It is needed if "K-gamma" model
+#' is used.
+#' @param p integer greater than or equal to 2. It is needed if "efron" mode is
+#' used.
 #' @param c0 numeric and greater than 0. It is needed if "efron" mode is used.
 #' @param maxi upper limit of iteration for the ECM algorithm.
 #' @param n_posterior_draws number of posterior draws for each AE-drug
 #' combination.
-#' @param eps a tolerance parameter used in the stopping rule of the ECM algorithm.
-#'  If the difference in marginal likelihood between two consecutive iterations is
-#'  less than eps, the ECM algorithm stops. Default to be 1e-4.
+#' @param eps a tolerance parameter used in the stopping rule of the ECM
+#' algorithm. If the difference in marginal likelihood between two consecutive
+#' iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.
 #' @param E A matrix of expected counts under the null model for the SRS
 #' frequency table. If `NULL` (default), the expected counts are estimated
 #' from the SRS data using 'estimate_null_expected_count()'.
@@ -565,36 +572,38 @@ estimate_null_expected_count <- function(contin_table) {
 #' @details
 #'
 #' This function implements the ECM algorithm proposed by Tan et al. (2025),
-#' providing a stable and efficient implementation of Gamma-Poisson Shrinker(GPS),
-#' K-gamma and "general-gamma" methods for signal estimation and signal detection
-#' in Spontaneous Reporting System (SRS) data table.
+#' providing a stable and efficient implementation of Gamma-Poisson
+#' Shrinker(GPS), K-gamma and "general-gamma" methods for signal estimation and
+#' signal detection in Spontaneous Reporting System (SRS) data table.
 #'
 #' Method "GPS" is proposed by DuMouchel (1999) and it is a parametric empirical
 #' Bayes model with a two gamma mixture prior distribution.
 #'
-#' Methods "K-gamma" and "general-gamma" are non-parametric empirical Bayes models,
-#' introduced by Tan et al. (2025). The number of mixture components "K" needs
-#' to be prespecified when fitting a "K-gamma" model. For "general-gamma", the
-#' mixture weights are regularized by a Dirichlet hyper prior with hyperparameter
-#' \eqn{0 \leq \alpha < 1} that controls the shrinkage strength. As "alpha" approaches
-#' 0, less non-empty mixture components exist in the fitted model. When \eqn{\alpha = 0},
-#' the Dirichlet distribution is an improper prior still offering a reasonable
-#' posterior inference that represents the strongest shrinkage of the "general-gamma"
-#' model.
+#' Methods "K-gamma" and "general-gamma" are non-parametric empirical Bayes
+#' models, introduced by Tan et al. (2025). The number of mixture components "K"
+#' needs to be prespecified when fitting a "K-gamma" model. For "general-gamma",
+#' the mixture weights are regularized by a Dirichlet hyper prior with
+#' hyperparameter \eqn{0 \leq \alpha < 1} that controls the shrinkage strength.
+#' As "alpha" approaches 0, less non-empty mixture components exist in the
+#' fitted model. When \eqn{\alpha = 0}, the Dirichlet distribution is an
+#' improper prior still offering a reasonable posterior inference that
+#' represents the strongest shrinkage of the "general-gamma" model.
 #'
 #' Parameter estimation for the "KM" model is formulated as a convex
-#' optimization problem. In this package, it is solved using \pkg{CVXR}.
+#' optimization problem. The objective function and constraints follow the same
+#' construction as in \pkg{REBayes}. Parameter estimation is performed using
+#' the open-source convex optimization package \pkg{CVXR}.
 #'
 #'
 #' The implementation of the "efron" model in this package is adapted from the
 #' \pkg{deconvolveR} package, developed by Bradley Efron and
 #' Balasubramanian Narasimhan. The original implementation in \pkg{deconvolveR}
 #' does not support an exposure or offset parameter in the Poisson model,
-#' which corresponds to the expected null value (\eqn{E_{ij}}) for each AE-drug combination.
-#' To address this, we modified the relevant code to allow for the inclusion
-#' of \eqn{E_{ij}} in the Poisson likelihood. In addition, we implemented a method for
-#' estimating the degrees of freedom, enabling AIC- or BIC-based hyperparameter
-#' selection for the "efron" model (Tan et al. 2025).
+#' which corresponds to the expected null value (\eqn{E_{ij}}) for each AE-drug
+#' combination. To address this, we modified the relevant code to allow for the
+#' inclusion of \eqn{E_{ij}} in the Poisson likelihood. In addition, we
+#' implemented a method for estimating the degrees of freedom, enabling AIC- or
+#' BIC-based hyperparameter selection for the "efron" model (Tan et al. 2025).
 #' See \code{\link{pvEBayes_tune}} for details.
 #'
 #'
@@ -602,13 +611,14 @@ estimate_null_expected_count <- function(contin_table) {
 #' @references
 #'
 #' DuMouchel W. Bayesian data mining in large frequency tables, with an
-#' application to the FDA spontaneous reporting system. \emph{The American Statistician.}
-#' 1999; 1;53(3):177-90. \cr
+#' application to the FDA spontaneous reporting system.
+#' \emph{The American Statistician.} 1999; 1;53(3):177-90. \cr
 #'
-#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
-#' Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-#' in Spontaneous Reporting Systems Data. \emph{Statistics in Medicine.} 2025;
-#' 44: 18-19, doi: https://doi.org/10.1002/sim.70195.
+#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+#' to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+#' Estimation in Spontaneous Reporting Systems Data.
+#' \emph{Statistics in Medicine.} 2025; 44: 18-19,
+#' https://doi.org/10.1002/sim.70195.
 #'
 #' Narasimhan B, Efron B. deconvolveR: A G-modeling program for deconvolution
 #' and empirical Bayes estimation. \emph{Journal of Statistical Software}.
@@ -617,8 +627,8 @@ estimate_null_expected_count <- function(contin_table) {
 #' Koenker R, Gu J. REBayes: an R package for empirical Bayes mixture methods.
 #' \emph{Journal of Statistical Software}. 2017; 4;82:1-26.
 #'
-#' Fu, A, Narasimhan, B, Boyd, S. CVXR: An R Package for Disciplined Convex Optimization.
-#' \emph{Journal of Statistical Software}. 2020; 94;14:1-34.
+#' Fu, A, Narasimhan, B, Boyd, S. CVXR: An R Package for Disciplined Convex
+#' Optimization. \emph{Journal of Statistical Software}. 2020; 94;14:1-34.
 #'
 #'
 #'
@@ -757,24 +767,24 @@ pvEBayes <- function(contin_table, model = "general-gamma",
 #' @description
 #' This function performs hyperparameter tuning for the general-gamma or Efron
 #' model using AIC or BIC. For a given AE-drug contingency table, the
-#' function fits a series of models across a grid of candidate hyperparameter values
-#' and computes their AIC and BIC. The models with the lowest AIC or BIC values
-#' are selected as the optimal fits.
+#' function fits a series of models across a grid of candidate hyperparameter
+#' values and computes their AIC and BIC. The models with the lowest AIC or BIC
+#' values are selected as the optimal fits.
 #'
-#' @param contin_table an IxJ contingency table showing pairwise counts of adverse
-#' events for I AEs (along the rows) and J drugs (along the columns).
+#' @param contin_table an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
 #' @param model the model to be tuned. Available models are "general-gamma" and
 #' "efron". Default to "general-gamma".
 #' @param alpha_vec vector of hyperparameter alpha values to be selected. Alpha
-#' is a hyperparameter in general-gamma model which is numeric and between 0 and 1.
-#' If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9) will
-#' be used.
+#' is a hyperparameter in general-gamma model which is numeric and between 0
+#' and 1. If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9)
+#' will be used.
 #' @param p_vec vector of hyperparameter p values to be selected. p is
-#' a hyperparameter in "efron" model which should be a positive integer. If is NULL,
-#' a default set of p values (80, 100, 120, 150, 200) will be used.
+#' a hyperparameter in "efron" model which should be a positive integer. If is
+#' NULL, a default set of p values (80, 100, 120, 150, 200) will be used.
 #' @param c0_vec vector of hyperparameter c0 values to be selected. c0 is
-#' a hyperparameter in "efron" model which should be a positive number. If is NULL,
-#' a default set of c0 values (0.001, 0.01, 0.1, 0.2, 0.5) will be used.
+#' a hyperparameter in "efron" model which should be a positive number. If is
+#' NULL, a default set of c0 values (0.001, 0.01, 0.1, 0.2, 0.5) will be used.
 #' @param use_AIC logical, indicating whether AIC or BIC is used. Default to be
 #' TRUE.
 #' @param n_posterior_draws number of posterior draws for each AE-drug
@@ -793,15 +803,17 @@ pvEBayes <- function(contin_table, model = "general-gamma",
 #'
 #' @references
 #'
-#' Akaike H. A new look at the statistical model identification. \emph{IEEE Transactions on Automatic Control.}
-#' 2003; 19(6):716-23. \cr
+#' Akaike H. A new look at the statistical model identification.
+#' \emph{IEEE Transactions on Automatic Control.} 2003; 19(6):716-23. \cr
 #'
-#' Schwarz G. Estimating the dimension of a model. \emph{The Annals of Statistics.}
-#' 1978; 1:461-4.
+#' Schwarz G. Estimating the dimension of a model.
+#' \emph{The Annals of Statistics.} 1978; 1:461-4.
 #'
-#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
-#' Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-#' in Spontaneous Reporting Systems Data. \emph{arXiv preprint.} 2025; arXiv:2502.09816.
+#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+#' to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+#' Estimation in Spontaneous Reporting Systems Data.
+#' \emph{Statistics in Medicine.} 2025; 44: 18-19,
+#' https://doi.org/10.1002/sim.70195.
 #'
 #' @return
 #'
@@ -907,20 +919,20 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
 #' Select hyperparameter alpha and obtain the optimal general-gamma model based
 #'  on AIC and BIC
 #'
-#' @param contin_table an IxJ contingency table showing pairwise counts of adverse
-#' events for I AEs (along the rows) and J drugs (along the columns).
+#' @param contin_table an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
 #' @param alpha_vec vector of hyperparameter alpha values to be selected. Alpha
-#' is hyperparameter in general-gamma model which is numeric and between 0 and 1.
-#' If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9) will
-#' be used.
+#' is hyperparameter in general-gamma model which is numeric and between 0
+#' and 1. If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9)
+#' will be used.
 #'
 #' @references
 #'
-#' Akaike H. A new look at the statistical model identification. \emph{IEEE Transactions on Automatic Control.}
-#' 2003; 19(6):716-23. \cr
+#' Akaike H. A new look at the statistical model identification.
+#' \emph{IEEE Transactions on Automatic Control.} 2003; 19(6):716-23. \cr
 #'
-#' Schwarz G. Estimating the dimension of a model. \emph{The Annals of Statistics.}
-#' 1978; 1:461-4.
+#' Schwarz G. Estimating the dimension of a model.
+#' \emph{The Annals of Statistics.} 1978; 1:461-4.
 #'
 #'
 #' @return
@@ -1011,14 +1023,14 @@ tuning_general_gamma <- function(contin_table,
 #'  on AIC and BIC
 #'
 #'
-#' @param contin_table an IxJ contingency table showing pairwise counts of adverse
-#' events for I AEs (along the rows) and J drugs (along the columns).
+#' @param contin_table an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
 #' @param p_vec vector of hyperparameter p values to be selected. p is
-#' a hyperparameter in "efron" model which should be a positive integer. If is NULL,
-#' a default set of p values (80, 100, 120, 150, 200) will be used.
+#' a hyperparameter in "efron" model which should be a positive integer. If is
+#' NULL, a default set of p values (80, 100, 120, 150, 200) will be used.
 #' @param c0_vec vector of hyperparameter c0 values to be selected. c0 is
-#' a hyperparameter in "efron" model which should be a positive number. If is NULL,
-#' a default set of c0 values (0.001, 0.01, 0.1, 0.2, 0.5) will be used.
+#' a hyperparameter in "efron" model which should be a positive number. If is
+#' NULL, a default set of c0 values (0.001, 0.01, 0.1, 0.2, 0.5) will be used.
 #'
 #' @references
 #'
@@ -1026,8 +1038,8 @@ tuning_general_gamma <- function(contin_table,
 #' \emph{IEEE Transactions on Automatic Control.}
 #' 2003; 19(6):716-23. \cr
 #'
-#' Schwarz G. Estimating the dimension of a model. \emph{The Annals of Statistics.}
-#' 1978; 1:461-4.
+#' Schwarz G. Estimating the dimension of a model.
+#' \emph{The Annals of Statistics.} 1978; 1:461-4.
 #'
 #' @return
 #' a list of fitted models with hyperparameter alpha selected by AIC or BIC.

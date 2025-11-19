@@ -56,8 +56,8 @@ rtruncnorm <- function(n, a = -0.4, b = 0, mean = 0, sd = 0.05) {
       ), I, J)
       tmp_sig[signal_mat == 1] <- signal_mat[signal_mat == 1] +
         err1[signal_mat == 1]
-      tmp_sig[signal_mat > 1] <- signal_mat[signal_mat > 1] + err1[signal_mat >
-        1]
+      tmp_sig[signal_mat > 1] <- signal_mat[signal_mat > 1] +
+        err1[signal_mat > 1]
       tmp_sig[I, ] <- 1
       tmp_sig[, J] <- 1
       tmp_sig * (1 - Z) %>%
@@ -117,9 +117,11 @@ rtruncnorm <- function(n, a = -0.4, b = 0, mean = 0, sd = 0.05) {
 #'
 #' @references
 #'
-#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
-#' Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-#' in Spontaneous Reporting Systems Data. \emph{arXiv preprint.} 2025; arXiv:2502.09816.
+#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+#' to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+#' Estimation in Spontaneous Reporting Systems Data.
+#' \emph{Statistics in Medicine.} 2025; 44: 18-19,
+#' https://doi.org/10.1002/sim.70195.
 #'
 #' @return
 #'

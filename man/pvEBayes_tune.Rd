@@ -20,24 +20,24 @@ pvEBayes_tune(
 )
 }
 \arguments{
-\item{contin_table}{an IxJ contingency table showing pairwise counts of adverse
-events for I AEs (along the rows) and J drugs (along the columns).}
+\item{contin_table}{an IxJ contingency table showing pairwise counts of
+adverse events for I AEs (along the rows) and J drugs (along the columns).}
 
 \item{model}{the model to be tuned. Available models are "general-gamma" and
 "efron". Default to "general-gamma".}
 
 \item{alpha_vec}{vector of hyperparameter alpha values to be selected. Alpha
-is a hyperparameter in general-gamma model which is numeric and between 0 and 1.
-If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9) will
-be used.}
+is a hyperparameter in general-gamma model which is numeric and between 0
+and 1. If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9)
+will be used.}
 
 \item{p_vec}{vector of hyperparameter p values to be selected. p is
-a hyperparameter in "efron" model which should be a positive integer. If is NULL,
-a default set of p values (80, 100, 120, 150, 200) will be used.}
+a hyperparameter in "efron" model which should be a positive integer. If is
+NULL, a default set of p values (80, 100, 120, 150, 200) will be used.}
 
 \item{c0_vec}{vector of hyperparameter c0 values to be selected. c0 is
-a hyperparameter in "efron" model which should be a positive number. If is NULL,
-a default set of c0 values (0.001, 0.01, 0.1, 0.2, 0.5) will be used.}
+a hyperparameter in "efron" model which should be a positive number. If is
+NULL, a default set of c0 values (0.001, 0.01, 0.1, 0.2, 0.5) will be used.}
 
 \item{use_AIC}{logical, indicating whether AIC or BIC is used. Default to be
 TRUE.}
@@ -66,9 +66,9 @@ combination if the number of posterior draws is specified.
 \description{
 This function performs hyperparameter tuning for the general-gamma or Efron
 model using AIC or BIC. For a given AE-drug contingency table, the
-function fits a series of models across a grid of candidate hyperparameter values
-and computes their AIC and BIC. The models with the lowest AIC or BIC values
-are selected as the optimal fits.
+function fits a series of models across a grid of candidate hyperparameter
+values and computes their AIC and BIC. The models with the lowest AIC or BIC
+values are selected as the optimal fits.
 }
 \examples{
 
@@ -76,13 +76,15 @@ fit <- pvEBayes_tune(statin2025_44, model = "general-gamma")
 
 }
 \references{
-Akaike H. A new look at the statistical model identification. \emph{IEEE Transactions on Automatic Control.}
-2003; 19(6):716-23. \cr
+Akaike H. A new look at the statistical model identification.
+\emph{IEEE Transactions on Automatic Control.} 2003; 19(6):716-23. \cr
 
-Schwarz G. Estimating the dimension of a model. \emph{The Annals of Statistics.}
-1978; 1:461-4.
+Schwarz G. Estimating the dimension of a model.
+\emph{The Annals of Statistics.} 1978; 1:461-4.
 
-Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
-Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-in Spontaneous Reporting Systems Data. \emph{arXiv preprint.} 2025; arXiv:2502.09816.
+Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+Estimation in Spontaneous Reporting Systems Data.
+\emph{Statistics in Medicine.} 2025; 44: 18-19,
+https://doi.org/10.1002/sim.70195.
 }

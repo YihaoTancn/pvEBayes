@@ -148,14 +148,15 @@ posterior_draws <- function(obj,
 #'
 #' @param x a \code{pvEBayes} object, which is the output of the function
 #' \link{pvEBayes} or \link{pvEBayes_tune}.
-#' @param num_top_AEs number of most significant AEs appearing in the plot. Default to
-#' 10.
-#' @param num_top_drugs number of most significant drugs appearing in the plot. Default
-#' to 7.
-#' @param specified_AEs a vector of AE names that are specified to appear in the plot. If
-#' a vector of AEs is given, argument num_top_AEs will be ignored.
-#' @param specified_drugs a vector of drug names that are specified to appear in the plot.
-#' If a vector of drugs is given, argument num_top_drugs will be ignored.
+#' @param num_top_AEs number of most significant AEs appearing in the plot.
+#' Default to 10.
+#' @param num_top_drugs number of most significant drugs appearing in the plot.
+#' Default to 7.
+#' @param specified_AEs a vector of AE names that are specified to appear in the
+#' plot. If a vector of AEs is given, argument num_top_AEs will be ignored.
+#' @param specified_drugs a vector of drug names that are specified to appear in
+#' the plot. If a vector of drugs is given, argument num_top_drugs will be
+#' ignored.
 #' @param N_threshold integer greater than 0. Any AE-drug combination with
 #' observation smaller than N_threshold will be filtered out.
 #' @param text_shift numeric. Controls the relative position of text labels,
@@ -304,7 +305,8 @@ eyeplot_pvEBayes <- function(x,
       })
 
 
-  q05_table <- dat_plot[, list(q05 = stats::quantile(.SD$post_draws, 0.05)), by = group_vars]
+  q05_table <- dat_plot[, list(q05 = stats::quantile(.SD$post_draws, 0.05)),
+                        by = group_vars]
 
   q05_table <- q05_table[q05_table$q05 > q05_cutoff, ]
   dat_plot <- dat_plot[q05_table, on = group_vars]
@@ -407,14 +409,15 @@ eyeplot_pvEBayes <- function(x,
 #'
 #' @param x a \code{pvEBayes} object, which is the output of the function
 #' \link{pvEBayes} or \link{pvEBayes_tune}.
-#' @param num_top_AEs number of most significant AEs appearing in the plot. Default to
-#' 10.
-#' @param num_top_drugs number of most significant drugs appearing in the plot. Default
-#' to 7.
-#' @param specified_AEs a vector of AE names that are specified to appear in the plot. If
-#' a vector of AEs is given, argument num_top_AEs will be ignored.
-#' @param specified_drugs a vector of drug names that are specified to appear in the plot.
-#' If a vector of drugs is given, argument num_top_drugs will be ignored.
+#' @param num_top_AEs number of most significant AEs appearing in the plot.
+#' Default to 10.
+#' @param num_top_drugs number of most significant drugs appearing in the plot.
+#' Default to 7.
+#' @param specified_AEs a vector of AE names that are specified to appear in the
+#' plot. If a vector of AEs is given, argument num_top_AEs will be ignored.
+#' @param specified_drugs a vector of drug names that are specified to appear in
+#' the plot. If a vector of drugs is given, argument num_top_drugs will be
+#' ignored.
 #' @param cutoff_signal numeric. Threshold for signal detection. An AE-drug
 #' combination is classified as a detected signal if its 5th posterior
 #' percentile exceeds this threshold.
@@ -776,9 +779,10 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
 #' \link{pvEBayes} or \link{pvEBayes_tune}.
 #' @param type character string determining the type of plot to show.
 #' Available choices are `"eyeplot"` which calls \link{eyeplot_pvEBayes} and
-#' `"heatmap"` which calls \link{heatmap_pvEBayes}, with the additional arguments
-#' supplied in ...
-#' @param ... additional arguments passed to heatmap_pvEBayes or eyeplot_pvEBayes.
+#' `"heatmap"` which calls \link{heatmap_pvEBayes}, with the additional
+#' arguments supplied in ...
+#' @param ... additional arguments passed to heatmap_pvEBayes or
+#' eyeplot_pvEBayes.
 #'
 #' @return
 #'

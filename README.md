@@ -18,7 +18,7 @@ For methodological details, see:
 
 Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
 Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-in Spontaneous Reporting Systems Data. \emph{Statistics in Medicine.} 2025;
+in Spontaneous Reporting Systems Data. *Statistics in Medicine.* 2025;
 44: 18-19, https://doi.org/10.1002/sim.70195.
 
 ## Installation
