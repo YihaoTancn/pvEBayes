@@ -3,9 +3,8 @@
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/pvEBayes)](https://CRAN.R-project.org/package=pvEBayes)
-[![R-CMD-check](https://github.com/YihaoTancn/pvEBayes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/YihaoTancn/pvEBayes/actions)
-[![Codecov test coverage](https://codecov.io/gh/YihaoTancn/pvEBayes/branch/main/graph/badge.svg)](https://app.codecov.io/gh/YihaoTancn/pvEBayes)
 [![R-CMD-check](https://github.com/YihaoTancn/pvEBayes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/YihaoTancn/pvEBayes/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/YihaoTancn/pvEBayes/graph/badge.svg)](https://app.codecov.io/gh/YihaoTancn/pvEBayes)
 <!-- badges: end -->
 
 'pvEBayes' is an R package that implements a suite of nonparametric empirical
