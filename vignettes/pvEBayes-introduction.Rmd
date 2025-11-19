@@ -32,7 +32,7 @@ Then, the estimated posterior density of $\lambda$ given $N_{ij}$ is:
 where $\hat{\text{p}}(N_{ij}) = \int_0^{\infty} \hat g(\lambda_{ij})f_{\text{pois}}(N_{ij}\mid \lambda_{ij}E_{ij}) \ d\lambda_{ij}$.
 
 
-All empirical Bayes models implemented in 'pvEBayes' share the structure described above; they differ in their assumptions on the prior distribution. The Gamma–Poisson Shrinker (GPS) adopts a two-component gamma mixture prior. The K-gamma model generalizes GPS by allowing a K-component gamma mixture, where K is user-specified. The Koenker–Mizera (KM) and Efron models use a nonparametric discrete mixture prior, with point masses on a pre-specified grid. The general-gamma model employs a nonparametric sparse gamma mixture distribution.
+All empirical Bayes models implemented in 'pvEBayes' share the structure described above; they differ in their assumptions on the prior distribution. The Gamma-Poisson Shrinker (GPS) adopts a two-component gamma mixture prior. The K-gamma model generalizes GPS by allowing a K-component gamma mixture, where K is user-specified. The Koenker-Mizera (KM) and Efron models use a nonparametric discrete mixture prior, with point masses on a pre-specified grid. The general-gamma model employs a nonparametric sparse gamma mixture distribution.
 
 'pvEBayes' provides implementations for the empirical Bayes methods for pharmacovigilance mentioned above. It provides tools for effectively fitting these models to the spontaneous reporting system (SRS) frequency tables,
 extracting summaries, performing hyperparameter tuning, and generating graphical summaries (eye plots and heatmaps) for signal detection and estimation.

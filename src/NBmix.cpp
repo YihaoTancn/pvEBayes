@@ -89,7 +89,6 @@ NBmixResult NBmix_s1_EM_g(const Eigen::VectorXd& N,
   Eigen::VectorXd P = Eigen::VectorXd::Ones(k) / k;
 
   double loglik = -std::numeric_limits<double>::infinity();
-  double loglik_new;
 
 
   Eigen::ArrayXXd TN1 = tcrossprod(N, Eigen::VectorXd::Ones(k)).array();
@@ -209,7 +208,7 @@ NBmixResult NBmix_s1_EM_g(const Eigen::VectorXd& N,
     //compute log-likelihood
     tmp = mx_dnbinom_log(TN1, TR1, TEh, P, len_N);
     tmp_max = tmp.rowwise().maxCoeff();
-    loglik_new = ((tmp.colwise() - tmp_max).exp().rowwise().sum().log() + tmp_max).sum();
+    double loglik_new = ((tmp.colwise() - tmp_max).exp().rowwise().sum().log() + tmp_max).sum();
 
 
     if ((std::abs(loglik - loglik_new) <= eps) && (iter > 100)) {

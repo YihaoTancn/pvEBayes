@@ -1,6 +1,6 @@
 # pvEBayes 0.2.0
 
-* Added a new implementation of the Koenker–Mizera (KM) model using the 'CVXR' package.
+* Added a new implementation of the Koenker-Mizera (KM) model using the 'CVXR' package.
 * Removed the dependency on 'REBayes'.
 * Removed the suggested dependency on 'Rmosek'.
 * Added support for supplying a prespecified expected‐null baseline estimator via the E argument in 'pvEBayes()'.
