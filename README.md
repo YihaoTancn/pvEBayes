@@ -5,6 +5,7 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/pvEBayes)](https://CRAN.R-project.org/package=pvEBayes)
 [![R-CMD-check](https://github.com/YihaoTancn/pvEBayes/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/YihaoTancn/pvEBayes/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/YihaoTancn/pvEBayes/graph/badge.svg)](https://app.codecov.io/gh/YihaoTancn/pvEBayes)
+[![CodeFactor](https://www.codefactor.io/repository/github/yihaotancn/pvebayes/badge)](https://www.codefactor.io/repository/github/yihaotancn/pvebayes)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 <!-- badges: end -->
 
@@ -15,12 +16,58 @@ for fitting these models to spontaneous reporting system (SRS) frequency tables,
 extracting summaries, performing hyperparameter tuning, and generating graphical
 summaries (eye plots and heatmaps) for signal detection and estimation.
 
-For methodological details, see:
+**Spontaneous Reporting System (SRS) Table**: An SRS dataset catalogs AE reports 
+on *I* AE rows across *J* drug columns. Let \eqn{N_{ij}} denote the number of 
+reported cases for the *i*-th AE and the *j*-th drug, where \eqn{i = 1,..., I} 
+and \eqn{j = 1,..., J}. 
 
-Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to
-Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation
-in Spontaneous Reporting Systems Data. *Statistics in Medicine.* 2025;
-44: 18-19, https://doi.org/10.1002/sim.70195.
+**Empirical Bayes modeling**: We assume that for each AE-drug pair, 
+\eqn{N_{ij} \sim \text{Poisson}(\lambda_{ij} E_{ij})}, where \eqn{E_{ij}} is
+expected baseline value meansuring the expected count of the AE-drug pair
+when there is no association between*i*-th AE and *j*-th drug. The parameter
+\eqn{\lambda_{ij} \geq 0} represents the relative reporting ratio, the signal
+strength, for the \eqn{(i, j)}-th pair measuring the ratio of the actual
+expected count arising due to dependence to the null baseline expected count.
+Let *g* be the prior density function for signal strength:
+\eqn{\lambda_{ij} \sim g(\cdot)}. The methods included in 'pvEBayes'
+differ by their assumptions on the prior distribution.
+
+Implemented methods include the Gamma-Poisson Shrinker (GPS),
+Koenker-Mizera (KM) method, Efron’s nonparametric empirical Bayes approach,
+the K-gamma model, and the general-gamma model. The selection of prior 
+distribution is critical in Bayesian analysis. The GPS model uses two gamma 
+mixture prior by assuming the signal/non-signal structure in SRS data. 
+However, in real-world setting, signal strengths \eqn{(\lambda_{ij})} are 
+often heterogeneous and thus follows a multi-modal distribution, making it
+difficult to assume a parametric prior. Non-parametric empirical Bayes models 
+(KM, Efron, K-gamma and general-gamma) address this challenge by utilizing a 
+flexible prior with general mixture form and estimating the prior 
+distribution in a data-driven way.    
+
+Unlike many existing pharmacovigilance packages that focus solely on signal
+detection (e.g. looking for AE-drug pairs that
+\eqn{p(\lambda_{ij}> 1+\epsilon) > 0.95} for some small \eqn{\epsilon}),
+'pvEBayes' supports both signal detection and signal estimation,
+enabling users not only to identify potential safety signals but also to
+quantify the underlying AE-drug association.
+
+**Implementations**: The KM method has an existing implementation in the 
+'REBayes' package, but it relies on Mosek, a commercial convex optimization 
+solver, which may limit accessibility due to licensing issue. The 'pvEBayes' 
+package provides an alternative fully open-source implementation of the KM 
+method using 'CVXR'. Efron’s method also has a general nonparametric empirical 
+Bayes implementation in the 'deconvolveR' package; however, that
+implementation does not support an exposure or offset parameter in the
+Poisson model, which corresponds to the expected null value \eqn{E_{ij}}. In
+'pvEBayes', the implementation of the Efron's method is adapted and
+modified from \code{deconvolveR} to support \eqn{E_{ij}} in Poisson model.
+
+In addition, this package implements the novel bi-level Expectation
+Conditional Maximization (ECM) algorithm proposed by Tan et al. (2025) for
+efficient parameter estimation in gamma mixture prior based models mentioned
+above.
+
+
 
 ## Installation
 
@@ -73,3 +120,24 @@ For a more detailed illustration, please see 'Vignette'.
 ## License
 
 'pvEBayes' is released under the GPL-3 license. See 'LICENSE.md' for details.
+
+
+## References
+
+Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+Estimation in Spontaneous Reporting Systems Data.
+\emph{Statistics in Medicine.} 2025; 44: 18-19,
+https://doi.org/10.1002/sim.70195.
+
+Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound
+Decisions, and Empirical Bayes Rules. \emph{Journal of the American
+Statistical Association} 2014; 109(506): 674–685,
+https://doi.org/10.1080/01621459.2013.869224
+
+Efron B. Empirical Bayes Deconvolution Estimates. \emph{Biometrika} 2016;
+103(1); 1-20, https://doi.org/10.1093/biomet/asv068
+
+DuMouchel W. Bayesian data mining in large frequency tables, with an
+application to the FDA spontaneous reporting system.
+\emph{The American Statistician.} 1999; 1;53(3):177-90.
