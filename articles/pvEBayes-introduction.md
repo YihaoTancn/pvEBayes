@@ -1,19 +1,19 @@
 # Analyzing SRS frequency table with pvEBayes
 
-## Disproportionality Analysis
+### Disproportionality Analysis
 
-Postmarketing surveillance primarily relies on the collection of
-spontaneous reports of suspected adverse drug events from pharmaceutical
-companies, healthcare professionals, and patients. These reports are
-curated and stored in spontaneous reporting systems (SRS), usually
-constructed as a large frequency table. We consider an SRS dataset
-cataloging AE reports on $I$ AE rows across $J$ drug columns. Let
-$N_{ij}$ denote the number of reported cases for the $i$-th AE and the
-$j$-th drug, where $i = 1,...,I$ and $j = 1,...,J$. Therefore, AE-drug
-pairwise occurrences from the AE-reports are summarized into an
-$I \times J$ contingency table, where the $(i,j)$-th cell catalogs the
-observed count $N_{ij}$ indicating the number of cases involving $i$-th
-AE and the $j$-th drug.
+Contemporary drug postmarketing surveillance largely relies on the
+collection of spontaneous reports of suspected adverse drug events from
+pharmaceutical companies, healthcare professionals, and patients. These
+reports are curated and stored in spontaneous reporting systems (SRS),
+usually organized as a large frequency table for downstream data
+abalysis. We consider an SRS dataset cataloging AE reports on $I$ AE
+rows across $J$ drug columns. Let $N_{ij}$ denote the number of reported
+cases for the $i$-th AE and the $j$-th drug, where $i = 1,...,I$ and
+$j = 1,...,J$. Therefore, AE-drug pairwise occurrences from the
+AE-reports are summarized into an $I \times J$ contingency table, where
+the $(i,j)$-th cell catalogs the observed count $N_{ij}$ indicating the
+number of cases involving $i$-th AE and the $j$-th drug.
 
 Methods implemented in this package assumes the observed count $N_{ij}$
 conditional on $E_{ij}$ is that
@@ -49,14 +49,15 @@ K-component gamma mixture, where K is user-specified. The Koenker-Mizera
 point masses on a pre-specified grid. The general-gamma model employs a
 nonparametric sparse gamma mixture distribution.
 
-‘pvEBayes’ provides implementations for the empirical Bayes methods for
-pharmacovigilance mentioned above. It provides tools for effectively
-fitting these models to the spontaneous reporting system (SRS) frequency
-tables, extracting summaries, performing hyperparameter tuning, and
-generating graphical summaries (eye plots and heatmaps) for signal
-detection and estimation.
+Package ‘pvEBayes’ provides implementations for the empirical Bayes
+methods for pharmacovigilance mentioned above. It provides tools for
+effectively fitting these models to the spontaneous reporting system
+(SRS) frequency tables, extracting summaries, performing hyperparameter
+tuning, and generating graphical summaries (eye plots and heatmaps) for
+signal detection and estimation. In the following we provide an example
+(borrowed from Tan et al.) of SRS data analyzing with ‘pvEBayes’.
 
-## Analyzing FDA statin SRS data with pvEBayes
+### Analyzing FDA statin SRS data with pvEBayes
 
 ``` r
 library(pvEBayes)
@@ -89,7 +90,7 @@ head(statin2025_44)
 #> BLOOD CREATININE ABNORMAL                     2645
 ```
 
-### Fit the general-gamma model
+#### Fit the general-gamma model
 
 Our interest lies in finding the most important adverse events and
 estimating the corresponding signal strength of these 6 statin drugs.
@@ -156,7 +157,7 @@ gg_tune_statin44 <- pvEBayes_tune(statin2025_44,
 #> 6   0.9 3906.526 4323.061          37
 ```
 
-## Visualization
+### Visualization
 
 In addition, ‘pvEBayes’ has implemented visual summary methods for both
 signal detection and estimation, which are heatmap and eyeplot. These
@@ -216,3 +217,13 @@ different statin drugs. The red dotted vertical line represents the
 value ‘1’. The texts on the right provide the number of observations as
 well as the null baseline expected counts under independence for an
 AE-drug pair.
+
+## References
+
+Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian
+Approaches to Pharmacovigilance for Simultaneous Signal Detection and
+Signal Strength Estimation in Spontaneous Reporting Systems Data. 2025;
+44: 18-19, <https://doi.org/10.1002/sim.70195>.
+
+Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for
+Empirical Bayes Methods in Pharmacovigilance.

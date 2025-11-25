@@ -65,15 +65,15 @@
 
     
     
-<div class="section level2">
-<h2 id="disproportionality-analysis">Disproportionality Analysis<a class="anchor" aria-label="anchor" href="#disproportionality-analysis"></a>
-</h2>
-<p>Postmarketing surveillance primarily relies on the collection of
-spontaneous reports of suspected adverse drug events from pharmaceutical
-companies, healthcare professionals, and patients. These reports are
-curated and stored in spontaneous reporting systems (SRS), usually
-constructed as a large frequency table. We consider an SRS dataset
-cataloging AE reports on
+<div class="section level3">
+<h3 id="disproportionality-analysis">Disproportionality Analysis<a class="anchor" aria-label="anchor" href="#disproportionality-analysis"></a>
+</h3>
+<p>Contemporary drug postmarketing surveillance largely relies on the
+collection of spontaneous reports of suspected adverse drug events from
+pharmaceutical companies, healthcare professionals, and patients. These
+reports are curated and stored in spontaneous reporting systems (SRS),
+usually organized as a large frequency table for downstream data
+abalysis. We consider an SRS dataset cataloging AE reports on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>
 AE rows across
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
@@ -156,16 +156,17 @@ K-component gamma mixture, where K is user-specified. The Koenker-Mizera
 (KM) and Efron models use a nonparametric discrete mixture prior, with
 point masses on a pre-specified grid. The general-gamma model employs a
 nonparametric sparse gamma mixture distribution.</p>
-<p>‘pvEBayes’ provides implementations for the empirical Bayes methods
-for pharmacovigilance mentioned above. It provides tools for effectively
-fitting these models to the spontaneous reporting system (SRS) frequency
-tables, extracting summaries, performing hyperparameter tuning, and
-generating graphical summaries (eye plots and heatmaps) for signal
-detection and estimation.</p>
+<p>Package ‘pvEBayes’ provides implementations for the empirical Bayes
+methods for pharmacovigilance mentioned above. It provides tools for
+effectively fitting these models to the spontaneous reporting system
+(SRS) frequency tables, extracting summaries, performing hyperparameter
+tuning, and generating graphical summaries (eye plots and heatmaps) for
+signal detection and estimation. In the following we provide an example
+(borrowed from Tan et al.) of SRS data analyzing with ‘pvEBayes’.</p>
 </div>
-<div class="section level2">
-<h2 id="analyzing-fda-statin-srs-data-with-pvebayes">Analyzing FDA statin SRS data with pvEBayes<a class="anchor" aria-label="anchor" href="#analyzing-fda-statin-srs-data-with-pvebayes"></a>
-</h2>
+<div class="section level3">
+<h3 id="analyzing-fda-statin-srs-data-with-pvebayes">Analyzing FDA statin SRS data with pvEBayes<a class="anchor" aria-label="anchor" href="#analyzing-fda-statin-srs-data-with-pvebayes"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/YihaoTancn/pvEBayes" class="external-link">pvEBayes</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -195,9 +196,9 @@ detection and estimation.</p>
 <span><span class="co">#&gt; BLOOD CREATINE PHOSPHOKINASE ABNORMAL          133</span></span>
 <span><span class="co">#&gt; BLOOD CREATINE PHOSPHOKINASE INCREASED       17203</span></span>
 <span><span class="co">#&gt; BLOOD CREATININE ABNORMAL                     2645</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="fit-the-general-gamma-model">Fit the general-gamma model<a class="anchor" aria-label="anchor" href="#fit-the-general-gamma-model"></a>
-</h3>
+<div class="section level4">
+<h4 id="fit-the-general-gamma-model">Fit the general-gamma model<a class="anchor" aria-label="anchor" href="#fit-the-general-gamma-model"></a>
+</h4>
 <p>Our interest lies in finding the most important adverse events and
 estimating the corresponding signal strength of these 6 statin drugs.
 These are achieved by fitting empirical Bayes models with pvEBayes() to
@@ -255,9 +256,9 @@ steps. The relevant code is given below:</p>
 <span><span class="co">#&gt; 6   0.9 3906.526 4323.061          37</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
-<h2 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
-</h2>
+<div class="section level3">
+<h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
+</h3>
 <p>In addition, ‘pvEBayes’ has implemented visual summary methods for
 both signal detection and estimation, which are heatmap and eyeplot.
 These plot functions can be accessed through the ‘plot()’ with argument
@@ -310,6 +311,16 @@ with different colors indicating the results from different statin
 drugs. The red dotted vertical line represents the value ‘1’. The texts
 on the right provide the number of observations as well as the null
 baseline expected counts under independence for an AE-drug pair.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian
+Approaches to Pharmacovigilance for Simultaneous Signal Detection and
+Signal Strength Estimation in Spontaneous Reporting Systems Data. 2025;
+44: 18-19, <a href="https://doi.org/10.1002/sim.70195" class="external-link uri">https://doi.org/10.1002/sim.70195</a>.</p>
+<p>Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for
+Empirical Bayes Methods in Pharmacovigilance.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

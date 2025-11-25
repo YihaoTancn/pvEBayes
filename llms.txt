@@ -95,6 +95,8 @@ details.
   : Generate posterior draws for each AE-drug combination
 - [`print(`*`<pvEBayes>`*`)`](https://yihaotancn.github.io/pvEBayes/reference/print.pvEBayes.md)
   : Print method for a pvEBayes object
+- [`pvEBayes-package`](https://yihaotancn.github.io/pvEBayes/reference/pvEBayes-package.md)
+  : A suite of empirical Bayes methods to use in pharmacovigilance.
 - [`pvEBayes()`](https://yihaotancn.github.io/pvEBayes/reference/pvEBayes.md)
   : Fit a general-gamma, GPS, K-gamma, KM or efron model for a
   contingency table.
