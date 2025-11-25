@@ -26,9 +26,15 @@ differ by their assumptions on the prior distribution.
 
 Implemented methods include the Gamma-Poisson Shrinker (GPS),
 Koenker-Mizera (KM) method, Efron’s nonparametric empirical Bayes approach,
-the K-gamma model, and the general-gamma model. The GPS, K-gamma, and
-General-Gamma models are based on gamma mixture priors, whereas the KM and
-Efron methods use nonparametric grid-based discrete priors.
+the K-gamma model, and the general-gamma model. The selection of prior
+distribution is critical in Bayesian analysis. The GPS model uses two gamma
+mixture prior by assuming the signal/non-signal structure in SRS data.
+However, in real-world setting, signal strengths \eqn{(\lambda_{ij})} are
+often heterogeneous and thus follows a multi-modal distribution, making it
+difficult to assume a parametric prior. Non-parametric empirical Bayes models
+(KM, Efron, K-gamma and general-gamma) address this challenge by utilizing a
+flexible prior with general mixture form and estimating the prior
+distribution in a data-driven way.
 
 Unlike many existing pharmacovigilance packages that focus solely on signal
 detection (e.g. looking for AE-drug pairs that

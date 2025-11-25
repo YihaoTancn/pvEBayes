@@ -122,6 +122,12 @@ For a more detailed illustration, please see 'Vignette'.
 `pvEBayes` is released under the GPL-3 license. See 'LICENSE.md' for details.
 
 
+## Code of Conduct
+  
+Please note that the `pvEBayes` project is released with a 
+[Contributor Code of Conduct](https://yihaotancn.github.io/pvEBayes/CODE_OF_CONDUCT.html). 
+By contributing to this project, you agree to abide by its terms.
+
 ## References
 
 Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
