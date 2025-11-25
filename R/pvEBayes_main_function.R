@@ -54,9 +54,12 @@ calculate_tilde_e <- function(contin_table) {
     (all(contin_table == floor(contin_table)))
 
   if (is_valid == FALSE) {
-    warning("contin_table must be a matrix with each entry being non-negative integer")
+    warning(
+      paste0("contin_table must be a matrix with",
+             " each entry being non-negative integer.")
+      )
   }
-  return(is_valid)
+  is_valid
 }
 
 
@@ -129,7 +132,7 @@ estimate_null_expected_count <- function(contin_table) {
   )[, 1]
   range <- to - from
   res <- sobol_seq * range + from
-  return(res)
+  res
 }
 
 
@@ -166,7 +169,7 @@ estimate_null_expected_count <- function(contin_table) {
     seqs <- c(exp(grid_zero), seqs) %>% sort()
   }
 
-  return(seqs)
+  seqs
 }
 
 .sigmoid <- function(x) {
@@ -177,7 +180,7 @@ estimate_null_expected_count <- function(contin_table) {
   dist21 <- abs(grid - 1)
   weights <- 2 - 2 * .sigmoid(dist21 / 2)
   h <- 1e-7 + (1e-4 - 1e-7) * (weights)
-  return(h)
+  h
 }
 
 .km_eb_fit <- function(x, v, exposure = NULL, eps = 1e-04, ...) {
@@ -205,7 +208,7 @@ estimate_null_expected_count <- function(contin_table) {
     x = v, y = f$f, g = f$g, logLik = logLik,
     status = f$status
   )
-  return(z)
+  z
 }
 
 
@@ -253,7 +256,7 @@ estimate_null_expected_count <- function(contin_table) {
 
 
   out <- list(g = g, grid = grid, loglik = fit$logLik)
-  return(out)
+  out
 }
 
 .E_fit <- function(N, E, c0 = 1, pDegree = 5, aStart = 1, ...) {
@@ -403,7 +406,10 @@ estimate_null_expected_count <- function(contin_table) {
       stop("Error: K must be an integer greater than 1.")
     }
     if (!is.null(alpha)) {
-      message("parameter alpha is not needed in GPS/K-gamma model, now running without alpha")
+      message(
+        paste0("parameter alpha is not needed in GPS/K-gamma model,",
+               " now running without alpha.")
+        )
     }
     alpha <- 1
     if (K == 2) {
@@ -420,7 +426,10 @@ estimate_null_expected_count <- function(contin_table) {
       stop("Error: Dirichlet parameter alpha (0,1) is not given.")
     }
     if (!is.null(K)) {
-      message("parameter K is not needed in general-gamma model, now running without K")
+      message(
+        paste0("parameter K is not needed in general-gamma model,",
+               " now running without K.")
+        )
     }
 
     grid <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = 200)
@@ -441,7 +450,7 @@ estimate_null_expected_count <- function(contin_table) {
     eps,
     dirichlet
   )
-  return(result)
+  result
 }
 
 
@@ -457,7 +466,7 @@ estimate_null_expected_count <- function(contin_table) {
   N <- as.vector(N)
   E <- as.vector(E)
   if (log == FALSE) {
-    Tau <- vapply(seq_len(length(N)), function(e) {
+    Tau <- vapply(seq_along(N), function(e) {
       tmp <- stats::dnbinom(N[e],
         size = alphas,
         prob = 1 / (1 + E[e] * h), log = TRUE
@@ -466,7 +475,7 @@ estimate_null_expected_count <- function(contin_table) {
     }, FUN.VALUE = numeric(length(alphas))) %>% t()
     Qn <- Tau / rowSums(Tau)
   } else {
-    Tau <- vapply(seq_len(length(N)), function(e) {
+    Tau <- vapply(seq_along(N), function(e) {
       tmp <- stats::dnbinom(N[e],
         size = alphas,
         prob = 1 / (1 + E[e] * h), log = TRUE
@@ -476,7 +485,7 @@ estimate_null_expected_count <- function(contin_table) {
     Qn <- Tau - log(rowSums(exp(Tau)))
   }
 
-  return(Qn)
+  Qn
 }
 
 .generate_posterior_gamma_mix <- function(N,
@@ -507,7 +516,7 @@ estimate_null_expected_count <- function(contin_table) {
     colnames(N) # Names for dim 3
   )
 
-  return(lambda_sim)
+  lambda_sim
 }
 
 
@@ -530,7 +539,7 @@ estimate_null_expected_count <- function(contin_table) {
     colnames(N) # Names for dim 3
   )
 
-  return(lambda_sim)
+  lambda_sim
 }
 
 
@@ -1009,13 +1018,13 @@ tuning_general_gamma <- function(contin_table,
 
 .get_grid_list <- function(c0, p) {
   res <- list()
-  for (i in seq_len(length(c0))) {
-    for (j in seq_len(length(p))) {
+  for (i in seq_along(c0)) {
+    for (j in seq_along(p)) {
       res[[10 * i + j]] <- list(c0 = c0[i], p = p[j])
     }
   }
   res <- Filter(Negate(is.null), res)
-  return(res)
+  res
 }
 
 

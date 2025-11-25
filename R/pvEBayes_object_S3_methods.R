@@ -37,9 +37,12 @@ is.pvEBayes_tuned <- function(object) {
 #'
 extract_all_fitted_models <- function(object) {
   if (!is.pvEBayes_tuned(object)) {
-    stop("This function can only be used after tuning. Please apply to objects returned by 'pvEBayes_tune()'.")
+    stop(
+      paste0("This function can only be used after tuning.",
+                "Please apply to objects returned by 'pvEBayes_tune()'.")
+    )
   }
-  return(object$tuning)
+  object$tuning
 }
 
 
@@ -104,7 +107,7 @@ posterior_draws <- function(obj,
   # Reorder columns to place the new column first
   df <- df[, c(var, setdiff(names(df), var))]
 
-  return(df)
+  df
 }
 
 .left_join_base <- function(x, y, by) {
@@ -287,11 +290,13 @@ eyeplot_pvEBayes <- function(x,
     dat_plot$post_draws[dat_plot$post_draws == 0] <- 1e-10
     dat_plot$post_draws <- log(dat_plot$post_draws)
     q05_cutoff <- log(1.01)
-    xlab_text <- "Log signal strength (posterior median and 90% equi-tailed credible intervals)"
+    xlab_text <- paste0("Log signal strength (posterior median",
+                        " and 90% equi-tailed credible intervals)")
     vline_x <- 0
   } else {
     q05_cutoff <- 1.01
-    xlab_text <- "Signal strength (posterior median and 90% equi-tailed credible intervals)"
+    xlab_text <- paste0("Signal strength (posterior median",
+                        " and 90% equi-tailed credible intervals)")
     vline_x <- 1
   }
 
@@ -316,7 +321,7 @@ eyeplot_pvEBayes <- function(x,
     N = data.table::first(.SD$N),
     E = data.table::first(.SD$E),
     max_post_draws = max(.SD$post_draws),
-    q95 = stats::quantile(.SD$post_draws, probs = c(0.95))
+    q95 = stats::quantile(.SD$post_draws, probs = 0.95)
   ), by = group_vars, .SDcols = measure_vars]
 
   # Adding new columns using :=
@@ -341,7 +346,7 @@ eyeplot_pvEBayes <- function(x,
     ) +
     ggdist::stat_pointinterval(
       position = ggplot2::position_dodge(0.9),
-      .width = c(0.9),
+      .width = 0.9,
       point_interval = "median_qi"
     ) +
     ggplot2::scale_x_continuous(
@@ -842,7 +847,7 @@ logLik.pvEBayes <- function(object, ...) {
   stopifnot(is.pvEBayes(object))
 
   res <- object$loglik
-  return(res)
+  res
 }
 
 
@@ -888,7 +893,7 @@ AIC.pvEBayes <- function(object, ..., k = 2) {
 
 
   AIC_score <- penalty * 2 - object$loglik * k
-  return(AIC_score)
+  AIC_score
 }
 
 
@@ -937,5 +942,5 @@ BIC.pvEBayes <- function(object, ...) {
 
 
   BIC_score <- penalty * log(n) - object$loglik * 2
-  return(BIC_score)
+  BIC_score
 }
