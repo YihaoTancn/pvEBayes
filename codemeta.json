@@ -1,0 +1,284 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "pvEBayes",
+  "description": "A suite of empirical Bayes methods to use in pharmacovigilance. Contains various model fitting and post-processing functions. For more details see Tan et al. (2025) <doi:10.48550/arXiv.2502.09816>, Koenker and Mizera (2014) <doi:10.1080/01621459.2013.869224> and Efron (2016) <doi:10.1093/biomet/asv068>.",
+  "name": "pvEBayes: Empirical Bayes Methods for Pharmacovigilance",
+  "relatedLink": ["https://yihaotancn.github.io/pvEBayes/", "https://CRAN.R-project.org/package=pvEBayes"],
+  "codeRepository": "https://github.com/YihaoTancn/pvEBayes",
+  "issueTracker": "https://github.com/YihaoTancn/pvEBayes/issues",
+  "license": "https://spdx.org/licenses/GPL-3.0",
+  "version": "0.2.0",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 4.5.0 (2025-04-11 ucrt)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Yihao",
+      "familyName": "Tan",
+      "email": "yihaotan@buffalo.edu",
+      "@id": "https://orcid.org/0009-0002-9196-8166"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Marianthi",
+      "familyName": "Markatou",
+      "@id": "https://orcid.org/0000-0002-1453-8229"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Saptarshi",
+      "familyName": "Chakraborty",
+      "@id": "https://orcid.org/0000-0002-3121-9174"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Raktim",
+      "familyName": "Mukhopadhyay",
+      "@id": "https://orcid.org/0009-0007-8972-6682"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Yihao",
+      "familyName": "Tan",
+      "email": "yihaotan@buffalo.edu",
+      "@id": "https://orcid.org/0009-0002-9196-8166"
+    }
+  ],
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "knitr",
+      "name": "knitr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "testthat",
+      "name": "testthat",
+      "version": ">= 3.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
+    }
+  ],
+  "softwareRequirements": {
+    "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 3.6.0"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "data.table",
+      "name": "data.table",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=data.table"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "ggdist",
+      "name": "ggdist",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggdist"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "ggfittext",
+      "name": "ggfittext",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggfittext"
+    },
+    "5": {
+      "@type": "SoftwareApplication",
+      "identifier": "ggplot2",
+      "name": "ggplot2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggplot2"
+    },
+    "6": {
+      "@type": "SoftwareApplication",
+      "identifier": "glue",
+      "name": "glue",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=glue"
+    },
+    "7": {
+      "@type": "SoftwareApplication",
+      "identifier": "graphics",
+      "name": "graphics"
+    },
+    "8": {
+      "@type": "SoftwareApplication",
+      "identifier": "magrittr",
+      "name": "magrittr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=magrittr"
+    },
+    "9": {
+      "@type": "SoftwareApplication",
+      "identifier": "methods",
+      "name": "methods"
+    },
+    "10": {
+      "@type": "SoftwareApplication",
+      "identifier": "SobolSequence",
+      "name": "SobolSequence",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=SobolSequence"
+    },
+    "11": {
+      "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
+    },
+    "12": {
+      "@type": "SoftwareApplication",
+      "identifier": "wacolors",
+      "name": "wacolors",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=wacolors"
+    },
+    "13": {
+      "@type": "SoftwareApplication",
+      "identifier": "Rcpp",
+      "name": "Rcpp",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=Rcpp"
+    },
+    "14": {
+      "@type": "SoftwareApplication",
+      "identifier": "splines",
+      "name": "splines"
+    },
+    "15": {
+      "@type": "SoftwareApplication",
+      "identifier": "CVXR",
+      "name": "CVXR",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=CVXR"
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "40983.644KB",
+  "citation": [
+    {
+      "@type": "SoftwareSourceCode",
+      "datePublished": "2025",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Yihao",
+          "familyName": "Tan"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Saptarshi",
+          "familyName": "Chakraborty"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Marianthi",
+          "familyName": "Markatou"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Raktim",
+          "familyName": "Mukhopadhyay"
+        }
+      ],
+      "name": "pvEBayes: Empirical Bayes Models for Pharmacovigilance",
+      "url": "https://CRAN.R-project.org/package=pvEBayes",
+      "description": "R package version 0.2.0"
+    }
+  ],
+  "releaseNotes": "https://github.com/YihaoTancn/pvEBayes/blob/main/NEWS.md",
+  "readme": "https://github.com/YihaoTancn/pvEBayes/blob/master/README.md",
+  "contIntegration": ["https://github.com/YihaoTancn/pvEBayes/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/YihaoTancn/pvEBayes"],
+  "keywords": "pharmacovigilance"
+}
