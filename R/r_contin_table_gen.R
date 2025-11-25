@@ -17,7 +17,7 @@ rtruncnorm <- function(n, a = -0.4, b = 0, mean = 0, sd = 0.05) {
     i <- i + 1
   }
   res <- unlist(samples)[1:n]
-  return(res)
+  res
 }
 
 
@@ -81,12 +81,12 @@ rtruncnorm <- function(n, a = -0.4, b = 0, mean = 0, sd = 0.05) {
       magrittr::set_colnames(colnames(ref_table))
   })
   if (Variation == TRUE) {
-    return(list(
+    list(
       tables = tables,
       var_sig = var_sig
-    ))
+    )
   } else {
-    return(tables)
+    tables
   }
 }
 
@@ -185,5 +185,5 @@ generate_contin_table <- function(n_table = 1,
     Variation,
     zi_indic_mat
   )
-  return(out)
+  out
 }

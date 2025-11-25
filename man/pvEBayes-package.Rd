@@ -5,9 +5,10 @@
 \alias{pvEBayes-package}
 \title{A suite of empirical Bayes methods to use in pharmacovigilance.}
 \description{
-\code{pvEBayes} provides a collection of parametric and non-parametric empirical
-Bayes methods implementation for pharmacovigilance (including signal
-detection and signal estimation) on spontaneous reporting systems (SRS) data.
+\code{pvEBayes} provides a collection of parametric and non-parametric
+empirical Bayes methods implementation for pharmacovigilance (including
+signal detection and signal estimation) on spontaneous reporting systems
+(SRS) data.
 
 An SRS dataset catalogs AE reports on \emph{I} AE rows across \emph{J} drug columns.
 Let \eqn{N_{ij}} denote the number of reported cases for the

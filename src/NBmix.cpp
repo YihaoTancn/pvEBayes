@@ -72,7 +72,6 @@ NBmixResult NBmix_s1_EM_g(const Eigen::VectorXd& N,
                           int maxi,
                           double eps,
                           bool dirichlet) {
-
   int k = grid.size();
   int len_N = N.size();
   int iter = 0;
@@ -163,7 +162,6 @@ NBmixResult NBmix_s1_EM_g(const Eigen::VectorXd& N,
       TN1 = array_colIndexing(TN1, filtered_seq);
       TR1 = array_colIndexing(TR1, filtered_seq);
       T1h = array_colIndexing(T1h, filtered_seq);
-
     }
 
     //updating r_k
@@ -219,8 +217,6 @@ NBmixResult NBmix_s1_EM_g(const Eigen::VectorXd& N,
     if(iter>= maxi){
       stop = true;
     }
-
-
   }
 
   NBmixResult result;
@@ -243,7 +239,6 @@ Rcpp::List NBmix_s1_EM_g_Rcpp(const Eigen::VectorXd& N,
                               int maxi,
                               double eps,
                               bool dirichlet) {
-
   // Call the core function using Rcpp::as to convert R types to std::vector<int>
   NBmixResult result = NBmix_s1_EM_g(N, E, h, grid, alpha, maxi, eps, dirichlet);
 
