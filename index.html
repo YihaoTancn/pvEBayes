@@ -58,8 +58,12 @@
 <!-- badges: start -->
 
 <p>‘pvEBayes’ is an R package that implements a suite of nonparametric empirical Bayes methods for pharmacovigilance including Gamma-Poisson Shrinker (GPS), K-gamma, general-gamma, Koenker-Mizera (KM), and Efron models. It provides tools for fitting these models to spontaneous reporting system (SRS) frequency tables, extracting summaries, performing hyperparameter tuning, and generating graphical summaries (eye plots and heatmaps) for signal detection and estimation.</p>
-<p>For methodological details, see:</p>
-<p>Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation in Spontaneous Reporting Systems Data. <em>Statistics in Medicine.</em> 2025; 44: 18-19, <a href="https://doi.org/10.1002/sim.70195" class="external-link uri">https://doi.org/10.1002/sim.70195</a>.</p>
+<p><strong>Spontaneous Reporting System (SRS) Table</strong>: An SRS dataset catalogs AE reports on <em>I</em> AE rows across <em>J</em> drug columns. Let  denote the number of reported cases for the <em>i</em>-th AE and the <em>j</em>-th drug, where  and .</p>
+<p><strong>Empirical Bayes modeling</strong>: We assume that for each AE-drug pair, , where  is expected baseline value meansuring the expected count of the AE-drug pair when there is no association between<em>i</em>-th AE and <em>j</em>-th drug. The parameter  represents the relative reporting ratio, the signal strength, for the -th pair measuring the ratio of the actual expected count arising due to dependence to the null baseline expected count. Let <em>g</em> be the prior density function for signal strength: . The methods included in ‘pvEBayes’ differ by their assumptions on the prior distribution.</p>
+<p>Implemented methods include the Gamma-Poisson Shrinker (GPS), Koenker-Mizera (KM) method, Efron’s nonparametric empirical Bayes approach, the K-gamma model, and the general-gamma model. The selection of prior distribution is critical in Bayesian analysis. The GPS model uses two gamma mixture prior by assuming the signal/non-signal structure in SRS data. However, in real-world setting, signal strengths  are often heterogeneous and thus follows a multi-modal distribution, making it difficult to assume a parametric prior. Non-parametric empirical Bayes models (KM, Efron, K-gamma and general-gamma) address this challenge by utilizing a flexible prior with general mixture form and estimating the prior distribution in a data-driven way.</p>
+<p>Unlike many existing pharmacovigilance packages that focus solely on signal detection (e.g. looking for AE-drug pairs that  for some small ), ‘pvEBayes’ supports both signal detection and signal estimation, enabling users not only to identify potential safety signals but also to quantify the underlying AE-drug association.</p>
+<p><strong>Implementations</strong>: The KM method has an existing implementation in the ‘REBayes’ package, but it relies on Mosek, a commercial convex optimization solver, which may limit accessibility due to licensing issue. The ‘pvEBayes’ package provides an alternative fully open-source implementation of the KM method using ‘CVXR’. Efron’s method also has a general nonparametric empirical Bayes implementation in the ‘deconvolveR’ package; however, that implementation does not support an exposure or offset parameter in the Poisson model, which corresponds to the expected null value . In ‘pvEBayes’, the implementation of the Efron’s method is adapted and modified from  to support  in Poisson model.</p>
+<p>In addition, this package implements the novel bi-level Expectation Conditional Maximization (ECM) algorithm proposed by Tan et al. (2025) for efficient parameter estimation in gamma mixture prior based models mentioned above.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -101,6 +105,14 @@
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
 <p>‘pvEBayes’ is released under the GPL-3 license. See ‘LICENSE.md’ for details.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength Estimation in Spontaneous Reporting Systems Data.  2025; 44: 18-19, <a href="https://doi.org/10.1002/sim.70195" class="external-link uri">https://doi.org/10.1002/sim.70195</a>.</p>
+<p>Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound Decisions, and Empirical Bayes Rules.  2014; 109(506): 674–685, <a href="https://doi.org/10.1080/01621459.2013.869224" class="external-link uri">https://doi.org/10.1080/01621459.2013.869224</a></p>
+<p>Efron B. Empirical Bayes Deconvolution Estimates.  2016; 103(1); 1-20, <a href="https://doi.org/10.1093/biomet/asv068" class="external-link uri">https://doi.org/10.1093/biomet/asv068</a></p>
+<p>DuMouchel W. Bayesian data mining in large frequency tables, with an application to the FDA spontaneous reporting system.  1999; 1;53(3):177-90.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -144,6 +156,7 @@
 <li><a href="https://CRAN.R-project.org/package=pvEBayes" class="external-link"><img src="https://www.r-pkg.org/badges/version/pvEBayes" alt="CRAN status"></a></li>
 <li><a href="https://github.com/YihaoTancn/pvEBayes/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/YihaoTancn/pvEBayes/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/YihaoTancn/pvEBayes" class="external-link"><img src="https://codecov.io/gh/YihaoTancn/pvEBayes/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://www.codefactor.io/repository/github/yihaotancn/pvebayes" class="external-link"><img src="https://www.codefactor.io/repository/github/yihaotancn/pvebayes/badge" alt="CodeFactor"></a></li>
 <li><a href="https://www.gnu.org/licenses/gpl-3.0" class="external-link"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3"></a></li>
 </ul>
 </div>

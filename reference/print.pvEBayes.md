@@ -41,9 +41,9 @@ print(obj)
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 19 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.235 seconds.
+#> Running time of the general-gamma model fitting: 0.2364 seconds.
 #> Running time for posterior draws 
-#> (10000 signal strength posterior draws per AE-drug pair):0.3971 seconds.
+#> (10000 signal strength posterior draws per AE-drug pair):0.4288 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
