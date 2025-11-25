@@ -17,7 +17,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/YihaoTancn/pvEBayes/blob/master/inst/CITATION)
+[`inst/CITATION`](https://github.com/YihaoTancn/pvEBayes/blob/main/inst/CITATION)
 
 Tan Y, Chakraborty S, Markatou M, Mukhopadhyay R (2025). *pvEBayes:
 Empirical Bayes Models for Pharmacovigilance*. R package version 0.2.0,
