@@ -89,7 +89,7 @@ rtruncnorm <- function(n, a = -0.4, b = 0, mean = 0, sd = 0.05) {
       tmp_sig[signal_mat == 1] <- signal_mat[signal_mat == 1] +
         err1[signal_mat == 1]
       tmp_sig[signal_mat > 1] <- signal_mat[signal_mat > 1] +
-        err1[signal_mat > 1]
+        err2[signal_mat > 1]
       tmp_sig[I, ] <- 1
       tmp_sig[, J] <- 1
       tmp_sig * (1 - Z) %>%

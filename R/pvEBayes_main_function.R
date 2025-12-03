@@ -275,7 +275,6 @@ estimate_null_expected_count <- function(contin_table) {
 
   f <- .KWDual_CVXR(A, d, w, ...)
   logLik <- n * sum(w * log(f$g))
-  dy <- as.vector((A %*% (f$f * d * v)) / f$g)
   z <- list(
     x = v, y = f$f, g = f$g, logLik = logLik,
     status = f$status
@@ -300,7 +299,6 @@ estimate_null_expected_count <- function(contin_table) {
 #' @keywords internal
 #' @noRd
 .KWDual_CVXR <- function(A, d, w, rtol_KM = 1e-6, verb = FALSE) {
-  n <- nrow(A)
   m <- ncol(A)
 
   A_mat <- A
@@ -427,7 +425,6 @@ estimate_null_expected_count <- function(contin_table) {
   P <- vapply(tau, function(ee) {
     stats::dpois(x, ee * E)
   }, FUN.VALUE = numeric(length(x)))
-  m <- length(tau)
   Q <- cbind(1, scale(splines::ns(tau, pDegree),
     center = TRUE,
     scale = FALSE
@@ -456,7 +453,7 @@ estimate_null_expected_count <- function(contin_table) {
     f <- as.vector(P %*% g)
     Pt <- P / f
     W <- g * (t(Pt) - 1)
-    qw <- crossprod(Q, W) # t(Q) %*% W
+    qw <- crossprod(Q, W)
     aa <- sqrt(sum(a^2))
     sDot <- c0 * a / aa
     qw_rowsums <- rowSums(qw)
@@ -471,7 +468,7 @@ estimate_null_expected_count <- function(contin_table) {
     f <- as.vector(P %*% g)
     Pt <- P / f
     W <- g * (t(Pt) - 1)
-    qw <- crossprod(Q, W) # t(Q) %*% W
+    qw <- crossprod(Q, W)
     aa <- sqrt(sum(a^2))
     qw_rowsums <- rowSums(qw)
     qg <- crossprod(Q, g)
@@ -515,8 +512,7 @@ estimate_null_expected_count <- function(contin_table) {
     f <- as.vector(P %*% g)
     Pt <- P / f
     W <- g * (t(Pt) - 1)
-    qw <- crossprod(Q, W) # t(Q) %*% W
-    aa <- sqrt(sum(a^2))
+    qw <- crossprod(Q, W)
     qw_rowsums <- rowSums(qw)
     qg <- crossprod(Q, g)
     t1 <- tcrossprod(qw)
@@ -524,8 +520,7 @@ estimate_null_expected_count <- function(contin_table) {
     t3 <- t(t2)
     W_rowsums <- rowSums(W)
     t4 <- crossprod(Q * W_rowsums, Q)
-    # sDotDot <- c0/aa * (diag(length(a)) - tcrossprod(a)/aa^2)
-    hess <- (t1 + t2 + t3 - t4) #+ sDotDot
+    hess <- (t1 + t2 + t3 - t4)
     hess
   }
 
@@ -988,7 +983,7 @@ pvEBayes <- function(contin_table, model = "general-gamma",
   if (.is_valid_contin_table(contin_table) == FALSE) {
     stop()
   }
-  if (is.null(colnames(contin_table)) |
+  if (is.null(colnames(contin_table)) ||
     is.null(rownames(contin_table))) {
     contin_table <- .set_default_names(contin_table)
   }
@@ -1017,7 +1012,7 @@ pvEBayes <- function(contin_table, model = "general-gamma",
     )
   }
   model <- as.character(model)
-  if (!is.null(maxi) &
+  if (!is.null(maxi) &&
     !(is.numeric(maxi) && length(maxi) == 1 &&
       maxi %% 1 == 0 && maxi > 0)) {
     stop("'maxi' must be a single integer that is greater than 0.")
@@ -1028,7 +1023,7 @@ pvEBayes <- function(contin_table, model = "general-gamma",
     maxi <- 1000L
   }
 
-  if (!is.null(n_posterior_draws) &
+  if (!is.null(n_posterior_draws) &&
     !(is.numeric(n_posterior_draws) && length(n_posterior_draws) == 1 &&
       n_posterior_draws %% 1 == 0 && n_posterior_draws > 0)) {
     stop("'n_posterior_draws' must be a single positive integer.")
@@ -1244,7 +1239,7 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
     stop("'return_all_BIC' must be a single logical value (TRUE or FALSE).")
   }
 
-  if (is.null(colnames(contin_table)) |
+  if (is.null(colnames(contin_table)) ||
     is.null(rownames(contin_table))) {
     contin_table <- .set_default_names(contin_table)
   }
@@ -1277,7 +1272,7 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
     stop("Please use pvEBayes() for GPS, K-gamma or KM model fitting.")
   }
 
-  if (!is.null(n_posterior_draws) &
+  if (!is.null(n_posterior_draws) &&
     !(is.numeric(n_posterior_draws) && length(n_posterior_draws) == 1 &&
       n_posterior_draws %% 1 == 0 && n_posterior_draws > 0)) {
     stop("'n_posterior_draws' must be a single positive integer.")
