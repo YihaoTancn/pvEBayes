@@ -7,7 +7,7 @@ collection of spontaneous reports of suspected adverse drug events from
 pharmaceutical companies, healthcare professionals, and patients. These
 reports are curated and stored in spontaneous reporting systems (SRS),
 usually organized as a large frequency table for downstream data
-abalysis. We consider an SRS dataset cataloging AE reports on $I$ AE
+analysis. We consider an SRS dataset cataloging AE reports on $I$ AE
 rows across $J$ drug columns. Let $N_{ij}$ denote the number of reported
 cases for the $i$-th AE and the $j$-th drug, where $i = 1,...,I$ and
 $j = 1,...,J$. Therefore, AE-drug pairwise occurrences from the
@@ -133,11 +133,11 @@ BIC(gg_given_alpha)
 #> [1] 4016.649
 ```
 
-In practice, one can specify a list of candidate α values, fit the
-general-gamma model for each, compute the corresponding AIC or BIC, and
-select the model with the lowest AIC or BIC. Instead of manually doing
-so, one can use the ‘pvEBayes_tune()’ function, which implements these
-steps. The relevant code is given below:
+In practice, one can specify a list of candidate $\alpha$ values, fit
+the general-gamma model for each, compute the corresponding AIC or BIC,
+and select the model with the lowest AIC or BIC. Instead of manually
+doing so, one can use the ‘pvEBayes_tune()’ function, which implements
+these steps. The relevant code is given below:
 
 ``` r
 
@@ -222,8 +222,22 @@ AE-drug pair.
 
 Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian
 Approaches to Pharmacovigilance for Simultaneous Signal Detection and
-Signal Strength Estimation in Spontaneous Reporting Systems Data. 2025;
-44: 18-19, <https://doi.org/10.1002/sim.70195>.
+Signal Strength Estimation in Spontaneous Reporting Systems Data.
+*Statistics in Medicine*. 2025; 44: 18-19,
+<https://doi.org/10.1002/sim.70195>.
 
 Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for
-Empirical Bayes Methods in Pharmacovigilance.
+Empirical Bayes Methods in Pharmacovigilance. *arXiv*:2512.01057
+(stat.AP). <https://doi.org/10.48550/arXiv.2512.01057>
+
+Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound
+Decisions, and Empirical Bayes Rules. *Journal of the American
+Statistical Association* 2014; 109(506): 674–685,
+<https://doi.org/10.1080/01621459.2013.869224>
+
+Efron B. Empirical Bayes Deconvolution Estimates. *Biometrika* 2016;
+103(1); 1-20, <https://doi.org/10.1093/biomet/asv068>
+
+DuMouchel W. Bayesian data mining in large frequency tables, with an
+application to the FDA spontaneous reporting system. *The American
+Statistician*. 1999; 1;53(3):177-90.

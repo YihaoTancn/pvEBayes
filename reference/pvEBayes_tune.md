@@ -20,6 +20,8 @@ pvEBayes_tune(
   return_all_fit = FALSE,
   return_all_AIC = TRUE,
   return_all_BIC = TRUE,
+  rtol_ecm = 1e-04,
+  rtol_efron = 1e-10,
   E = NULL
 )
 ```
@@ -34,7 +36,8 @@ pvEBayes_tune(
 - model:
 
   the model to be tuned. Available models are "general-gamma" and
-  "efron". Default to "general-gamma".
+  "efron". Default to "general-gamma". Note that the input for model is
+  case-sensitive.
 
 - alpha_vec:
 
@@ -80,6 +83,19 @@ pvEBayes_tune(
   logical, indicating whether to return BIC values for each fitted model
   under the selection. Default to be TRUE.
 
+- rtol_ecm:
+
+  a tolerance parameter used in the stopping rule of the ECM algorithm.
+  It is used when 'GPS', 'K-gamma' or 'general-gamma' model is fitted.
+  If the difference in marginal likelihood between two consecutive
+  iterations is less than eps, the ECM algorithm stops. Default to be
+  1e-4.
+
+- rtol_efron:
+
+  a tolerance parameter used when 'efron' model is fitted. Default to
+  1e-10. See 'stats::nlminb' for detail.
+
 - E:
 
   A matrix of expected counts under the null model for the SRS frequency
@@ -109,7 +125,10 @@ https://doi.org/10.1002/sim.70195.
 ## Examples
 
 ``` r
-fit <- pvEBayes_tune(statin2025_44, model = "general-gamma")
+fit <- pvEBayes_tune(statin2025_44,
+  model = "general-gamma",
+  alpha_vec = c(0, 0.1, 0.3, 0.5, 0.7, 0.9)
+)
 #> The alpha value selected under AIC is 0.3,
 #> The alpha value selected under BIC is 0.1.
 #>   alpha      AIC      BIC num_mixture

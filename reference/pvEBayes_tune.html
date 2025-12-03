@@ -66,6 +66,8 @@ values are selected as the optimal fits.</p>
 <span>  return_all_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  return_all_AIC <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  return_all_BIC <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rtol_ecm <span class="op">=</span> <span class="fl">1e-04</span>,</span>
+<span>  rtol_efron <span class="op">=</span> <span class="fl">1e-10</span>,</span>
 <span>  E <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -81,7 +83,8 @@ adverse events for I AEs (along the rows) and J drugs (along the columns).</p></
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>the model to be tuned. Available models are "general-gamma" and
-"efron". Default to "general-gamma".</p></dd>
+"efron". Default to "general-gamma". Note that the input for model is
+case-sensitive.</p></dd>
 
 
 <dt id="arg-alpha-vec">alpha_vec<a class="anchor" aria-label="anchor" href="#arg-alpha-vec"></a></dt>
@@ -128,6 +131,18 @@ each fitted model under the selection. Default to be TRUE.</p></dd>
 each fitted model under the selection. Default to be TRUE.</p></dd>
 
 
+<dt id="arg-rtol-ecm">rtol_ecm<a class="anchor" aria-label="anchor" href="#arg-rtol-ecm"></a></dt>
+<dd><p>a tolerance parameter used in the stopping rule of the ECM
+algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
+fitted. If the difference in marginal likelihood between two consecutive
+iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.</p></dd>
+
+
+<dt id="arg-rtol-efron">rtol_efron<a class="anchor" aria-label="anchor" href="#arg-rtol-efron"></a></dt>
+<dd><p>a tolerance parameter used when 'efron' model is fitted.
+Default to 1e-10. See 'stats::nlminb' for detail.</p></dd>
+
+
 <dt id="arg-e">E<a class="anchor" aria-label="anchor" href="#arg-e"></a></dt>
 <dd><p>A matrix of expected counts under the null model for the SRS
 frequency table. If <code>NULL</code> (default), the expected counts are estimated
@@ -156,7 +171,10 @@ https://doi.org/10.1002/sim.70195.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes_tune</span><span class="op">(</span><span class="va">statin2025_44</span>, model <span class="op">=</span> <span class="st">"general-gamma"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes_tune</span><span class="op">(</span><span class="va">statin2025_44</span>,</span></span>
+<span class="r-in"><span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span></span>
+<span class="r-in"><span>  alpha_vec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The alpha value selected under AIC is 0.3,</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The alpha value selected under BIC is 0.1.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   alpha      AIC      BIC num_mixture</span>

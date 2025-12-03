@@ -52,7 +52,8 @@ on AIC and BIC</p>
 <span>  c0_vec <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  return_all_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  return_all_AIC <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  return_all_BIC <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  return_all_BIC <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rtol_efron <span class="op">=</span> <span class="fl">1e-10</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -75,6 +76,11 @@ NULL, a default set of p values (80, 100, 120, 150, 200) will be used.</p></dd>
 <dd><p>vector of hyperparameter c0 values to be selected. c0 is
 a hyperparameter in "efron" model which should be a positive number. If is
 NULL, a default set of c0 values (0.001, 0.01, 0.1, 0.2, 0.5) will be used.</p></dd>
+
+
+<dt id="arg-rtol-efron">rtol_efron<a class="anchor" aria-label="anchor" href="#arg-rtol-efron"></a></dt>
+<dd><p>a tolerance parameter used when 'efron' model is fitted.
+Default to 1e-10. See 'stats::nlminb' for detail.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -60,7 +60,9 @@ specified hyperparameter, if is required. Supported models include the
 <span>  p <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  c0 <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  maxi <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  eps <span class="op">=</span> <span class="fl">1e-04</span>,</span>
+<span>  rtol_ecm <span class="op">=</span> <span class="fl">1e-04</span>,</span>
+<span>  rtol_efron <span class="op">=</span> <span class="fl">1e-10</span>,</span>
+<span>  rtol_KM <span class="op">=</span> <span class="fl">1e-06</span>,</span>
 <span>  n_posterior_draws <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  E <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -77,40 +79,58 @@ adverse events for I AEs (along the rows) and J drugs (along the columns).</p></
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>the model to fit. Available models are "general-gamma",
-"K-gamma", "GPS", "KM" and "efron". Default to "general-gamma".</p></dd>
+"K-gamma", "GPS", "KM" and "efron". Default to "general-gamma". Note that the
+input for model is case-sensitive.</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
 <dd><p>numeric between 0 and 1. The hyperparameter of "general-gamma"
-model. It is needed if "general-gamma" model is used.</p></dd>
+model. It is needed if "general-gamma" model is used. Small 'alpha'
+encourages shrinkage on mixture weights of the estimated prior distribution.
+See Tan et al. (2025) for further details.</p></dd>
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>integer greater than or equal to 2. It is needed if "K-gamma" model
-is used.</p></dd>
+<dd><p>a integer greater than or equal to 2 indicating the number of
+mixture components in the prior distribution. It is needed if "K-gamma"
+model is used. See Tan et al. (2025) for further details.</p></dd>
 
 
 <dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
-<dd><p>integer greater than or equal to 2. It is needed if "efron" mode is
-used.</p></dd>
+<dd><p>a integer greater than or equal to 2. It is needed if "efron" mode
+is used. Larger p leads to smoother estimated prior distribution. See
+Narasimhan and Efron (2020) for detail.</p></dd>
 
 
 <dt id="arg-c-">c0<a class="anchor" aria-label="anchor" href="#arg-c-"></a></dt>
-<dd><p>numeric and greater than 0. It is needed if "efron" mode is used.</p></dd>
+<dd><p>numeric and greater than 0. It is needed if "efron" mode is used.
+Large c0 encourage estimated prior distribution shrink toward discrete
+uniform. See Narasimhan and Efron (2020) for detail.</p></dd>
 
 
 <dt id="arg-maxi">maxi<a class="anchor" aria-label="anchor" href="#arg-maxi"></a></dt>
-<dd><p>upper limit of iteration for the ECM algorithm.</p></dd>
+<dd><p>a upper limit of iteration for the ECM algorithm.</p></dd>
 
 
-<dt id="arg-eps">eps<a class="anchor" aria-label="anchor" href="#arg-eps"></a></dt>
+<dt id="arg-rtol-ecm">rtol_ecm<a class="anchor" aria-label="anchor" href="#arg-rtol-ecm"></a></dt>
 <dd><p>a tolerance parameter used in the stopping rule of the ECM
-algorithm. If the difference in marginal likelihood between two consecutive
+algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
+fitted. If the difference in marginal likelihood between two consecutive
 iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.</p></dd>
 
 
+<dt id="arg-rtol-efron">rtol_efron<a class="anchor" aria-label="anchor" href="#arg-rtol-efron"></a></dt>
+<dd><p>a tolerance parameter used when 'efron' model is fitted.
+Default to 1e-10. See 'stats::nlminb' for detail.</p></dd>
+
+
+<dt id="arg-rtol-km">rtol_KM<a class="anchor" aria-label="anchor" href="#arg-rtol-km"></a></dt>
+<dd><p>a tolerance parameter used when 'KM' model is fitted.
+Default to be 1e-6. See 'CVXR::solve' for detail.</p></dd>
+
+
 <dt id="arg-n-posterior-draws">n_posterior_draws<a class="anchor" aria-label="anchor" href="#arg-n-posterior-draws"></a></dt>
-<dd><p>number of posterior draws for each AE-drug
+<dd><p>a number of posterior draws for each AE-drug
 combination.</p></dd>
 
 
@@ -202,9 +222,33 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># fit general-gamma model with a specified alpha</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">simu_table</span>, model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span></span>
-<span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">0.3</span>, n_posterior_draws <span class="op">=</span> <span class="fl">1000</span></span></span>
+<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">simu_table</span>,</span></span>
+<span class="r-in"><span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span></span>
+<span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">0.3</span>,</span></span>
+<span class="r-in"><span>  n_posterior_draws <span class="op">=</span> <span class="fl">1000</span>,</span></span>
+<span class="r-in"><span>  E <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  maxi <span class="op">=</span> <span class="cn">NULL</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># fit K-gamma model with K = 3</span></span></span>
+<span class="r-in"><span><span class="va">fit_Kgamma</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">simu_table</span>, model <span class="op">=</span> <span class="st">"K-gamma"</span>,</span></span>
+<span class="r-in"><span>  K <span class="op">=</span> <span class="fl">3</span>, n_posterior_draws <span class="op">=</span> <span class="fl">1000</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># fit Efron model with specified hyperparameters</span></span></span>
+<span class="r-in"><span><span class="co"># p = 40, c0 = 0.05</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="va">fit_efron</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">simu_table</span>,</span></span>
+<span class="r-in"><span>  model <span class="op">=</span> <span class="st">"efron"</span>,</span></span>
+<span class="r-in"><span>  p <span class="op">=</span> <span class="fl">40</span>,</span></span>
+<span class="r-in"><span>  c0 <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
+<span class="r-in"><span>  n_posterior_draws <span class="op">=</span> <span class="fl">1000</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -25,8 +25,8 @@ plot(x, type = "eyeplot", ...)
   choices are `"eyeplot"` which calls
   [eyeplot_pvEBayes](https://yihaotancn.github.io/pvEBayes/reference/eyeplot_pvEBayes.md)
   and `"heatmap"` which calls
-  [heatmap_pvEBayes](https://yihaotancn.github.io/pvEBayes/reference/heatmap_pvEBayes.md),
-  with the additional arguments supplied in ...
+  [heatmap_pvEBayes](https://yihaotancn.github.io/pvEBayes/reference/heatmap_pvEBayes.md).
+  Note that the input for 'type' is case-sensitive.
 
 - ...:
 
@@ -41,4 +41,5 @@ A [ggplot](https://ggplot2.tidyverse.org/reference/ggplot.html) object.
 ``` r
 obj <- pvEBayes(statin2025_44, model = "general-gamma", alpha = 0.5)
 plot(obj, type = "eyeplot")
+
 ```

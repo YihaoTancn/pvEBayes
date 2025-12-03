@@ -73,7 +73,7 @@ collection of spontaneous reports of suspected adverse drug events from
 pharmaceutical companies, healthcare professionals, and patients. These
 reports are curated and stored in spontaneous reporting systems (SRS),
 usually organized as a large frequency table for downstream data
-abalysis. We consider an SRS dataset cataloging AE reports on
+analysis. We consider an SRS dataset cataloging AE reports on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>
 AE rows across
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
@@ -233,11 +233,12 @@ shown below:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC</a></span><span class="op">(</span><span class="va">gg_given_alpha</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 4016.649</span></span></code></pre></div>
-<p>In practice, one can specify a list of candidate α values, fit the
-general-gamma model for each, compute the corresponding AIC or BIC, and
-select the model with the lowest AIC or BIC. Instead of manually doing
-so, one can use the ‘pvEBayes_tune()’ function, which implements these
-steps. The relevant code is given below:</p>
+<p>In practice, one can specify a list of candidate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+values, fit the general-gamma model for each, compute the corresponding
+AIC or BIC, and select the model with the lowest AIC or BIC. Instead of
+manually doing so, one can use the ‘pvEBayes_tune()’ function, which
+implements these steps. The relevant code is given below:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes_tune.html">pvEBayes_tune</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
@@ -317,10 +318,19 @@ baseline expected counts under independence for an AE-drug pair.</p>
 </h2>
 <p>Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian
 Approaches to Pharmacovigilance for Simultaneous Signal Detection and
-Signal Strength Estimation in Spontaneous Reporting Systems Data. 2025;
-44: 18-19, <a href="https://doi.org/10.1002/sim.70195" class="external-link uri">https://doi.org/10.1002/sim.70195</a>.</p>
+Signal Strength Estimation in Spontaneous Reporting Systems Data.
+<em>Statistics in Medicine</em>. 2025; 44: 18-19, <a href="https://doi.org/10.1002/sim.70195" class="external-link uri">https://doi.org/10.1002/sim.70195</a>.</p>
 <p>Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for
-Empirical Bayes Methods in Pharmacovigilance.</p>
+Empirical Bayes Methods in Pharmacovigilance. <em>arXiv</em>:2512.01057
+(stat.AP). <a href="https://doi.org/10.48550/arXiv.2512.01057" class="external-link uri">https://doi.org/10.48550/arXiv.2512.01057</a></p>
+<p>Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound
+Decisions, and Empirical Bayes Rules. <em>Journal of the American
+Statistical Association</em> 2014; 109(506): 674–685, <a href="https://doi.org/10.1080/01621459.2013.869224" class="external-link uri">https://doi.org/10.1080/01621459.2013.869224</a></p>
+<p>Efron B. Empirical Bayes Deconvolution Estimates. <em>Biometrika</em>
+2016; 103(1); 1-20, <a href="https://doi.org/10.1093/biomet/asv068" class="external-link uri">https://doi.org/10.1093/biomet/asv068</a></p>
+<p>DuMouchel W. Bayesian data mining in large frequency tables, with an
+application to the FDA spontaneous reporting system. <em>The American
+Statistician</em>. 1999; 1;53(3):177-90.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

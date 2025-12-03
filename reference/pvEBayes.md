@@ -16,7 +16,9 @@ pvEBayes(
   p = NULL,
   c0 = NULL,
   maxi = NULL,
-  eps = 1e-04,
+  rtol_ecm = 1e-04,
+  rtol_efron = 1e-10,
+  rtol_KM = 1e-06,
   n_posterior_draws = 1000,
   E = NULL
 )
@@ -32,41 +34,59 @@ pvEBayes(
 - model:
 
   the model to fit. Available models are "general-gamma", "K-gamma",
-  "GPS", "KM" and "efron". Default to "general-gamma".
+  "GPS", "KM" and "efron". Default to "general-gamma". Note that the
+  input for model is case-sensitive.
 
 - alpha:
 
   numeric between 0 and 1. The hyperparameter of "general-gamma" model.
-  It is needed if "general-gamma" model is used.
+  It is needed if "general-gamma" model is used. Small 'alpha'
+  encourages shrinkage on mixture weights of the estimated prior
+  distribution. See Tan et al. (2025) for further details.
 
 - K:
 
-  integer greater than or equal to 2. It is needed if "K-gamma" model is
-  used.
+  a integer greater than or equal to 2 indicating the number of mixture
+  components in the prior distribution. It is needed if "K-gamma" model
+  is used. See Tan et al. (2025) for further details.
 
 - p:
 
-  integer greater than or equal to 2. It is needed if "efron" mode is
-  used.
+  a integer greater than or equal to 2. It is needed if "efron" mode is
+  used. Larger p leads to smoother estimated prior distribution. See
+  Narasimhan and Efron (2020) for detail.
 
 - c0:
 
   numeric and greater than 0. It is needed if "efron" mode is used.
+  Large c0 encourage estimated prior distribution shrink toward discrete
+  uniform. See Narasimhan and Efron (2020) for detail.
 
 - maxi:
 
-  upper limit of iteration for the ECM algorithm.
+  a upper limit of iteration for the ECM algorithm.
 
-- eps:
+- rtol_ecm:
 
   a tolerance parameter used in the stopping rule of the ECM algorithm.
+  It is used when 'GPS', 'K-gamma' or 'general-gamma' model is fitted.
   If the difference in marginal likelihood between two consecutive
   iterations is less than eps, the ECM algorithm stops. Default to be
   1e-4.
 
+- rtol_efron:
+
+  a tolerance parameter used when 'efron' model is fitted. Default to
+  1e-10. See 'stats::nlminb' for detail.
+
+- rtol_KM:
+
+  a tolerance parameter used when 'KM' model is fitted. Default to be
+  1e-6. See 'CVXR::solve' for detail.
+
 - n_posterior_draws:
 
-  number of posterior draws for each AE-drug combination.
+  a number of posterior draws for each AE-drug combination.
 
 - E:
 
@@ -166,7 +186,31 @@ simu_table <- generate_contin_table(
 
 # fit general-gamma model with a specified alpha
 fit <- pvEBayes(
-  contin_table = simu_table, model = "general-gamma",
-  alpha = 0.3, n_posterior_draws = 1000
+  contin_table = simu_table,
+  model = "general-gamma",
+  alpha = 0.3,
+  n_posterior_draws = 1000,
+  E = NULL,
+  maxi = NULL
 )
+
+# fit K-gamma model with K = 3
+fit_Kgamma <- pvEBayes(
+  contin_table = simu_table, model = "K-gamma",
+  K = 3, n_posterior_draws = 1000
+)
+
+
+# fit Efron model with specified hyperparameters
+# p = 40, c0 = 0.05
+
+if (FALSE) { # \dontrun{
+fit_efron <- pvEBayes(
+  contin_table = simu_table,
+  model = "efron",
+  p = 40,
+  c0 = 0.05,
+  n_posterior_draws = 1000
+)
+} # }
 ```

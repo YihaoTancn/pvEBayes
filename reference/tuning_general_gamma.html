@@ -51,7 +51,8 @@ on AIC and BIC</p>
 <span>  alpha_vec <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  return_all_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  return_all_AIC <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  return_all_BIC <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  return_all_BIC <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rtol_ecm <span class="op">=</span> <span class="fl">1e-04</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -69,6 +70,13 @@ adverse events for I AEs (along the rows) and J drugs (along the columns).</p></
 is hyperparameter in general-gamma model which is numeric and between 0
 and 1. If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9)
 will be used.</p></dd>
+
+
+<dt id="arg-rtol-ecm">rtol_ecm<a class="anchor" aria-label="anchor" href="#arg-rtol-ecm"></a></dt>
+<dd><p>a tolerance parameter used in the stopping rule of the ECM
+algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
+fitted. If the difference in marginal likelihood between two consecutive
+iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.</p></dd>
 
 </dl></div>
     <div class="section level2">

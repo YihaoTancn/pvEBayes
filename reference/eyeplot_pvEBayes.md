@@ -33,11 +33,12 @@ eyeplot_pvEBayes(
 
 - num_top_AEs:
 
-  number of most significant AEs appearing in the plot. Default to 10.
+  a number of most significant AEs appearing in the plot. Default to 10.
 
 - num_top_drugs:
 
-  number of most significant drugs appearing in the plot. Default to 7.
+  a number of most significant drugs appearing in the plot. Default to
+  7.
 
 - specified_AEs:
 
@@ -51,7 +52,7 @@ eyeplot_pvEBayes(
 
 - N_threshold:
 
-  integer greater than 0. Any AE-drug combination with observation
+  a integer greater than 0. Any AE-drug combination with observation
   smaller than N_threshold will be filtered out.
 
 - text_shift:

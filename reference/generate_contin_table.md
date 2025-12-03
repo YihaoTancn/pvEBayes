@@ -19,7 +19,7 @@ generate_contin_table(
 
 - n_table:
 
-  number of random matrices to generate.
+  a number of random matrices to generate.
 
 - ref_table:
 
@@ -27,7 +27,7 @@ generate_contin_table(
 
 - signal_mat:
 
-  numeric matrix of the same dimension as the reference table
+  a numeric matrix of the same dimension as the reference table
   (ref_table). The entry at position (i, j) in signal_mat represents the
   signal strength between the i-th adverse event and the j-th drug. By
   default, each pair is assigned a value of 1, indicating no signal for
