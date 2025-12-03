@@ -23,10 +23,10 @@ Authors@R: c(
       comment = c(ORCID = "0009-0007-8972-6682"))
     )
 Maintainer: Yihao Tan <yihaotan@buffalo.edu>
-Description: A suite of empirical Bayes methods to use in pharmacovigilance. Contains various model fitting and post-processing functions. For more details see Tan et al. (2025) <doi:10.48550/arXiv.2502.09816>, Koenker and Mizera (2014) <doi:10.1080/01621459.2013.869224> and Efron (2016) <doi:10.1093/biomet/asv068>.
+Description: A suite of empirical Bayes methods to use in pharmacovigilance. Contains various model fitting and post-processing functions. For more details see Tan et al. (2025) <doi:10.48550/arXiv.2502.09816>, <doi:10.48550/arXiv.2512.01057>; Koenker and Mizera (2014) <doi:10.1080/01621459.2013.869224>; Efron (2016) <doi:10.1093/biomet/asv068>.
 License: GPL-3
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
+Roxygen: list(markdown = TRUE, roclets = c ("namespace", "rd", "srr::srr_stats_roclet"))
 RoxygenNote: 7.3.2
 Depends: 
     R (>= 3.6.0)

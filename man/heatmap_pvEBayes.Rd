@@ -52,7 +52,11 @@ fit <- pvEBayes(
 
 heatmap_pvEBayes(
   x = fit,
-  cutoff = 1.001
+  num_top_AEs = 10,
+  num_top_drugs = 8,
+  specified_AEs = NULL,
+  specified_drugs = NULL,
+  cutoff_signal = 1.001
 )
 
 }

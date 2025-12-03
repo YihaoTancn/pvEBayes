@@ -20,7 +20,7 @@ This function estimates the expected null baseline count (\eqn{E_{ij}}) for
 each AE-drug combination under the assumption of independence between rows
 and columns. The expected count is calculated using a reference row
 (other AEs) and reference column (other drugs). This null baseline is
-typically used in empirical Bayes modeling of \code{pvEBayes} package for
+typically used in empirical Bayes modeling of \pkg{pvEBayes} package for
 signal detection and estimation in spontaneous reporting system (SRS) data.
 }
 \details{

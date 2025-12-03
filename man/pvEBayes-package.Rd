@@ -15,49 +15,58 @@ Let \eqn{N_{ij}} denote the number of reported cases for the
 \emph{i}-th AE and the \emph{j}-th drug, where \eqn{i = 1,..., I} and
 \eqn{j = 1,..., J}. We assume that for each AE-drug pair,
 \eqn{N_{ij} \sim \text{Poisson}(\lambda_{ij} E_{ij})}, where \eqn{E_{ij}} is
-expected baseline value meansuring the expected count of the AE-drug pair
-when there is no association between\emph{i}-th AE and \emph{j}-th drug. The parameter
+expected baseline value measuring the expected count of the AE-drug pair
+when there is no association between \emph{i}-th AE and \emph{j}-th drug. The parameter
 \eqn{\lambda_{ij} \geq 0} represents the relative reporting ratio, the signal
 strength, for the \eqn{(i, j)}-th pair measuring the ratio of the actual
 expected count arising due to dependence to the null baseline expected count.
-Let \emph{g} be the prior density function for signal strength:
-\eqn{\lambda_{ij} \sim g(\cdot)}. The methods included in \code{pvEBayes}
-differ by their assumptions on the prior distribution.
+Current disproportionality analysis mainly focuses on \emph{signal detection}
+which seeks to determine whether the observation \eqn{N_{ij}} is substantially
+greater than the corresponding null baseline \eqn{E_{ij}}. Under the Poisson
+model, that is to say, its signal strength \eqn{\lambda_{ij}} is
+significantly greater than 1.
 
-Implemented methods include the Gamma-Poisson Shrinker (GPS),
-Koenker-Mizera (KM) method, Efron’s nonparametric empirical Bayes approach,
-the K-gamma model, and the general-gamma model. The selection of prior
-distribution is critical in Bayesian analysis. The GPS model uses two gamma
-mixture prior by assuming the signal/non-signal structure in SRS data.
-However, in real-world setting, signal strengths \eqn{(\lambda_{ij})} are
-often heterogeneous and thus follows a multi-modal distribution, making it
-difficult to assume a parametric prior. Non-parametric empirical Bayes models
-(KM, Efron, K-gamma and general-gamma) address this challenge by utilizing a
-flexible prior with general mixture form and estimating the prior
-distribution in a data-driven way.
+In addition to \emph{signal detection}, Tan et al. (\emph{Stat. in Med.}, 2025) broaden
+the role of disproportionality to \emph{signal estimation}. The use of the flexible
+non-parametric empirical Bayes models enables more nuanced empirical Bayes
+posterior inference (parameter estimation and uncertainty quantification) on
+signal strength parameter \eqn{\{ \lambda_{ij} \}}. This allows researchers to
+distinguish AE-drug pairs that would appear similar under a binary signal
+detection framework. For example, the AE-drug pairs with signal strengths of
+1.5 and 4.0 could both be significantly greater than 1 and detected as a
+signal. Such differences in signal strength may have distinct implications in
+medical and clinical contexts.
 
-Unlike many existing pharmacovigilance packages that focus solely on signal
-detection (e.g. looking for AE-drug pairs that
-\eqn{p(\lambda_{ij}> 1+\epsilon) > 0.95} for some small \eqn{\epsilon}),
-\code{pvEBayes} supports both signal detection and signal estimation,
-enabling users not only to identify potential safety signals but also to
-quantify the underlying AE-drug association.
+The methods included in \code{pvEBayes} differ by their assumptions on the
+prior distribution. Implemented methods include the Gamma-Poisson Shrinker
+(GPS), Koenker-Mizera (KM) method, Efron’s nonparametric empirical Bayes
+approach, the K-gamma model, and the general-gamma model.
+
+The GPS model uses two gamma mixture prior by assuming the signal/non-signal
+structure in SRS data. However, in real-world setting, signal
+strengths \eqn{(\lambda_{ij})} are often heterogeneous and thus follows a
+multi-modal distribution, making it difficult to assume a parametric prior.
+Non-parametric empirical Bayes models (KM, Efron, K-gamma and general-gamma)
+address this challenge by utilizing a flexible prior with general mixture
+form and estimating the prior distribution in a data-driven way.
+
+\code{pvEBayes} offers the first implemention of the bi-level Expectation
+Conditional Maximization (ECM) algorithm proposed by Tan et al. (2025) for
+efficient parameter estimation in gamma mixture prior based models: GPS
+K-gamma and general-gamma.
 
 The KM method has an existing implementation in the \code{REBayes} package,
 but it relies on Mosek, a commercial convex optimization solver, which may
 limit accessibility due to licensing issue. \code{pvEBayes} provides a
 alternative fully open-source implementation of the KM method using
-\code{CVXR}. Efron’s method also has a general nonparametric empirical Bayes
+\code{CVXR}.
+
+Efron’s method also has a general nonparametric empirical Bayes
 implementation in the \code{deconvolveR} package; however, that
 implementation does not support an exposure or offset parameter in the
-Poisson model, which corresponds to the expected null value \eqn{E_{ij}}. In
-\code{pvEBayes}, the implementation of the Efron's method is adapted and
+Poisson model, which corresponds to the expected null value \eqn{E_{ij}}.
+In \code{pvEBayes}, the implementation of the Efron's method is adapted and
 modified from \code{deconvolveR} to support \eqn{E_{ij}} in Poisson model.
-
-In addition, this package implements the novel bi-level Expectation
-Conditional Maximization (ECM) algorithm proposed by Tan et al. (2025) for
-efficient parameter estimation in gamma mixture prior based models mentioned
-above.
 
 For an introduction to \code{pvEBayes}, see the vignette.
 }
@@ -67,6 +76,10 @@ to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
 Estimation in Spontaneous Reporting Systems Data.
 \emph{Statistics in Medicine.} 2025; 44: 18-19,
 https://doi.org/10.1002/sim.70195.
+
+Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for Empirical
+Bayes Methods in Pharmacovigilance.
+\emph{arXiv}:2512.01057 (stat.AP). https://doi.org/10.48550/arXiv.2512.01057
 
 Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound
 Decisions, and Empirical Bayes Rules. \emph{Journal of the American

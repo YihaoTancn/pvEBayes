@@ -1,7 +1,23 @@
+#' Report whether the input is a "pvEBayes" object
+#'
+#' @param object a \code{pvEBayes} object, which is the output of the function
+#' \link{pvEBayes}.
+#'
+#' @returns logical
+#' @keywords internal
+#' @noRd
 is.pvEBayes <- function(object) {
   methods::is(object, "pvEBayes")
 }
 
+#' Report whether the input is a "pvEBayes_tuned" object
+#'
+#' @param object a \code{pvEBayes_tune} object, which is the output of the
+#' function \link{pvEBayes_tune}.
+#'
+#' @returns logical
+#' @keywords internal
+#' @noRd
 is.pvEBayes_tuned <- function(object) {
   methods::is(object, "pvEBayes_tuned")
 }
@@ -38,8 +54,10 @@ is.pvEBayes_tuned <- function(object) {
 extract_all_fitted_models <- function(object) {
   if (!is.pvEBayes_tuned(object)) {
     stop(
-      paste0("This function can only be used after tuning.",
-                "Please apply to objects returned by 'pvEBayes_tune()'.")
+      paste0(
+        "This function can only be used after tuning.",
+        "Please apply to objects returned by 'pvEBayes_tune()'."
+      )
     )
   }
   object$tuning
@@ -77,10 +95,21 @@ extract_all_fitted_models <- function(object) {
 #'
 #' fit_with_draws <- posterior_draws(fit, n_posterior_draws = 1000)
 #'
+#' @srrstats {G2.0, G2.1, G2.2} length and value of single and vector inputs are properly
+#' checked.
+#' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are explicitly
+#' described in the corresponding documentation.
+#' @srrstats {G2.4, G2.4a, G2.8} explicit conversion is used for integer input.
+#'
 posterior_draws <- function(obj,
                             n_posterior_draws = 1000) {
   stopifnot(is.pvEBayes(obj))
-
+  if (
+    !(is.numeric(n_posterior_draws) && length(n_posterior_draws) == 1 &&
+      n_posterior_draws %% 1 == 0 && n_posterior_draws > 0)) {
+    stop("'n_posterior_draws' must be a single positive integer.")
+  }
+  n_posterior_draws <- as.integer(n_posterior_draws)
   if (obj$model %in% c("KM", "efron")) {
     generate_posterior_fun <- .generate_posterior_grid_based
   } else {
@@ -97,6 +126,14 @@ posterior_draws <- function(obj,
 }
 
 
+#' Make rownames a extra column
+#'
+#' @param df a matrix with rownames
+#' @param var name of the extra column
+#'
+#' @returns a matrix with extra column
+#' @keywords internal
+#' @noRd
 .rownames_to_column <- function(df, var = "rowname") {
   # Create a new column from row names
   df[[var]] <- row.names(df)
@@ -110,28 +147,53 @@ posterior_draws <- function(obj,
   df
 }
 
+#' Left join
+#'
+#' @param x a data frame
+#' @param y a data frame
+#' @param by specifications of the columns used for merging
+#'
+#' @returns a data frame
+#' @keywords internal
+#' @noRd
 .left_join_base <- function(x, y, by) {
   merge(x, y, by = by, all.x = TRUE)
 }
 
 
+#' Obtain posterior probability of being a signal
+#'
+#' @param obj a \code{pvEBayes} object, which is the output of the function
+#' \link{pvEBayes} or \link{pvEBayes_tune}.
+#'
+#' @returns a matrix
+#' @keywords internal
+#' @noRd
 .get_posterior_prob <- function(obj) {
   tmp <- obj$posterior_draws
-  # posterior::draws_of()
   (tmp > 1.001) %>%
     apply(c(2, 3), mean)
 }
 
+#' Report valid AE rows for ploting
+#'
+#' @param post_matrix a matrix
+#' @param N an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' @param N_threshold integer greater than 0. Any AE-drug combination with
+#' observation smaller than N_threshold will be filtered out.
+#'
+#' @returns a logical vector
+#' @keywords internal
+#' @noRd
 .check_AEs <- function(post_matrix, N, N_threshold) {
   I <- nrow(N)
   J <- ncol(N)
   indi <- rep(FALSE, I)
   for (i in seq_len(I)) {
     tmp_indi <- (post_matrix[i, ] == max(post_matrix[i, ]))
-    if (sum(tmp_indi) > 0) {
-      if (sum(N[i, tmp_indi] > N_threshold) > 0) {
-        indi[i] <- TRUE
-      }
+    if (sum(N[i, tmp_indi] > N_threshold) > 0) {
+      indi[i] <- TRUE
     }
   }
   indi
@@ -151,16 +213,16 @@ posterior_draws <- function(obj,
 #'
 #' @param x a \code{pvEBayes} object, which is the output of the function
 #' \link{pvEBayes} or \link{pvEBayes_tune}.
-#' @param num_top_AEs number of most significant AEs appearing in the plot.
+#' @param num_top_AEs a number of most significant AEs appearing in the plot.
 #' Default to 10.
-#' @param num_top_drugs number of most significant drugs appearing in the plot.
-#' Default to 7.
+#' @param num_top_drugs a number of most significant drugs appearing in the
+#' plot. Default to 7.
 #' @param specified_AEs a vector of AE names that are specified to appear in the
 #' plot. If a vector of AEs is given, argument num_top_AEs will be ignored.
 #' @param specified_drugs a vector of drug names that are specified to appear in
 #' the plot. If a vector of drugs is given, argument num_top_drugs will be
 #' ignored.
-#' @param N_threshold integer greater than 0. Any AE-drug combination with
+#' @param N_threshold a integer greater than 0. Any AE-drug combination with
 #' observation smaller than N_threshold will be filtered out.
 #' @param text_shift numeric. Controls the relative position of text labels,
 #' (e.g., "N = 1", "E = 2"). A larger value shifts the "E = 2" further away from
@@ -189,6 +251,15 @@ posterior_draws <- function(obj,
 #'   x = fit
 #' )
 #'
+#' @srrstats {G2.0, G2.1, G2.2} length and value of single and vector inputs are properly
+#' checked.
+#' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are explicitly
+#' described in the corresponding documentation.
+#' @srrstats {G2.4, G2.4a, G2.4b, G2.4c, G2.8} explicit conversion is used for
+#' integer, continuous and character inputs.
+#' @srrstats {G2.9, G2.10} inconsistent return when extracting a matrix is
+#' addressed.
+#'
 eyeplot_pvEBayes <- function(x,
                              num_top_AEs = 10,
                              num_top_drugs = 8,
@@ -199,6 +270,71 @@ eyeplot_pvEBayes <- function(x,
                              x_lim_scalar = 1.3,
                              text_size = 3,
                              log_scale = FALSE) {
+  if (!(is.numeric(num_top_AEs) &&
+    length(num_top_AEs) == 1 &&
+    num_top_AEs %% 1 == 0 &&
+    num_top_AEs > 0)) {
+    stop("'num_top_AEs' must be a single positive integer.")
+  }
+  num_top_AEs <- as.integer(num_top_AEs)
+  if (!(is.numeric(num_top_drugs) &&
+    length(num_top_drugs) == 1 &&
+    num_top_drugs %% 1 == 0 &&
+    num_top_drugs > 0)) {
+    stop("'num_top_drugs' must be a single positive integer.")
+  }
+  num_top_drugs <- as.integer(num_top_drugs)
+  if (!(is.numeric(N_threshold) &&
+    length(N_threshold) == 1 &&
+    N_threshold %% 1 == 0 &&
+    N_threshold > 0)) {
+    stop("'N_threshold' must be a single positive integer.")
+  }
+  N_threshold <- as.integer(N_threshold)
+  if (!(is.numeric(text_size) &&
+    length(text_size) == 1 &&
+    text_size > 0)) {
+    stop("'text_size' must be a single positive integer.")
+  }
+  text_size <- as.numeric(text_size)
+
+  if (!(is.numeric(text_shift) &&
+    length(text_shift) == 1)) {
+    stop("'text_shift' must be a single numeric variable.")
+  }
+  text_shift <- as.numeric(text_shift)
+  if (!(is.numeric(x_lim_scalar) &&
+    length(x_lim_scalar) == 1) &&
+    x_lim_scalar > 0) {
+    stop("'x_lim_scalar' must be a single positive variable.")
+  }
+  text_shift <- as.numeric(text_shift)
+  if (!(is.logical(log_scale) &&
+    length(log_scale) == 1)) {
+    stop("'log_scale' must be a single logical value (TRUE or FALSE).")
+  }
+
+  if (!is.null(specified_AEs) &
+    !(is.character(specified_AEs) &&
+      length(specified_AEs) >= 1)) {
+    stop("Elements in 'specified_AEs' must be entirely of strings.")
+  }
+  if(!is.null(specified_AEs)){
+    specified_AEs <- as.character(specified_AEs)
+  }
+
+  if (!is.null(specified_drugs) &
+    !(is.character(specified_drugs) &&
+      length(specified_drugs) >= 1)) {
+    stop("Elements in 'specified_drugs' must be entirely of strings.")
+  }
+  if(!is.null(specified_drugs)){
+    specified_drugs <- as.character(specified_drugs)
+  }
+
+
+
+
   top_drugs <- num_top_drugs
   top_AEs <- num_top_AEs
   AEs <- specified_AEs
@@ -290,13 +426,17 @@ eyeplot_pvEBayes <- function(x,
     dat_plot$post_draws[dat_plot$post_draws == 0] <- 1e-10
     dat_plot$post_draws <- log(dat_plot$post_draws)
     q05_cutoff <- log(1.01)
-    xlab_text <- paste0("Log signal strength (posterior median",
-                        " and 90% equi-tailed credible intervals)")
+    xlab_text <- paste0(
+      "Log signal strength (posterior median",
+      " and 90% equi-tailed credible intervals)"
+    )
     vline_x <- 0
   } else {
     q05_cutoff <- 1.01
-    xlab_text <- paste0("Signal strength (posterior median",
-                        " and 90% equi-tailed credible intervals)")
+    xlab_text <- paste0(
+      "Signal strength (posterior median",
+      " and 90% equi-tailed credible intervals)"
+    )
     vline_x <- 1
   }
 
@@ -311,7 +451,8 @@ eyeplot_pvEBayes <- function(x,
 
 
   q05_table <- dat_plot[, list(q05 = stats::quantile(.SD$post_draws, 0.05)),
-                        by = group_vars]
+    by = group_vars
+  ]
 
   q05_table <- q05_table[q05_table$q05 > q05_cutoff, ]
   dat_plot <- dat_plot[q05_table, on = group_vars]
@@ -392,6 +533,13 @@ eyeplot_pvEBayes <- function(x,
 }
 
 
+#' Capitalize the first character for each word
+#'
+#' @param x a vector of strings
+#'
+#' @returns a vector of strings
+#' @keywords internal
+#' @noRd
 .capitalize_words <- function(x) {
   vapply(x, function(s) {
     words <- strsplit(tolower(s), "\\s+")[[1]]
@@ -443,8 +591,21 @@ eyeplot_pvEBayes <- function(x,
 #'
 #' heatmap_pvEBayes(
 #'   x = fit,
-#'   cutoff = 1.001
+#'   num_top_AEs = 10,
+#'   num_top_drugs = 8,
+#'   specified_AEs = NULL,
+#'   specified_drugs = NULL,
+#'   cutoff_signal = 1.001
 #' )
+#'
+#' @srrstats {G2.0, G2.1, G2.2} length and value of single and vector inputs are properly
+#' checked.
+#' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are explicitly
+#' described in the corresponding documentation.
+#' @srrstats {G2.4, G2.4a, G2.4b, G2.4c, G2.8} explicit conversion is used for
+#' integer, continuous and character inputs.
+#' @srrstats {G2.9, G2.10} inconsistent return when extracting a matrix is
+#' addressed.
 #'
 heatmap_pvEBayes <- function(x,
                              num_top_AEs = 10,
@@ -452,6 +613,53 @@ heatmap_pvEBayes <- function(x,
                              specified_AEs = NULL,
                              specified_drugs = NULL,
                              cutoff_signal = NULL) {
+
+  if (!(is.numeric(num_top_AEs) &&
+        length(num_top_AEs) == 1 &&
+        num_top_AEs %% 1 == 0 &&
+        num_top_AEs > 0)) {
+    stop("'num_top_AEs' must be a single positive integer.")
+  }
+  num_top_AEs <- as.integer(num_top_AEs)
+  if (!(is.numeric(num_top_drugs) &&
+        length(num_top_drugs) == 1 &&
+        num_top_drugs %% 1 == 0 &&
+        num_top_drugs > 0)) {
+    stop("'num_top_drugs' must be a single positive integer.")
+  }
+  num_top_drugs <- as.integer(num_top_drugs)
+
+  if (!is.null(specified_AEs) &
+      !(is.character(specified_AEs) &&
+        length(specified_AEs) >= 1)) {
+    stop("Elements in 'specified_AEs' must be entirely of strings.")
+  }
+  if(!is.null(specified_AEs)){
+    specified_AEs <- as.character(specified_AEs)
+  }
+
+  if (!is.null(specified_drugs) &
+      !(is.character(specified_drugs) &&
+        length(specified_drugs) >= 1)) {
+    stop("Elements in 'specified_drugs' must be entirely of strings.")
+  }
+  if(!is.null(specified_drugs)){
+    specified_drugs <- as.character(specified_drugs)
+  }
+  if (!is.null(cutoff_signal) &
+      !(is.numeric(cutoff_signal) &&
+        length(cutoff_signal) == 1 &&
+      cutoff_signal > 0)) {
+    stop(
+      paste0("'cutoff_signal' must be a single positive ",
+             "variable that is greater than 1.")
+      )
+  }
+  if(!is.null(cutoff_signal)){
+    cutoff_signal <- as.numeric(cutoff_signal)
+  }
+
+
   top_drugs <- num_top_drugs
   top_AEs <- num_top_AEs
   AEs <- specified_AEs
@@ -702,10 +910,11 @@ print.pvEBayes <- function(x, ...) {
 #' @param object a \code{pvEBayes} object, which is the output of the function
 #' \link{pvEBayes} or \link{pvEBayes_tune}.
 #'
-#' @param return A character string specifying which component the summary
+#' @param return a character string specifying which component the summary
 #'  function should return.Valid options include: "prior parameters",
 #' "likelihood", "detected signal" and "posterior draws". If set to NULL
-#' (default), all components will be returned in a list.
+#' (default), all components will be returned in a list. Note that the input
+#' for 'return' is case-sensitive.
 #'
 #' @param ... other input parameters. Currently unused.
 #'
@@ -724,6 +933,15 @@ print.pvEBayes <- function(x, ...) {
 #' )
 #'
 #' summary(obj)
+#'
+#' @srrstats {G2.0, G2.1, G2.2} length and value of single and vector inputs are
+#' properly checked.
+#' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are
+#' explicitly described in the corresponding documentation.
+#' @srrstats {G2.3, G2.3a, G2.3b} character inputs are explicitly documented
+#' that they are strictly case-sensitive and only applicable to expected values.
+#'
+#'
 summary.pvEBayes <- function(object, return = NULL, ...) {
   stopifnot(is.pvEBayes(object))
   if (is.null(object$posterior_draws)) {
@@ -758,7 +976,11 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
     } else if (return == "posterior draws") {
       object$posterior_draws
     } else {
-      stop("Please provide a valid return argument.")
+      stop(
+        paste0("'return' must be one of the followings: ",
+               "'prior parameters', 'likelihood', ",
+               "'detected signal' or 'posterior draws'.")
+        )
     }
   } else {
     res <- list(
@@ -784,8 +1006,8 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
 #' \link{pvEBayes} or \link{pvEBayes_tune}.
 #' @param type character string determining the type of plot to show.
 #' Available choices are `"eyeplot"` which calls \link{eyeplot_pvEBayes} and
-#' `"heatmap"` which calls \link{heatmap_pvEBayes}, with the additional
-#' arguments supplied in ...
+#' `"heatmap"` which calls \link{heatmap_pvEBayes}. Note that the input for
+#' 'type' is case-sensitive.
 #' @param ... additional arguments passed to heatmap_pvEBayes or
 #' eyeplot_pvEBayes.
 #'
@@ -798,14 +1020,24 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
 #'
 #' obj <- pvEBayes(statin2025_44, model = "general-gamma", alpha = 0.5)
 #' plot(obj, type = "eyeplot")
+#'
+#' @srrstats {G2.0, G2.1, G2.2} length and value of single and vector inputs are properly
+#' checked.
+#' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are explicitly
+#' described in the corresponding documentation.
+#' @srrstats {G2.3, G2.3a, G2.3b} character inputs are explicitly documented
+#' that they are strictly case-sensitive and only applicable to expected values.
+#'
 plot.pvEBayes <- function(x, type = "eyeplot", ...) {
   if (!is.pvEBayes(x)) {
     stop("x must be a 'pvEBayes' object.")
   }
 
-  stopifnot(
-    type %in% c("heatmap", "eyeplot")
-  )
+  if(
+    !(type %in% c("heatmap", "eyeplot"))
+  ){
+    stop("'type' must be either 'heatmap' or 'eyeplot'")
+  }
 
   out <- if (type == "heatmap") {
     heatmap_pvEBayes(x, ...)
@@ -880,8 +1112,18 @@ logLik.pvEBayes <- function(object, ...) {
 #'
 #' AIC_score <- AIC(fit)
 #'
+#' @srrstats {G2.0, G2.1, G2.2} length and value of single and vector inputs are properly
+#' checked.
+#' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are explicitly
+#' described in the corresponding documentation.
+#' @srrstats {G2.4, G2.4a, G2.8} explicit conversion is used for integer input.
+#'
 AIC.pvEBayes <- function(object, ..., k = 2) {
   stopifnot(is.pvEBayes(object))
+  if (!(is.numeric(k) && length(k) == 1 )) {
+    stop("'k' must be a single integer.")
+  }
+  k <- as.integer(k)
   model <- object$model
   if (model == "KM") {
     penalty <- length(object$g)

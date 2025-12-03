@@ -25,4 +25,64 @@ test_that("pvEBayes object associated functions", {
   plot4 <- plot(obj, type = "heatmap")
   expect_equal(inherits(plot3, "ggplot"), TRUE)
   expect_equal(inherits(plot4, "ggplot"), TRUE)
+
+
+
+  #check for errors
+  expect_error(
+    extract_all_fitted_models(1)
+  )
+
+  expect_error(
+    posterior_draws(obj, n_posterior_draws = -1)
+  )
+
+  expect_error(
+    plot(obj, type = "eyeplot", num_top_AEs = -1)
+  )
+  expect_error(
+    plot(obj, type = "eyeplot", num_top_drugs = -1)
+  )
+  expect_error(
+    plot(obj, type = "eyeplot", N_threshold = -1)
+  )
+  expect_error(
+    plot(obj, type = "heatmap", num_top_AEs = -1)
+  )
+  expect_error(
+    plot(obj, type = "eyeplot", text_size = "a")
+  )
+  expect_error(
+    plot(obj, type = "eyeplot", text_shift = "a")
+  )
+  expect_error(
+    plot(obj, type = "eyeplot", x_lim_scalar = "a")
+  )
+  expect_error(
+    plot(obj, type = "eyeplot", specified_AEs = 1)
+  )
+
+  expect_error(
+    plot(obj, type = "eyeplot", specified_drugs = 1)
+  )
+  expect_error(
+    plot(obj, type = "heatmap", num_top_drugs = -1)
+  )
+
+  expect_error(
+    plot(obj, type = "heatmap", specified_AEs = 1)
+  )
+
+  expect_error(
+    plot(obj, type = "heatmap", specified_drugs = 1)
+  )
+
+  expect_error(
+    plot(obj, type = "heatmap", cutoff_signal = -1)
+  )
+
+  expect_error(
+    summary(obj, return = 123)
+  )
+
 })

@@ -12,8 +12,8 @@
 
 \item{type}{character string determining the type of plot to show.
 Available choices are \code{"eyeplot"} which calls \link{eyeplot_pvEBayes} and
-\code{"heatmap"} which calls \link{heatmap_pvEBayes}, with the additional
-arguments supplied in ...}
+\code{"heatmap"} which calls \link{heatmap_pvEBayes}. Note that the input for
+'type' is case-sensitive.}
 
 \item{...}{additional arguments passed to heatmap_pvEBayes or
 eyeplot_pvEBayes.}
@@ -29,4 +29,5 @@ This function defines the S3 \code{plot} method for objects of class
 
 obj <- pvEBayes(statin2025_44, model = "general-gamma", alpha = 0.5)
 plot(obj, type = "eyeplot")
+
 }

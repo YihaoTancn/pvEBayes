@@ -14,12 +14,12 @@ generate_contin_table(
 )
 }
 \arguments{
-\item{n_table}{number of random matrices to generate.}
+\item{n_table}{a number of random matrices to generate.}
 
 \item{ref_table}{a reference table used as the basis for generating random
 tables.}
 
-\item{signal_mat}{numeric matrix of the same dimension as
+\item{signal_mat}{a numeric matrix of the same dimension as
 the reference table (ref_table). The entry at position (i, j)
 in signal_mat represents the signal strength between
 the i-th adverse event and the j-th drug. By default,

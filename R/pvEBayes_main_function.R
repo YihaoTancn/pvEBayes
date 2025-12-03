@@ -5,7 +5,7 @@
 #' each AE-drug combination under the assumption of independence between rows
 #' and columns. The expected count is calculated using a reference row
 #' (other AEs) and reference column (other drugs). This null baseline is
-#' typically used in the empirical Bayes modeling of \code{pvEBayes} package
+#' typically used in the empirical Bayes modeling of \pkg{pvEBayes} package
 #' for signal detection and estimation in spontaneous reporting system (SRS)
 #' data.
 #'
@@ -48,6 +48,14 @@ calculate_tilde_e <- function(contin_table) {
     magrittr::set_colnames(colnames(contin_table))
 }
 
+#' Check if a input is a valid SRS contingency table
+#'
+#' @param contin_table an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#'
+#' @returns logical.
+#' @keywords internal
+#' @noRd
 .is_valid_contin_table <- function(contin_table) {
   is_valid <- is.numeric(contin_table) &
     all(contin_table >= 0) &
@@ -55,9 +63,11 @@ calculate_tilde_e <- function(contin_table) {
 
   if (is_valid == FALSE) {
     warning(
-      paste0("contin_table must be a matrix with",
-             " each entry being non-negative integer.")
+      paste0(
+        "contin_table must be a matrix with",
+        " each entry being non-negative integer."
       )
+    )
   }
   is_valid
 }
@@ -71,7 +81,7 @@ calculate_tilde_e <- function(contin_table) {
 #' each AE-drug combination under the assumption of independence between rows
 #' and columns. The expected count is calculated using a reference row
 #' (other AEs) and reference column (other drugs). This null baseline is
-#' typically used in empirical Bayes modeling of \code{pvEBayes} package for
+#' typically used in empirical Bayes modeling of \pkg{pvEBayes} package for
 #' signal detection and estimation in spontaneous reporting system (SRS) data.
 #'
 #' @param contin_table an IxJ contingency table showing pairwise counts of
@@ -107,6 +117,17 @@ estimate_null_expected_count <- function(contin_table) {
 
 
 
+#' Set default row and column names to a contingency table
+#'
+#' @param contin_table an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#'
+#' @returns the contingency table with default row names (AE1, AE2, ...)and
+#' column names (drug1, drug2, ...).
+#'
+#'
+#' @keywords internal
+#' @noRd
 .set_default_names <- function(contin_table) {
   I <- nrow(contin_table)
   J <- ncol(contin_table)
@@ -125,6 +146,17 @@ estimate_null_expected_count <- function(contin_table) {
     magrittr::set_colnames(drug_names)
 }
 
+
+
+#' Generate one-dimensional uniform quasi-random sequence
+#'
+#' @param from the lower bound of the sequence
+#' @param to the upper bound of the sequence
+#' @param length.out desired length of the sequence
+#'
+#' @returns a numeric vector
+#' @keywords internal
+#' @noRd
 .seq_sobol <- function(from, to, length.out) {
   sobol_seq <- SobolSequence::sobolSequence.points(
     dimR = 2, dimF2 = 14,
@@ -136,6 +168,19 @@ estimate_null_expected_count <- function(contin_table) {
 }
 
 
+#' Histogram-based grid value generation for discrete non-parametric empirical
+#' Bayes methods
+#'
+#' @param N an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' @param E an IxJ numeric table of estimated null baseline count. E should be
+#' the same dimension as N.
+#' @param max_draws a upper limit of the generated grid size. If a max_draws
+#' is provided, the grid size is min(max_draws, 10*I*J). Defaul to NULL.
+#'
+#' @returns a numeric vector
+#' @keywords internal
+#' @noRd
 .grid_based_on_hist_log_scale_sobol <- function(N, E, max_draws = FALSE) {
   tmp <- graphics::hist(as.vector(log(N / E)), plot = FALSE)
   num_seq <- length(tmp$breaks) - 1
@@ -172,10 +217,25 @@ estimate_null_expected_count <- function(contin_table) {
   seqs
 }
 
+#' Sigmoid function
+#'
+#' @param x numeric input
+#'
+#' @returns numeric sigmoid return
+#' @keywords internal
+#' @noRd
 .sigmoid <- function(x) {
   1 / (1 + exp(-x))
 }
 
+
+#' Obtain initialization of h for general-gamma method
+#'
+#' @param grid a numeric vector
+#'
+#' @returns a numeric vector
+#' @keywords internal
+#' @noRd
 .get_initial_h <- function(grid) {
   dist21 <- abs(grid - 1)
   weights <- 2 - 2 * .sigmoid(dist21 / 2)
@@ -183,7 +243,19 @@ estimate_null_expected_count <- function(contin_table) {
   h
 }
 
-.km_eb_fit <- function(x, v, exposure = NULL, eps = 1e-04, ...) {
+#' Parameter estimation for Koenker-Mizera method
+#'
+#' @param x a vector of sample observation. In the context of SRS mining,
+#' x is vectorized SRS contingency table.
+#' @param v a vector of grid values
+#' @param exposure a vector of observation specific exposures. In the context
+#' of SRS mining, it is a vector of expected null baseline values.
+#' @param ... other parameters passed to the CVXR optimizer.
+#'
+#' @returns a list of CVXR optimizer outputs
+#' @keywords internal
+#' @noRd
+.km_eb_fit <- function(x, v, exposure = NULL, ...) {
   n <- length(x)
 
   m <- length(v)
@@ -213,7 +285,21 @@ estimate_null_expected_count <- function(contin_table) {
 
 
 
-.KWDual_CVXR <- function(A, d, w, rtol = 1e-6, verb = FALSE) {
+#' Convex optimization for Koenker-Mizera method with CVXR
+#'
+#' @param A linear constraint matrix. In the context of SRS mining, entries in
+#' A represent the conditional Poisson likelihood of the observation given
+#' grid value.
+#' @param d constraint vector. In the context of SRS mining, d is the
+#' reciprocal of grid values.
+#' @param w weights for observations.
+#' @param rtol_KM relative tolerance for optimization algorithm.
+#' @param verb
+#'
+#' @returns a list of CVXR optimizer outputs
+#' @keywords internal
+#' @noRd
+.KWDual_CVXR <- function(A, d, w, rtol_KM = 1e-6, verb = FALSE) {
   n <- nrow(A)
   m <- ncol(A)
 
@@ -230,7 +316,7 @@ estimate_null_expected_count <- function(contin_table) {
   prob <- CVXR::Problem(objective, constraints)
   res <- CVXR::solve(prob,
     solver = "ECOS",
-    reltol = rtol,
+    reltol = rtol_KM,
     verbose = verb
   )
 
@@ -242,7 +328,42 @@ estimate_null_expected_count <- function(contin_table) {
 }
 
 
-.KM_fit <- function(N, E) {
+#' Fit a Koenker-Mizera (KM) model for a contingency table.
+#'
+#' @param N an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' @param E A matrix of expected counts under the null model for the SRS
+#' frequency table.
+#' @param rtol_KM The relative tolerance on the duality gap.
+#'
+#' @details
+#'
+#' Parameter estimation for the "KM" model is formulated as a convex
+#' optimization problem. The objective function and constraints used in
+#' \pkg{pvEBayes} follow the same construction as in \pkg{REBayes}.
+#' Parameter estimation is performed using the open-source convex optimization
+#' package \pkg{CVXR}. The grid value generation follows the recommendation of
+#' Tan et al. (2025).
+#'
+#' @references
+#'
+#' Koenker R, Gu J. REBayes: an R package for empirical Bayes mixture methods.
+#' \emph{Journal of Statistical Software}. 2017; 4;82:1-26.
+#'
+#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+#' to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+#' Estimation in Spontaneous Reporting Systems Data.
+#' \emph{Statistics in Medicine.} 2025; 44: 18-19,
+#' https://doi.org/10.1002/sim.70195.
+#'
+#'
+#' Fu, A, Narasimhan, B, Boyd, S. CVXR: An R Package for Disciplined Convex
+#' Optimization. \emph{Journal of Statistical Software}. 2020; 94;14:1-34.
+#'
+#'
+#' @returns a list of CVXR optimizer outputs
+#' @keywords internal
+.KM_fit <- function(N, E, rtol_KM = 1e-6) {
   n_draws <- prod(dim(N)) * 3
   if (n_draws >= 1000) {
     n_draws <- 1000
@@ -250,7 +371,7 @@ estimate_null_expected_count <- function(contin_table) {
   grid <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = n_draws)
   fit <- .km_eb_fit(as.vector(N),
     v = grid, exposure = as.vector(E),
-    rtol = 1e-6
+    rtol_KM = rtol_KM
   )
   g <- fit$y
 
@@ -259,7 +380,47 @@ estimate_null_expected_count <- function(contin_table) {
   out
 }
 
-.E_fit <- function(N, E, c0 = 1, pDegree = 5, aStart = 1, ...) {
+#' Fit an Efron model for a contingency table.
+#'
+#' @param N an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' @param E A matrix of expected counts under the null model for the SRS
+#' frequency table.
+#' @param c0 numeric and greater than 0. It is a hyperparameter in "efron"
+#' model.
+#' @param pDegree integer greater than or equal to 2. It is a hyperparameter in
+#' Efron model.
+#' @param aStart initial value for parameter alpha in Efron model.
+#'
+#' @details
+#'
+#' The implementation of the "efron" model is adapted from the
+#' \pkg{deconvolveR} package, developed by Bradley Efron and
+#' Balasubramanian Narasimhan. The original implementation in \pkg{deconvolveR}
+#' does not support an exposure or offset parameter in the Poisson model,
+#' which corresponds to the expected null value (\eqn{E_{ij}}) for each AE-drug
+#' combination. To address this, we modified the relevant code to allow for the
+#' inclusion of \eqn{E_{ij}} in the Poisson likelihood. In addition, we
+#' implemented a method for estimating the degrees of freedom, enabling AIC- or
+#' BIC-based hyperparameter selection for the "efron" model (Tan et al. 2025).
+#' See \code{\link{pvEBayes_tune}} for details.
+#'
+#' @references
+#'
+#' Narasimhan B, Efron B. deconvolveR: A G-modeling program for deconvolution
+#' and empirical Bayes estimation. \emph{Journal of Statistical Software}.
+#' 2020; 2;94:1-20.
+#'
+#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+#' to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+#' Estimation in Spontaneous Reporting Systems Data.
+#' \emph{Statistics in Medicine.} 2025; 44: 18-19,
+#' https://doi.org/10.1002/sim.70195.
+#'
+#'
+#' @returns a list of optimizer outputs
+#' @keywords internal
+.E_fit <- function(N, E, c0 = 1, pDegree = 5, aStart = 1, rel.tol) {
   tau <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = 3010)
   x <- as.vector(N)
   E <- as.vector(E)
@@ -335,7 +496,7 @@ estimate_null_expected_count <- function(contin_table) {
 
   result <- stats::nlminb(
     start = aStart, objective = loglik_1, gradient = grad_fun,
-    hessian = hess_fun
+    hessian = hess_fun, control = list(rel.tol = rel.tol)
   )
 
 
@@ -390,7 +551,43 @@ estimate_null_expected_count <- function(contin_table) {
 
 
 
-
+#' Fit gamma mixture based empirical Bayes models using ECM algorithm.
+#' @param N an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' @param E A matrix of expected counts under the null model for the SRS
+#' frequency table.
+#' @param dirichlet logical. Used for "general-gamma" model. If is TRUE, a
+#' dirichlet hyperprior for weights of gamma mixture prior is applied.
+#' @param alpha numeric between 0 and 1. The hyperparameter of "general-gamma"
+#' model. It is needed if "general-gamma" model is used.
+#' @param K integer greater than or equal to 2. It is needed if "K-gamma" model
+#' is used.
+#' @param maxi upper limit of iteration for the ECM algorithm.
+#' @param h a vector of initialization of parameter h.
+#' @param eps a tolerance parameter for ECM algorithm.
+#'
+#' @details
+#' This function implements the ECM algorithm proposed by Tan et al. (2025),
+#' providing a stable and efficient implementation of Gamma-Poisson
+#' Shrinker(GPS), K-gamma and "general-gamma" methods for signal estimation and
+#' signal detection in Spontaneous Reporting System (SRS) data table.
+#'
+#' @references
+#'
+#' Tan Y, Markatou M and Chakraborty S. Flexible Empirical Bayesian Approaches
+#' to Pharmacovigilance for Simultaneous Signal Detection and Signal Strength
+#' Estimation in Spontaneous Reporting Systems Data.
+#' \emph{Statistics in Medicine.} 2025; 44: 18-19,
+#' https://doi.org/10.1002/sim.70195.
+#'
+#' DuMouchel W. Bayesian data mining in large frequency tables, with an
+#' application to the FDA spontaneous reporting system.
+#' \emph{The American Statistician.} 1999; 1;53(3):177-90. \cr
+#'
+#' @returns a list of optimizer outputs
+#'
+#' @keywords internal
+#'
 #' @useDynLib pvEBayes, .registration = TRUE
 #' @importFrom Rcpp evalCpp
 .NBmix_EM <- function(N, E, dirichlet = TRUE,
@@ -407,9 +604,11 @@ estimate_null_expected_count <- function(contin_table) {
     }
     if (!is.null(alpha)) {
       message(
-        paste0("parameter alpha is not needed in GPS/K-gamma model,",
-               " now running without alpha.")
+        paste0(
+          "parameter alpha is not needed in GPS/K-gamma model,",
+          " now running without alpha."
         )
+      )
     }
     alpha <- 1
     if (K == 2) {
@@ -427,9 +626,11 @@ estimate_null_expected_count <- function(contin_table) {
     }
     if (!is.null(K)) {
       message(
-        paste0("parameter K is not needed in general-gamma model,",
-               " now running without K.")
+        paste0(
+          "parameter K is not needed in general-gamma model,",
+          " now running without K."
         )
+      )
     }
 
     grid <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = 200)
@@ -454,15 +655,29 @@ estimate_null_expected_count <- function(contin_table) {
 }
 
 
-.calc_qn_mix_gamma <- function(pvEBayes_obj, N, E, log = FALSE) {
-  num_comp <- length(pvEBayes_obj$r)
+#' Calculate mixture weights in posterior distribution for gamma mixture based
+#' empirical Bayes models
+#'
+#' @param object a \code{pvEBayes} object, which is the output of the function
+#' \link{pvEBayes} or \link{pvEBayes_tune}.
+#' @param N an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' @param E A matrix of expected counts under the null model for the SRS
+#' frequency table.
+#' @param log logical. If is TRUE, log-sum-exp trick is used in the computation.
+#'
+#' @returns an IxJ by K matrix, where K is the number of mixture components.
+#' @keywords internal
+#' @noRd
+.calc_qn_mix_gamma <- function(object, N, E, log = FALSE) {
+  num_comp <- length(object$r)
   if (num_comp == 1) {
     res <- matrix(1, length(N), 1)
     return(res)
   }
-  alphas <- pvEBayes_obj$r
-  h <- pvEBayes_obj$h
-  P <- pvEBayes_obj$omega
+  alphas <- object$r
+  h <- object$h
+  P <- object$omega
   N <- as.vector(N)
   E <- as.vector(E)
   if (log == FALSE) {
@@ -488,18 +703,30 @@ estimate_null_expected_count <- function(contin_table) {
   Qn
 }
 
+#' Take posterior draws for gamma mixture based models
+#'
+#' @param N an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' @param E A matrix of expected counts under the null model for the SRS
+#' frequency table.
+#' @param object a \code{pvEBayes} object, which is the output of the function
+#' \link{pvEBayes} or \link{pvEBayes_tune}.
+#' @param nsim number of posterior draws for each AE-drug combination.
+#'
+#' @returns a \code{pvEBayes} object
+#' @keywords internal
+#' @noRd
 .generate_posterior_gamma_mix <- function(N,
                                           E,
-                                          pvEBayes_obj,
-                                          nsim = 1000,
-                                          ...) {
-  prior_shape <- pvEBayes_obj$r
-  prior_rate <- 1 / pvEBayes_obj$h
+                                          object,
+                                          nsim = 1000) {
+  prior_shape <- object$r
+  prior_rate <- 1 / object$h
   m <- length(prior_shape)
   I <- nrow(N)
   J <- ncol(N)
 
-  Qn <- .calc_qn_mix_gamma(pvEBayes_obj, N, E)
+  Qn <- .calc_qn_mix_gamma(object, N, E)
   Qn <- array(as.vector(Qn), c(I, J, m))
   lambda_sim <- post_draw_gmix_cpp(
     prior_shape,
@@ -520,12 +747,25 @@ estimate_null_expected_count <- function(contin_table) {
 }
 
 
+#' Calculate mixture weights in posterior distribution for grid based
+#' empirical Bayes models
+#'
+#' @param N an IxJ contingency table showing pairwise counts of
+#' adverse events for I AEs (along the rows) and J drugs (along the columns).
+#' @param E A matrix of expected counts under the null model for the SRS
+#' frequency table.
+#' @param object a \code{pvEBayes} object, which is the output of the function
+#' \link{pvEBayes} or \link{pvEBayes_tune}.
+#' @param nsim number of posterior draws for each AE-drug combination.
+#'
+#' @returns a \code{pvEBayes} object
+#' @keywords internal
+#' @noRd
 .generate_posterior_grid_based <- function(N, E,
-                                           pvEBayes_obj,
-                                           nsim = 1000,
-                                           ...) {
-  grid <- pvEBayes_obj$grid
-  esti_prior <- pvEBayes_obj$g
+                                           object,
+                                           nsim = 1000) {
+  grid <- object$grid
+  esti_prior <- object$g
   lambda_sim <- post_draw_discrete_cpp(
     grid,
     esti_prior,
@@ -559,20 +799,32 @@ estimate_null_expected_count <- function(contin_table) {
 #' @param contin_table an IxJ contingency table showing pairwise counts of
 #' adverse events for I AEs (along the rows) and J drugs (along the columns).
 #' @param model the model to fit. Available models are "general-gamma",
-#' "K-gamma", "GPS", "KM" and "efron". Default to "general-gamma".
+#' "K-gamma", "GPS", "KM" and "efron". Default to "general-gamma". Note that the
+#' input for model is case-sensitive.
 #' @param alpha numeric between 0 and 1. The hyperparameter of "general-gamma"
-#' model. It is needed if "general-gamma" model is used.
-#' @param K integer greater than or equal to 2. It is needed if "K-gamma" model
-#' is used.
-#' @param p integer greater than or equal to 2. It is needed if "efron" mode is
-#' used.
+#' model. It is needed if "general-gamma" model is used. Small 'alpha'
+#' encourages shrinkage on mixture weights of the estimated prior distribution.
+#' See Tan et al. (2025) for further details.
+#' @param K a integer greater than or equal to 2 indicating the number of
+#' mixture components in the prior distribution. It is needed if "K-gamma"
+#' model is used. See Tan et al. (2025) for further details.
+#' @param p a integer greater than or equal to 2. It is needed if "efron" mode
+#' is used. Larger p leads to smoother estimated prior distribution. See
+#' Narasimhan and Efron (2020) for detail.
 #' @param c0 numeric and greater than 0. It is needed if "efron" mode is used.
-#' @param maxi upper limit of iteration for the ECM algorithm.
-#' @param n_posterior_draws number of posterior draws for each AE-drug
+#' Large c0 encourage estimated prior distribution shrink toward discrete
+#' uniform. See Narasimhan and Efron (2020) for detail.
+#' @param maxi a upper limit of iteration for the ECM algorithm.
+#' @param n_posterior_draws a number of posterior draws for each AE-drug
 #' combination.
-#' @param eps a tolerance parameter used in the stopping rule of the ECM
-#' algorithm. If the difference in marginal likelihood between two consecutive
+#' @param rtol_ecm a tolerance parameter used in the stopping rule of the ECM
+#' algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
+#' fitted. If the difference in marginal likelihood between two consecutive
 #' iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.
+#' @param rtol_efron a tolerance parameter used when 'efron' model is fitted.
+#' Default to 1e-10. See 'stats::nlminb' for detail.
+#' @param rtol_KM a tolerance parameter used when 'KM' model is fitted.
+#' Default to be 1e-6. See 'CVXR::solve' for detail.
 #' @param E A matrix of expected counts under the null model for the SRS
 #' frequency table. If `NULL` (default), the expected counts are estimated
 #' from the SRS data using 'estimate_null_expected_count()'.
@@ -676,18 +928,63 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' # fit general-gamma model with a specified alpha
 #' fit <- pvEBayes(
-#'   contin_table = simu_table, model = "general-gamma",
-#'   alpha = 0.3, n_posterior_draws = 1000
+#'   contin_table = simu_table,
+#'   model = "general-gamma",
+#'   alpha = 0.3,
+#'   n_posterior_draws = 1000,
+#'   E = NULL,
+#'   maxi = NULL
 #' )
+#'
+#' # fit K-gamma model with K = 3
+#' fit_Kgamma <- pvEBayes(
+#'   contin_table = simu_table, model = "K-gamma",
+#'   K = 3, n_posterior_draws = 1000
+#' )
+#'
+#'
+#' # fit Efron model with specified hyperparameters
+#' # p = 40, c0 = 0.05
+#'
+#' \dontrun{
+#' fit_efron <- pvEBayes(
+#'   contin_table = simu_table,
+#'   model = "efron",
+#'   p = 40,
+#'   c0 = 0.05,
+#'   n_posterior_draws = 1000
+#' )
+#' }
+#'
+#' @srrstats {G2.0, G2.1, G2.2} Length and value of single and vector inputs are
+#' properly checked.
+#' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are
+#' explicitly described in the corresponding documentation.
+#' @srrstats {G2.3, G2.3a, G2.3b} Character inputs are explicitly documented
+#' that they are strictly case-sensitive and only applicable to expected values.
+#' @srrstats {G2.4, G2.4a, G2.4b, G2.4c, G2.8} Explicit conversion is used for
+#' integer, continuous and character inputs.
+#' @srrstats {G2.7} Tabular formats appear in Depends or Sugggests are tested.
+#' @srrstats {G3.0} The algorithm do not compare floating points for equality.
+#' @srrstats {BS5.3, BS5.4, bs5.5}
+#' The empirical Bayes methods implemented in \pkg{pvEBayes} do not rely on
+#' stochastic sampling, and therefore do not produce the types of
+#' convergence diagnostics typically associated with full Bayesian modeling.
+#' Convergence in the ECM algorithm is reached (at least to a sub-optimal).
+#' This is ensured by monotonically increased log joint marginal likelihood,
+#' as proved by Tan et al. (*Stat. in Med*, 2025).
 #'
 pvEBayes <- function(contin_table, model = "general-gamma",
                      alpha = NULL, K = NULL,
                      p = NULL, c0 = NULL,
                      maxi = NULL,
-                     eps = 1e-4,
+                     rtol_ecm = 1e-4,
+                     rtol_efron = 1e-10,
+                     rtol_KM = 1e-6,
                      n_posterior_draws = 1000,
                      E = NULL) {
   h <- NULL
+  contin_table <- as.matrix(contin_table)
   if (.is_valid_contin_table(contin_table) == FALSE) {
     stop()
   }
@@ -697,33 +994,104 @@ pvEBayes <- function(contin_table, model = "general-gamma",
   }
   if (is.null(E)) {
     E <- calculate_tilde_e(contin_table)
+  }else{
+    if(!(all(E >= 0) &&
+         identical(dim(E), dim(contin_table)))
+       ){
+      stop(
+        paste0("'E' must contain only positive values and have the same ",
+               "dimensions as 'contin_table'.")
+        )
+    }
+  }
+  E <- as.matrix(E)
+  if (!(length(model) == 1 &&
+    (model %in% c("general-gamma", "K-gamma", "GPS", "KM", "efron")))) {
+    stop(
+      paste0(
+        "'model' must be one of the followings:",
+        "'general-gamma', 'K-gamma', 'GPS', 'KM', 'efron'"
+      )
+    )
+  }
+  model <- as.character(model)
+  if (!is.null(maxi) &
+    !(is.numeric(maxi) && length(maxi) == 1 &&
+      maxi %% 1 == 0 && maxi > 0)) {
+    stop("'maxi' must be a single integer that is greater than 0.")
+  }
+  if(!is.null(maxi)){
+    maxi <- as.integer(maxi)
+  }else{
+    maxi <- 1000L
   }
 
-  stopifnot(
-    length(model) == 1,
-    (model %in% c("general-gamma", "K-gamma", "GPS", "KM", "efron"))
-  )
+  if (!is.null(n_posterior_draws) &
+    !(is.numeric(n_posterior_draws) && length(n_posterior_draws) == 1 &&
+      n_posterior_draws %% 1 == 0 && n_posterior_draws > 0)) {
+    stop("'n_posterior_draws' must be a single positive integer.")
+  }
+
+  if(!is.null(n_posterior_draws)){
+    n_posterior_draws <- as.integer(n_posterior_draws)
+  }else{
+    n_posterior_draws <- 1000L
+  }
+
+
+  if (!(is.numeric(rtol_ecm) && length(rtol_ecm) == 1 &&
+        rtol_ecm > 0)) {
+    stop("'rtol_ecm' must be a single positive variable.")
+  }
+  rtol_ecm <- as.numeric(rtol_ecm)
+
   if (model == "general-gamma") {
+    if (!(is.numeric(alpha) && length(alpha) == 1 &&
+      alpha >= 0 && alpha <= 1)) {
+      stop("'alpha' must be a single numeric variable between 0 and 1.")
+    }
+    alpha <- as.numeric(alpha)
     dirichlet <- TRUE
   } else {
-    dirichlet <- FALSE
     if (model == "GPS") {
       K <- 2
+      dirichlet <- FALSE
+    }
+    if (model == "K-gamma") {
+      if (!(is.numeric(K) && length(K) == 1 &&
+        K %% 1 == 0 && K > 2)) {
+        stop("'K' must be a single integer that is greater than 2.")
+      }
+      K <- as.integer(K)
+      dirichlet <- FALSE
     }
   }
   start_time <- Sys.time()
   if (model == "KM") {
     res <- .KM_fit(
-      contin_table, E
+      contin_table,
+      E,
+      rtol_KM = rtol_KM
     )
     generate_posterior_fun <- .generate_posterior_grid_based
   } else if (model == "efron") {
-    if (is.null(c0) | is.null(p)) {
-      stop("Error: hyperparameters c0 and p are not given")
+    if (!(is.numeric(p) && length(p) == 1 &&
+      p %% 1 == 0 && p >= 2)) {
+      stop("'p' must be a single integer that is greater or equal to 2.")
     }
+    p <- as.integer(p)
+
+    if (!(is.numeric(c0) && length(c0) == 1 &&
+      c0 > 0)) {
+      stop("'c0' must be a single numberic variable that is greater than 0.")
+    }
+    c0 <- as.numeric(c0)
     res <- .E_fit(
-      contin_table, E,
-      c0, p
+      contin_table,
+      E,
+      c0,
+      p,
+      rel.tol = rtol_efron
     )
     res$c0 <- c0
     res$p <- p
@@ -734,7 +1102,7 @@ pvEBayes <- function(contin_table, model = "general-gamma",
       alpha, K,
       maxi,
       h,
-      eps
+      rtol_ecm
     )
     res$alpha <- alpha
     generate_posterior_fun <- .generate_posterior_gamma_mix
@@ -747,21 +1115,14 @@ pvEBayes <- function(contin_table, model = "general-gamma",
   res$model <- model
 
   res$n_posterior_draws <- n_posterior_draws
-  if (!is.null(n_posterior_draws)) {
-    stopifnot(
-      is.numeric(n_posterior_draws),
-      n_posterior_draws > 0,
-      n_posterior_draws == round(n_posterior_draws)
-    )
 
-    res$posterior_draws <- generate_posterior_fun(contin_table,
-      E,
-      res,
-      nsim = n_posterior_draws
-    )
-    end_time2 <- Sys.time()
-    res$draws_time <- difftime(end_time2, end_time)
-  }
+  res$posterior_draws <- generate_posterior_fun(contin_table,
+    E,
+    res,
+    nsim = n_posterior_draws
+  )
+  end_time2 <- Sys.time()
+  res$draws_time <- difftime(end_time2, end_time)
   res$contin_table <- contin_table
   res$E <- E
 
@@ -783,7 +1144,8 @@ pvEBayes <- function(contin_table, model = "general-gamma",
 #' @param contin_table an IxJ contingency table showing pairwise counts of
 #' adverse events for I AEs (along the rows) and J drugs (along the columns).
 #' @param model the model to be tuned. Available models are "general-gamma" and
-#' "efron". Default to "general-gamma".
+#' "efron". Default to "general-gamma". Note that the input for model is
+#' case-sensitive.
 #' @param alpha_vec vector of hyperparameter alpha values to be selected. Alpha
 #' is a hyperparameter in general-gamma model which is numeric and between 0
 #' and 1. If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9)
@@ -804,6 +1166,12 @@ pvEBayes <- function(contin_table, model = "general-gamma",
 #' each fitted model under the selection. Default to be TRUE.
 #' @param return_all_BIC logical, indicating whether to return BIC values for
 #' each fitted model under the selection. Default to be TRUE.
+#' @param rtol_ecm a tolerance parameter used in the stopping rule of the ECM
+#' algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
+#' fitted. If the difference in marginal likelihood between two consecutive
+#' iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.
+#' @param rtol_efron a tolerance parameter used when 'efron' model is fitted.
+#' Default to 1e-10. See 'stats::nlminb' for detail.
 #' @param E A matrix of expected counts under the null model for the SRS
 #' frequency table. If `NULL` (default), the expected counts are estimated
 #' from the SRS data using 'estimate_null_expected_count()'.
@@ -834,8 +1202,20 @@ pvEBayes <- function(contin_table, model = "general-gamma",
 #'
 #' @examples
 #'
-#' fit <- pvEBayes_tune(statin2025_44, model = "general-gamma")
+#' fit <- pvEBayes_tune(statin2025_44,
+#'   model = "general-gamma",
+#'   alpha_vec = c(0, 0.1, 0.3, 0.5, 0.7, 0.9)
+#' )
 #'
+#' @srrstats {G2.0, G2.1, G2.2} length and value of single and
+#' vector inputs are properly checked.
+#' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are explicitly
+#' described in the corresponding documentation.
+#' @srrstats {G2.3, G2.3a, G2.3b} character inputs are explicitly documented
+#' that they are strictly case-sensitive and only applicable to expected values.
+#' @srrstats {G2.4, G2.4a, G2.4b, G2.4c, G2.8} explicit conversion is used for
+#' integer, continuous and character inputs.
+#' @srrstats {G2.6} one-dimensinoal inputs are appropriately pre-processed.
 pvEBayes_tune <- function(contin_table, model = "general-gamma",
                           alpha_vec = NULL,
                           p_vec = NULL, c0_vec = NULL,
@@ -844,43 +1224,112 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
                           return_all_fit = FALSE,
                           return_all_AIC = TRUE,
                           return_all_BIC = TRUE,
+                          rtol_ecm = 1e-4,
+                          rtol_efron = 1e-10,
                           E = NULL) {
-  if (.is_valid_contin_table(contin_table) == FALSE) {
-    stop()
+  if (!.is_valid_contin_table(contin_table)) {
+    stop("Please provide a valid 'contin_table'")
   }
+  if (!(is.logical(return_all_fit) && length(return_all_fit) == 1)) {
+    stop("'return_all_fit' must be a single logical value (TRUE or FALSE).")
+  }
+
+  if (!(is.logical(return_all_AIC) && length(return_all_AIC) == 1)) {
+    stop("'return_all_AIC' must be a single logical value (TRUE or FALSE).")
+  }
+
+  if (!(is.logical(return_all_BIC) && length(return_all_BIC) == 1)) {
+    stop("'return_all_BIC' must be a single logical value (TRUE or FALSE).")
+  }
+
   if (is.null(colnames(contin_table)) |
     is.null(rownames(contin_table))) {
     contin_table <- .set_default_names(contin_table)
   }
   if (is.null(E)) {
     E <- calculate_tilde_e(contin_table)
+  }else{
+    if(!(all(E >= 0) &&
+         identical(dim(E), dim(contin_table)))
+    ){
+      stop(
+        paste0("'E' must contain only positive values and have the same ",
+               "dimensions as 'contin_table'.")
+      )
+    }
   }
-  stopifnot(
-    length(model) == 1,
-    (model %in% c("general-gamma", "K-gamma", "GPS", "KM", "efron"))
-  )
-
+  E <- as.matrix(E)
+  if (!(length(model) == 1 &&
+    (model %in% c("general-gamma", "K-gamma", "GPS", "KM", "efron")))) {
+    stop(
+      paste0(
+        "'model' must be one of the followings:",
+        "'general-gamma', 'K-gamma', 'GPS', 'KM', 'efron'"
+      )
+    )
+  }
+  model <- as.character(model)
   if (model %in% c("K-gamma", "GPS", "KM")) {
     stop("Please use pvEBayes() for GPS, K-gamma or KM model fitting.")
   }
 
+  if (!is.null(n_posterior_draws) &
+    !(is.numeric(n_posterior_draws) && length(n_posterior_draws) == 1 &&
+      n_posterior_draws %% 1 == 0 && n_posterior_draws > 0)) {
+    stop("'n_posterior_draws' must be a single positive integer.")
+  }
+
   if (model == "efron") {
+    if (is.null(p_vec)) {
+      p_vec <- c(40, 60, 80, 100, 120)
+    }
+    if (is.null(c0_vec)) {
+      c0_vec <- c(1e-5, 1e-4, 1e-3, 1e-2, 1e-1)
+    }
+    p_vec <- as.vector(p_vec)
+    c0_vec <- as.vector(c0_vec)
+    if (!(
+      length(p_vec) > 0 &&
+        length(c0_vec) > 0 &&
+        all(p_vec >= 2) &&
+        all(c0_vec >= 0)
+    )
+    ) {
+      stop("Please provide valid 'p_vec' and 'c0_vec'.")
+    }
+    p_vec <- as.integer(p_vec)
+    c0_vec <- as.numeric(c0_vec)
     objects <- tuning_efron(
       contin_table = contin_table,
       p_vec = p_vec,
       c0_vec = c0_vec,
       return_all_fit = return_all_fit,
       return_all_AIC = return_all_AIC,
-      return_all_BIC = return_all_BIC
+      return_all_BIC = return_all_BIC,
+      rtol_efron = rtol_efron
     )
     generate_posterior_fun <- .generate_posterior_grid_based
   } else {
+    if (is.null(alpha_vec)) {
+      alpha_vec <- c(0, 0.1, 0.3, 0.5, 0.7, 0.9)
+    }
+    alpha_vec <- as.vector(alpha_vec)
+    if (!(
+      length(alpha_vec) > 0 &&
+        is.numeric(alpha_vec) &&
+        all(alpha_vec >= 0 & alpha_vec <= 1)
+    )
+    ) {
+      stop("Elements in 'alpha_vec' must be numeric and in [0,1)")
+    }
+    alpha_vec <- as.numeric(alpha_vec)
     objects <- tuning_general_gamma(
       contin_table = contin_table,
       alpha_vec = alpha_vec,
       return_all_fit = return_all_fit,
       return_all_AIC = return_all_AIC,
-      return_all_BIC = return_all_BIC
+      return_all_BIC = return_all_BIC,
+      rtol_ecm = rtol_ecm
     )
     generate_posterior_fun <- .generate_posterior_gamma_mix
   }
@@ -898,21 +1347,16 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
   res$model <- model
 
   res$n_posterior_draws <- n_posterior_draws
-  if (!is.null(n_posterior_draws)) {
-    stopifnot(
-      is.numeric(n_posterior_draws),
-      n_posterior_draws > 0,
-      n_posterior_draws == round(n_posterior_draws)
-    )
 
-    res$posterior_draws <- generate_posterior_fun(contin_table,
-      E,
-      res,
-      nsim = n_posterior_draws
-    )
-    end_time2 <- Sys.time()
-    res$draws_time <- difftime(end_time2, end_time)
-  }
+
+  res$posterior_draws <- generate_posterior_fun(contin_table,
+    E,
+    res,
+    nsim = n_posterior_draws
+  )
+  end_time2 <- Sys.time()
+  res$draws_time <- difftime(end_time2, end_time)
+
   res$contin_table <- contin_table
   res$E <- E
 
@@ -934,6 +1378,10 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
 #' is hyperparameter in general-gamma model which is numeric and between 0
 #' and 1. If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9)
 #' will be used.
+#' @param rtol_ecm a tolerance parameter used in the stopping rule of the ECM
+#' algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
+#' fitted. If the difference in marginal likelihood between two consecutive
+#' iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.
 #'
 #' @references
 #'
@@ -953,22 +1401,14 @@ tuning_general_gamma <- function(contin_table,
                                  alpha_vec = NULL,
                                  return_all_fit = FALSE,
                                  return_all_AIC = TRUE,
-                                 return_all_BIC = TRUE) {
-  if (is.null(alpha_vec)) {
-    alpha_vec <- c(0, 0.1, 0.3, 0.5, 0.7, 0.9)
-  }
-  stopifnot(
-    length(alpha_vec) > 0,
-    is.numeric(alpha_vec),
-    all(alpha_vec >= 0 & alpha_vec <= 1),
-    .is_valid_contin_table(contin_table)
-  )
+                                 return_all_BIC = TRUE,
+                                 rtol_ecm = 1e-4) {
   fits <- alpha_vec %>%
     lapply(function(e) {
       pvEBayes(
         contin_table = contin_table, model = "general-gamma",
         alpha = e, n_posterior_draws = NULL,
-        eps = 1e-4
+        rtol_ecm = rtol_ecm
       )
     })
   AICs <- fits %>% vapply(AIC.pvEBayes, FUN.VALUE = numeric(1))
@@ -1016,6 +1456,14 @@ tuning_general_gamma <- function(contin_table,
 }
 
 
+#' generate a list of all possible hyperparameter combination for Efron model
+#'
+#' @param p a vector of hyperparameter p values to be selected.
+#' @param c0 a vector of hyperparameter c0 values to be selected.
+#'
+#' @returns a list
+#' @keywords internal
+#' @noRd
 .get_grid_list <- function(c0, p) {
   res <- list()
   for (i in seq_along(c0)) {
@@ -1040,6 +1488,8 @@ tuning_general_gamma <- function(contin_table,
 #' @param c0_vec vector of hyperparameter c0 values to be selected. c0 is
 #' a hyperparameter in "efron" model which should be a positive number. If is
 #' NULL, a default set of c0 values (0.001, 0.01, 0.1, 0.2, 0.5) will be used.
+#' @param rtol_efron a tolerance parameter used when 'efron' model is fitted.
+#' Default to 1e-10. See 'stats::nlminb' for detail.
 #'
 #' @references
 #'
@@ -1054,33 +1504,21 @@ tuning_general_gamma <- function(contin_table,
 #' a list of fitted models with hyperparameter alpha selected by AIC or BIC.
 #'
 #' @keywords internal
-#'
 tuning_efron <- function(contin_table,
                          p_vec = NULL,
                          c0_vec = NULL,
                          return_all_fit = FALSE,
                          return_all_AIC = TRUE,
-                         return_all_BIC = TRUE) {
-  if (is.null(p_vec)) {
-    p_vec <- c(40, 60, 80, 100, 120)
-  }
-  if (is.null(c0_vec)) {
-    c0_vec <- c(1e-5, 1e-4, 1e-3, 1e-2, 1e-1)
-  }
-  stopifnot(
-    length(p_vec) > 0,
-    length(c0_vec) > 0,
-    all(p_vec >= 2),
-    all(c0_vec >= 0),
-    .is_valid_contin_table(contin_table)
-  )
+                         return_all_BIC = TRUE,
+                         rtol_efron = 1e-10) {
   parameter_list <- .get_grid_list(c0_vec, p_vec)
   fits <- parameter_list %>%
     lapply(function(e) {
       pvEBayes(
         contin_table = contin_table, model = "efron",
         p = e$p, c0 = e$c0,
-        n_posterior_draws = NULL
+        n_posterior_draws = NULL,
+        rtol_efron = rtol_efron
       )
     })
   AICs <- fits %>% vapply(AIC.pvEBayes, FUN.VALUE = numeric(1))

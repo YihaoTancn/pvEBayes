@@ -3,11 +3,65 @@ test_that("pvEBayes", {
   rownames(valid_matrix) <- c("AE_1", "AE_2")
   colnames(valid_matrix) <- c("drug_1", "drug_2", "drug_3", "drug_4")
   expect_equal(.is_valid_contin_table(valid_matrix), TRUE)
-  result <- calculate_tilde_e(valid_matrix)
+  result <- estimate_null_expected_count(valid_matrix)
 
   expect_equal(rownames(result), rownames(valid_matrix))
   expect_equal(colnames(result), colnames(valid_matrix))
-  E <- calculate_tilde_e(valid_matrix)
+  E <- estimate_null_expected_count(valid_matrix)
+
+  # test invalid input
+  invalid_matrix = matrix(c(-70, 40, 44, 50, 52, 60, 70, 80), nrow = 2)
+  invalid_E = E
+  invalid_E[1,1] = -10
+
+  expect_warning(
+    .is_valid_contin_table(contin_table = invalid_matrix)
+    )
+
+  ## valid contin_table + invalid E
+  expect_error(
+    pvEBayes(contin_table = valid_matrix, model = "GPS" , E = invalid_E)
+  )
+
+
+  ## general-gamma without specifying alpha
+  expect_error(
+    pvEBayes(contin_table = valid_matrix, model = "general-gamma")
+  )
+
+  ## K-gamma without specifying K
+  expect_error(
+    pvEBayes(contin_table = valid_matrix, model = "K-gamma")
+  )
+
+  expect_error(
+    pvEBayes(contin_table = valid_matrix, model = "sdfa")
+  )
+
+  expect_message(
+    pvEBayes(contin_table = valid_matrix, model = "GPS", alpha = 0.5)
+  )
+
+  expect_message(
+    pvEBayes(contin_table = valid_matrix, model = "general-gamma",
+             alpha = 0.5, K = 4)
+  )
+
+
+
+
+  ## check if errors can be caught
+
+  expect_true(
+    tryCatch(
+      {
+        pvEBayes(contin_table = valid_matrix, model = "GPS", E = invalid_E)
+        FALSE
+      },
+      error = function(e) TRUE
+    )
+  )
+
   # pseudo sample generation
   grid <- .grid_based_on_hist_log_scale_sobol(valid_matrix,
     result,
@@ -37,7 +91,19 @@ test_that("pvEBayes", {
   )
   expect_equal(is.pvEBayes(fit_gg), TRUE)
 
+  ## check data.table input
+
+  fit_gg_dt <- pvEBayes(
+    contin_table = data.table::data.table(valid_matrix),
+    model = "general-gamma", alpha = 0.5
+  )
+  expect_equal(is.pvEBayes(fit_gg_dt), TRUE)
+
   ## KM
+  grid <- .grid_based_on_hist_log_scale_sobol(valid_matrix,
+                                              E,
+                                              max_draws = FALSE)
+
   fit_km <- pvEBayes(
     contin_table = valid_matrix,
     model = "KM"
@@ -45,6 +111,8 @@ test_that("pvEBayes", {
   print_tmp <- print(fit_km)
   summary_tmp <- summary(fit_km)
   expect_equal(is.pvEBayes(fit_km), TRUE)
+
+
   ## efron
   fit_e <- pvEBayes(
     contin_table = valid_matrix,
@@ -58,9 +126,27 @@ test_that("pvEBayes", {
   gg_selection <- pvEBayes_tune(valid_matrix, model = "general-gamma")
   expect_equal(is.pvEBayes(gg_selection), TRUE)
 
+  # check if the message can be suppressed
+  expect_no_message(
+    suppressMessages(
+      gg_selection <- pvEBayes_tune(valid_matrix, model = "general-gamma")
+    )
+  )
+
   # check hyperparameter alpha selection
   e_selection <- pvEBayes_tune(valid_matrix, model = "efron")
   expect_equal(is.pvEBayes(e_selection), TRUE)
 
-  #
+  all_fit_e <- extract_all_fitted_models(e_selection)
+  # check for NA, NaN,Inf for log likelihood.
+  check_failure_fit <- function(loglik){
+    res = is.finite(loglik)
+    res
+  }
+
+  expect_true(is.finite(fit_gps$loglik))
+  expect_true(is.finite(fit_e$loglik))
+  expect_true(is.finite(fit_km$loglik))
+  expect_true(is.finite(fit_gg$loglik))
+  expect_true(is.finite(fit_4g$loglik))
 })

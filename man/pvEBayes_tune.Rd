@@ -16,6 +16,8 @@ pvEBayes_tune(
   return_all_fit = FALSE,
   return_all_AIC = TRUE,
   return_all_BIC = TRUE,
+  rtol_ecm = 1e-04,
+  rtol_efron = 1e-10,
   E = NULL
 )
 }
@@ -24,7 +26,8 @@ pvEBayes_tune(
 adverse events for I AEs (along the rows) and J drugs (along the columns).}
 
 \item{model}{the model to be tuned. Available models are "general-gamma" and
-"efron". Default to "general-gamma".}
+"efron". Default to "general-gamma". Note that the input for model is
+case-sensitive.}
 
 \item{alpha_vec}{vector of hyperparameter alpha values to be selected. Alpha
 is a hyperparameter in general-gamma model which is numeric and between 0
@@ -54,6 +57,14 @@ each fitted model under the selection. Default to be TRUE.}
 \item{return_all_BIC}{logical, indicating whether to return BIC values for
 each fitted model under the selection. Default to be TRUE.}
 
+\item{rtol_ecm}{a tolerance parameter used in the stopping rule of the ECM
+algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
+fitted. If the difference in marginal likelihood between two consecutive
+iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.}
+
+\item{rtol_efron}{a tolerance parameter used when 'efron' model is fitted.
+Default to 1e-10. See 'stats::nlminb' for detail.}
+
 \item{E}{A matrix of expected counts under the null model for the SRS
 frequency table. If \code{NULL} (default), the expected counts are estimated
 from the SRS data using 'estimate_null_expected_count()'.}
@@ -72,7 +83,10 @@ values are selected as the optimal fits.
 }
 \examples{
 
-fit <- pvEBayes_tune(statin2025_44, model = "general-gamma")
+fit <- pvEBayes_tune(statin2025_44,
+  model = "general-gamma",
+  alpha_vec = c(0, 0.1, 0.3, 0.5, 0.7, 0.9)
+)
 
 }
 \references{
