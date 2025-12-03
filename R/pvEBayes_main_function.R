@@ -961,7 +961,7 @@ estimate_null_expected_count <- function(contin_table) {
 #' integer, continuous and character inputs.
 #' @srrstats {G2.7} Tabular formats appear in Depends or Sugggests are tested.
 #' @srrstats {G3.0} The algorithm do not compare floating points for equality.
-#' @srrstats {BS5.3, BS5.4, bs5.5}
+#' @srrstats {BS5.3, BS5.4, BS5.5}
 #' The empirical Bayes methods implemented in \pkg{pvEBayes} do not rely on
 #' stochastic sampling, and therefore do not produce the types of
 #' convergence diagnostics typically associated with full Bayesian modeling.

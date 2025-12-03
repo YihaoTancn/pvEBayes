@@ -169,7 +169,7 @@
 #' \code{suppressMessages()} if desired. The suppression behavior is explicitly
 #' tested in \code{test-pvEBayes_main_function.R}.
 #'
-#' @srrstatsNA {BS2.14}
+#' @srrstats {BS2.14}
 #' The \pkg{pvEBayes} package does not currently give warnings during normal
 #' operation. Invalid inputs result in errors via \code{stop()}.
 #'

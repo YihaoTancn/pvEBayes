@@ -61,7 +61,7 @@ head(statin2025_44)
 Our interest lies in finding the most important adverse events and estimating the corresponding signal strength of these 6 statin drugs. These are achieved by fitting empirical Bayes models with pvEBayes() to the SRS data. We begin by fitting the general-gamma model to this dataset. Other models mentioned above could be used by modifying the 'model' argument. For illustration, we fit the model with a fixed hyperparameter value of $ \alpha = 0.5$ using the pvEBayes() function.
 
 ```{r, include=FALSE}
-#' @srrstats {BS5.3, BS5.4, bs5.5}
+#' @srrstats {BS5.3, BS5.4, BS5.5}
 #' The empirical Bayes methods implemented in \pkg{pvEBayes} do not rely on
 #' stochastic sampling, and therefore do not produce the types of
 #' convergence diagnostics typically associated with full Bayesian modeling.
