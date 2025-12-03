@@ -52,9 +52,9 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.
 #> Estimated prior is a mixture of 200 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0308 seconds.
+#> Running time of the general-gamma model fitting: 0.031 seconds.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0018 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -65,9 +65,9 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.
 #> Estimated prior is a mixture of 200 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0308 seconds.
+#> Running time of the general-gamma model fitting: 0.031 seconds.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0018 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -79,9 +79,9 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.
 #> Estimated prior is a mixture of 200 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0308 seconds.
+#> Running time of the general-gamma model fitting: 0.031 seconds.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0018 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -92,9 +92,9 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.1.
 #> Estimated prior is a mixture of 200 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0306 seconds.
+#> Running time of the general-gamma model fitting: 0.0312 seconds.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0017 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -105,9 +105,9 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.3.
 #> Estimated prior is a mixture of 200 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0309 seconds.
+#> Running time of the general-gamma model fitting: 0.0311 seconds.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0017 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -118,9 +118,9 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 200 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0307 seconds.
+#> Running time of the general-gamma model fitting: 0.031 seconds.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0017 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -131,9 +131,9 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.7.
 #> Estimated prior is a mixture of 200 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0305 seconds.
+#> Running time of the general-gamma model fitting: 0.0309 seconds.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0017 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -144,7 +144,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.9.
 #> Estimated prior is a mixture of 200 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0307 seconds.
+#> Running time of the general-gamma model fitting: 0.0311 seconds.
 #> Running time for posterior draws 
 #> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
 #> 
