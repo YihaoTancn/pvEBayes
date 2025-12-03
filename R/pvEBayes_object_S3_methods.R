@@ -319,7 +319,7 @@ eyeplot_pvEBayes <- function(x,
       length(specified_AEs) >= 1)) {
     stop("Elements in 'specified_AEs' must be entirely of strings.")
   }
-  if(!is.null(specified_AEs)){
+  if (!is.null(specified_AEs)) {
     specified_AEs <- as.character(specified_AEs)
   }
 
@@ -328,7 +328,7 @@ eyeplot_pvEBayes <- function(x,
       length(specified_drugs) >= 1)) {
     stop("Elements in 'specified_drugs' must be entirely of strings.")
   }
-  if(!is.null(specified_drugs)){
+  if (!is.null(specified_drugs)) {
     specified_drugs <- as.character(specified_drugs)
   }
 
@@ -613,49 +613,50 @@ heatmap_pvEBayes <- function(x,
                              specified_AEs = NULL,
                              specified_drugs = NULL,
                              cutoff_signal = NULL) {
-
   if (!(is.numeric(num_top_AEs) &&
-        length(num_top_AEs) == 1 &&
-        num_top_AEs %% 1 == 0 &&
-        num_top_AEs > 0)) {
+    length(num_top_AEs) == 1 &&
+    num_top_AEs %% 1 == 0 &&
+    num_top_AEs > 0)) {
     stop("'num_top_AEs' must be a single positive integer.")
   }
   num_top_AEs <- as.integer(num_top_AEs)
   if (!(is.numeric(num_top_drugs) &&
-        length(num_top_drugs) == 1 &&
-        num_top_drugs %% 1 == 0 &&
-        num_top_drugs > 0)) {
+    length(num_top_drugs) == 1 &&
+    num_top_drugs %% 1 == 0 &&
+    num_top_drugs > 0)) {
     stop("'num_top_drugs' must be a single positive integer.")
   }
   num_top_drugs <- as.integer(num_top_drugs)
 
   if (!is.null(specified_AEs) &
-      !(is.character(specified_AEs) &&
-        length(specified_AEs) >= 1)) {
+    !(is.character(specified_AEs) &&
+      length(specified_AEs) >= 1)) {
     stop("Elements in 'specified_AEs' must be entirely of strings.")
   }
-  if(!is.null(specified_AEs)){
+  if (!is.null(specified_AEs)) {
     specified_AEs <- as.character(specified_AEs)
   }
 
   if (!is.null(specified_drugs) &
-      !(is.character(specified_drugs) &&
-        length(specified_drugs) >= 1)) {
+    !(is.character(specified_drugs) &&
+      length(specified_drugs) >= 1)) {
     stop("Elements in 'specified_drugs' must be entirely of strings.")
   }
-  if(!is.null(specified_drugs)){
+  if (!is.null(specified_drugs)) {
     specified_drugs <- as.character(specified_drugs)
   }
   if (!is.null(cutoff_signal) &
-      !(is.numeric(cutoff_signal) &&
-        length(cutoff_signal) == 1 &&
+    !(is.numeric(cutoff_signal) &&
+      length(cutoff_signal) == 1 &&
       cutoff_signal > 0)) {
     stop(
-      paste0("'cutoff_signal' must be a single positive ",
-             "variable that is greater than 1.")
+      paste0(
+        "'cutoff_signal' must be a single positive ",
+        "variable that is greater than 1."
       )
+    )
   }
-  if(!is.null(cutoff_signal)){
+  if (!is.null(cutoff_signal)) {
     cutoff_signal <- as.numeric(cutoff_signal)
   }
 
@@ -977,10 +978,12 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
       object$posterior_draws
     } else {
       stop(
-        paste0("'return' must be one of the followings: ",
-               "'prior parameters', 'likelihood', ",
-               "'detected signal' or 'posterior draws'.")
+        paste0(
+          "'return' must be one of the followings: ",
+          "'prior parameters', 'likelihood', ",
+          "'detected signal' or 'posterior draws'."
         )
+      )
     }
   } else {
     res <- list(
@@ -1033,9 +1036,9 @@ plot.pvEBayes <- function(x, type = "eyeplot", ...) {
     stop("x must be a 'pvEBayes' object.")
   }
 
-  if(
+  if (
     !(type %in% c("heatmap", "eyeplot"))
-  ){
+  ) {
     stop("'type' must be either 'heatmap' or 'eyeplot'")
   }
 
@@ -1120,7 +1123,7 @@ logLik.pvEBayes <- function(object, ...) {
 #'
 AIC.pvEBayes <- function(object, ..., k = 2) {
   stopifnot(is.pvEBayes(object))
-  if (!(is.numeric(k) && length(k) == 1 )) {
+  if (!(is.numeric(k) && length(k) == 1)) {
     stop("'k' must be a single integer.")
   }
   k <- as.integer(k)

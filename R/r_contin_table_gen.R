@@ -201,7 +201,7 @@ generate_contin_table <- function(n_table = 1,
 
 
   if (!(is.numeric(n_table) && length(n_table) == 1 &&
-        n_table %% 1 == 0 && n_table > 0)) {
+    n_table %% 1 == 0 && n_table > 0)) {
     stop("'n_table' must be a single integer.")
   }
   n_table <- as.integer(n_table)

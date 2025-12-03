@@ -994,14 +994,16 @@ pvEBayes <- function(contin_table, model = "general-gamma",
   }
   if (is.null(E)) {
     E <- calculate_tilde_e(contin_table)
-  }else{
-    if(!(all(E >= 0) &&
-         identical(dim(E), dim(contin_table)))
-       ){
+  } else {
+    if (!(all(E >= 0) &&
+      identical(dim(E), dim(contin_table)))
+    ) {
       stop(
-        paste0("'E' must contain only positive values and have the same ",
-               "dimensions as 'contin_table'.")
+        paste0(
+          "'E' must contain only positive values and have the same ",
+          "dimensions as 'contin_table'."
         )
+      )
     }
   }
   E <- as.matrix(E)
@@ -1020,9 +1022,9 @@ pvEBayes <- function(contin_table, model = "general-gamma",
       maxi %% 1 == 0 && maxi > 0)) {
     stop("'maxi' must be a single integer that is greater than 0.")
   }
-  if(!is.null(maxi)){
+  if (!is.null(maxi)) {
     maxi <- as.integer(maxi)
-  }else{
+  } else {
     maxi <- 1000L
   }
 
@@ -1032,15 +1034,15 @@ pvEBayes <- function(contin_table, model = "general-gamma",
     stop("'n_posterior_draws' must be a single positive integer.")
   }
 
-  if(!is.null(n_posterior_draws)){
+  if (!is.null(n_posterior_draws)) {
     n_posterior_draws <- as.integer(n_posterior_draws)
-  }else{
+  } else {
     n_posterior_draws <- 1000L
   }
 
 
   if (!(is.numeric(rtol_ecm) && length(rtol_ecm) == 1 &&
-        rtol_ecm > 0)) {
+    rtol_ecm > 0)) {
     stop("'rtol_ecm' must be a single positive variable.")
   }
   rtol_ecm <- as.numeric(rtol_ecm)
@@ -1248,13 +1250,15 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
   }
   if (is.null(E)) {
     E <- calculate_tilde_e(contin_table)
-  }else{
-    if(!(all(E >= 0) &&
-         identical(dim(E), dim(contin_table)))
-    ){
+  } else {
+    if (!(all(E >= 0) &&
+      identical(dim(E), dim(contin_table)))
+    ) {
       stop(
-        paste0("'E' must contain only positive values and have the same ",
-               "dimensions as 'contin_table'.")
+        paste0(
+          "'E' must contain only positive values and have the same ",
+          "dimensions as 'contin_table'."
+        )
       )
     }
   }
