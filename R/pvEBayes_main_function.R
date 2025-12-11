@@ -627,8 +627,10 @@ estimate_null_expected_count <- function(contin_table) {
         )
       )
     }
-
-    grid <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = 200)
+    n_entry <- prod(dim(N))
+    grid <- .grid_based_on_hist_log_scale_sobol(N, E,
+      max_draws = min(200, n_entry)
+    )
   }
   if (is.null(maxi)) {
     maxi <- 1000
@@ -812,10 +814,10 @@ estimate_null_expected_count <- function(contin_table) {
 #' @param maxi a upper limit of iteration for the ECM algorithm.
 #' @param n_posterior_draws a number of posterior draws for each AE-drug
 #' combination.
-#' @param rtol_ecm a tolerance parameter used in the stopping rule of the ECM
-#' algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
-#' fitted. If the difference in marginal likelihood between two consecutive
-#' iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.
+#' @param tol_ecm a tolerance parameter used for the ECM stopping rule, defined
+#' as the absolute change in the joint marginal likelihood between two
+#' consecutive iterations. It is used when 'GPS', 'K-gamma' or 'general-gamma'
+#' model is fitted. Default to be 1e-4.
 #' @param rtol_efron a tolerance parameter used when 'efron' model is fitted.
 #' Default to 1e-10. See 'stats::nlminb' for detail.
 #' @param rtol_KM a tolerance parameter used when 'KM' model is fitted.
@@ -906,19 +908,14 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' # set up signal matrix with one signal at entry (1,1)
 #' sig_mat <- matrix(1, nrow(ref_table), ncol(ref_table))
-#' sig_mat[1, 1] <- 2
+#' sig_mat[c(1, 5), 1] <- 2
 #'
-#' # set up structural zero matrix
-#' Z <- matrix(0, nrow(ref_table), ncol(ref_table))
-#' Z[5, 1] <- 1
 #'
 #' simu_table <- generate_contin_table(
 #'   ref_table = ref_table,
 #'   signal_mat = sig_mat,
-#'   n_table = 1,
-#'   Variation = TRUE,
-#'   zi_indic_mat = Z
-#' )[[1]][[1]]
+#'   n_table = 1
+#' )[[1]]
 #'
 #'
 #' # fit general-gamma model with a specified alpha
@@ -951,6 +948,68 @@ estimate_null_expected_count <- function(contin_table) {
 #' )
 #' }
 #'
+#' # fit GPS model and comapre with 'openEBGM'
+#'
+#'
+#' fit_gps <- pvEBayes(simu_table, model = "GPS")
+#'
+#' \dontrun{
+#'
+#' ## Optional comparison with openEBGM (only if installed)
+#'
+#' ## tol_ecm is the absolute tolerance for ECM stopping rule.
+#' ## It is set to ensure comparability to `openEBGM`.
+#'
+#' fit_gps <- pvEBayes(simu_table, model = "GPS", tol_ecm = 1e-2)
+#'
+#' if (requireNamespace("openEBGM", quietly = TRUE)) {
+#'   E <- estimate_null_expected_count(simu_table)
+#'   simu_table_stacked <- as.data.frame(as.table(simu_table))
+#'   simu_table_stacked$E <- as.vector(E)
+#'   colnames(simu_table_stacked) <- c("var1", "var2", "N", "E")
+#'   simu_table_stacked_squash <- openEBGM::autoSquash(simu_table_stacked)
+#'
+#'   hyper_estimates <- openEBGM::hyperEM(simu_table_stacked_squash,
+#'     theta_init = c(2, 1, 2, 2, 0.2),
+#'     method = "nlminb",
+#'     N_star = NULL,
+#'     zeroes = TRUE,
+#'     param_upper = Inf,
+#'     LL_tol = 1e-2,
+#'     max_iter = 10000
+#'   )
+#' }
+#'
+#' theta_hat <- hyper_estimates$estimates
+#' qn <- openEBGM::Qn(theta_hat,
+#'   N = simu_table_stacked$N,
+#'   E = simu_table_stacked$E
+#' )
+#'
+#' simu_table_stacked$q05 <- openEBGM::quantBisect(5,
+#'   theta_hat = theta_hat,
+#'   N = simu_table_stacked$N,
+#'   E = simu_table_stacked$E,
+#'   qn = qn
+#' )
+#'
+#' ## obtain the detected signal provided by openEBGM
+#' simu_table_stacked %>%
+#'   subset(q05 > 1.001)
+#'
+#' ## detected signal from pvEBayes presented in the same way as openEBGM
+#' fit_gps %>%
+#'   summary(return = "posterior draws") %>%
+#'   apply(c(2, 3), quantile, prob = 0.05) %>%
+#'   as.table() %>%
+#'   as.data.frame() %>%
+#'   subset(Freq > 1.001)
+#' }
+#'
+#' @srrstats {G1.6} We provide an implementation of GPS model with the ECM
+#' algorithm as an alternative to \code{openEBGM} package. A comparison of
+#' these two implementation is presented in examples of associated function
+#' documentation.
 #' @srrstats {G2.0, G2.1, G2.2} Length and value of single and vector inputs are
 #' properly checked.
 #' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are
@@ -961,6 +1020,8 @@ estimate_null_expected_count <- function(contin_table) {
 #' integer, continuous and character inputs.
 #' @srrstats {G2.7} Tabular formats appear in Depends or Sugggests are tested.
 #' @srrstats {G3.0} The algorithm do not compare floating points for equality.
+#' @srrstats {G5.4b} The examples field provide a comparison of implementation
+#' of GPS model showing that both implementation correctly detect the signal.
 #' @srrstats {BS5.3, BS5.4, BS5.5}
 #' The empirical Bayes methods implemented in \pkg{pvEBayes} do not rely on
 #' stochastic sampling, and therefore do not produce the types of
@@ -973,7 +1034,7 @@ pvEBayes <- function(contin_table, model = "general-gamma",
                      alpha = NULL, K = NULL,
                      p = NULL, c0 = NULL,
                      maxi = NULL,
-                     rtol_ecm = 1e-4,
+                     tol_ecm = 1e-4,
                      rtol_efron = 1e-10,
                      rtol_KM = 1e-6,
                      n_posterior_draws = 1000,
@@ -1031,16 +1092,14 @@ pvEBayes <- function(contin_table, model = "general-gamma",
 
   if (!is.null(n_posterior_draws)) {
     n_posterior_draws <- as.integer(n_posterior_draws)
-  } else {
-    n_posterior_draws <- 1000L
   }
 
 
-  if (!(is.numeric(rtol_ecm) && length(rtol_ecm) == 1 &&
-    rtol_ecm > 0)) {
-    stop("'rtol_ecm' must be a single positive variable.")
+  if (!(is.numeric(tol_ecm) && length(tol_ecm) == 1 &&
+    tol_ecm > 0)) {
+    stop("'tol_ecm' must be a single positive variable.")
   }
-  rtol_ecm <- as.numeric(rtol_ecm)
+  tol_ecm <- as.numeric(tol_ecm)
 
   if (model == "general-gamma") {
     if (!(is.numeric(alpha) && length(alpha) == 1 &&
@@ -1099,7 +1158,7 @@ pvEBayes <- function(contin_table, model = "general-gamma",
       alpha, K,
       maxi,
       h,
-      rtol_ecm
+      tol_ecm
     )
     res$alpha <- alpha
     generate_posterior_fun <- .generate_posterior_gamma_mix
@@ -1111,15 +1170,21 @@ pvEBayes <- function(contin_table, model = "general-gamma",
   res$draws_time <- NULL
   res$model <- model
 
-  res$n_posterior_draws <- n_posterior_draws
 
-  res$posterior_draws <- generate_posterior_fun(contin_table,
-    E,
-    res,
-    nsim = n_posterior_draws
-  )
-  end_time2 <- Sys.time()
-  res$draws_time <- difftime(end_time2, end_time)
+  if (is.null(n_posterior_draws)) {
+    res$n_posterior_draws <- n_posterior_draws
+    res$draws_time <- NULL
+  } else {
+    res$posterior_draws <- generate_posterior_fun(contin_table,
+      E,
+      res,
+      nsim = n_posterior_draws
+    )
+    end_time2 <- Sys.time()
+    res$draws_time <- difftime(end_time2, end_time)
+  }
+
+
   res$contin_table <- contin_table
   res$E <- E
 
@@ -1163,10 +1228,10 @@ pvEBayes <- function(contin_table, model = "general-gamma",
 #' each fitted model under the selection. Default to be TRUE.
 #' @param return_all_BIC logical, indicating whether to return BIC values for
 #' each fitted model under the selection. Default to be TRUE.
-#' @param rtol_ecm a tolerance parameter used in the stopping rule of the ECM
-#' algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
-#' fitted. If the difference in marginal likelihood between two consecutive
-#' iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.
+#' @param tol_ecm a tolerance parameter used for the ECM stopping rule, defined
+#' as the absolute change in the joint marginal likelihood between two
+#' consecutive iterations. It is used when 'GPS', 'K-gamma' or 'general-gamma'
+#' model is fitted. Default to be 1e-4.
 #' @param rtol_efron a tolerance parameter used when 'efron' model is fitted.
 #' Default to 1e-10. See 'stats::nlminb' for detail.
 #' @param E A matrix of expected counts under the null model for the SRS
@@ -1221,7 +1286,7 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
                           return_all_fit = FALSE,
                           return_all_AIC = TRUE,
                           return_all_BIC = TRUE,
-                          rtol_ecm = 1e-4,
+                          tol_ecm = 1e-4,
                           rtol_efron = 1e-10,
                           E = NULL) {
   if (!.is_valid_contin_table(contin_table)) {
@@ -1328,7 +1393,7 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
       return_all_fit = return_all_fit,
       return_all_AIC = return_all_AIC,
       return_all_BIC = return_all_BIC,
-      rtol_ecm = rtol_ecm
+      tol_ecm = tol_ecm
     )
     generate_posterior_fun <- .generate_posterior_gamma_mix
   }
@@ -1377,10 +1442,10 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
 #' is hyperparameter in general-gamma model which is numeric and between 0
 #' and 1. If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9)
 #' will be used.
-#' @param rtol_ecm a tolerance parameter used in the stopping rule of the ECM
-#' algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
-#' fitted. If the difference in marginal likelihood between two consecutive
-#' iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.
+#' @param tol_ecm a tolerance parameter used for the ECM stopping rule, defined
+#' as the absolute change in the joint marginal likelihood between two
+#' consecutive iterations. It is used when 'GPS', 'K-gamma' or 'general-gamma'
+#' model is fitted. Default to be 1e-4.
 #'
 #' @references
 #'
@@ -1401,13 +1466,13 @@ tuning_general_gamma <- function(contin_table,
                                  return_all_fit = FALSE,
                                  return_all_AIC = TRUE,
                                  return_all_BIC = TRUE,
-                                 rtol_ecm = 1e-4) {
+                                 tol_ecm = 1e-4) {
   fits <- alpha_vec %>%
     lapply(function(e) {
       pvEBayes(
         contin_table = contin_table, model = "general-gamma",
         alpha = e, n_posterior_draws = NULL,
-        rtol_ecm = rtol_ecm
+        tol_ecm = tol_ecm
       )
     })
   AICs <- fits %>% vapply(AIC.pvEBayes, FUN.VALUE = numeric(1))

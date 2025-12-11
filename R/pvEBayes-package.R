@@ -23,16 +23,16 @@
 #' model, that is to say, its signal strength \eqn{\lambda_{ij}} is
 #' significantly greater than 1.
 #'
-#'In addition to *signal detection*, Tan et al. (*Stat. in Med.*, 2025) broaden
-#'the role of disproportionality to *signal estimation*. The use of the flexible
-#'non-parametric empirical Bayes models enables more nuanced empirical Bayes
-#'posterior inference (parameter estimation and uncertainty quantification) on
-#'signal strength parameter \eqn{\{ \lambda_{ij} \}}. This allows researchers to
-#'distinguish AE-drug pairs that would appear similar under a binary signal
-#'detection framework. For example, the AE-drug pairs with signal strengths of
-#'1.5 and 4.0 could both be significantly greater than 1 and detected as a
-#'signal. Such differences in signal strength may have distinct implications in
-#'medical and clinical contexts.
+#' In addition to *signal detection*, Tan et al. (*Stat. in Med.*, 2025) broaden
+#' the role of disproportionality to *signal estimation*. The use of the flexible
+#' non-parametric empirical Bayes models enables more nuanced empirical Bayes
+#' posterior inference (parameter estimation and uncertainty quantification) on
+#' signal strength parameter \eqn{\{ \lambda_{ij} \}}. This allows researchers to
+#' distinguish AE-drug pairs that would appear similar under a binary signal
+#' detection framework. For example, the AE-drug pairs with signal strengths of
+#' 1.5 and 4.0 could both be significantly greater than 1 and detected as a
+#' signal. Such differences in signal strength may have distinct implications in
+#' medical and clinical contexts.
 #'
 #' The methods included in \code{pvEBayes} differ by their assumptions on the
 #' prior distribution. Implemented methods include the Gamma-Poisson Shrinker
@@ -123,6 +123,8 @@
 #' @srrstats {G5.3} Functions that could potentially return objects containing
 #' (`NA`) or undefined (`NaN`, `Inf`) values are tested in
 #' 'test-pvEBayes_main_function.R'.
+#' @srrstats {G5.8, G5.8a, G5.8b, G5.8c, G5.8d}
+#' Edge condition tests are provided in 'test-pvEBayes_main_function.R'.
 #' @srrstats {BS1.0} The meaning and effect of the hyperparameters in K-gamma,
 #' general-gamma and Efron methods are carefully explained in the function
 #' documentation, README and vignette.
@@ -169,6 +171,14 @@
 #' \code{suppressMessages()} if desired. The suppression behavior is explicitly
 #' tested in \code{test-pvEBayes_main_function.R}.
 #'
+#'
+#' @srrstats {G2.13, G2.14, G2.14a, G2.14b, G2.14c, G2.15, G2.16}
+#' Missing value in the context of SRS data is underreporting
+#' or zero observation for a A (SRS contingency entry), rather than
+#' an \code{NA}, \code{Inf}, or other non-numeric placeholder.
+#' Such observations are expected and fully supported by the methods implemented
+#' in \pkg{pvEBayes}.
+#'
 #' @srrstats {BS2.14}
 #' The \pkg{pvEBayes} package does not currently give warnings during normal
 #' operation. Invalid inputs result in errors via \code{stop()}.
@@ -213,5 +223,3 @@
 #'
 #'
 "_PACKAGE"
-
-

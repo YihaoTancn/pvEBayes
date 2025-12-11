@@ -16,7 +16,7 @@ pvEBayes_tune(
   return_all_fit = FALSE,
   return_all_AIC = TRUE,
   return_all_BIC = TRUE,
-  rtol_ecm = 1e-04,
+  tol_ecm = 1e-04,
   rtol_efron = 1e-10,
   E = NULL
 )
@@ -57,10 +57,10 @@ each fitted model under the selection. Default to be TRUE.}
 \item{return_all_BIC}{logical, indicating whether to return BIC values for
 each fitted model under the selection. Default to be TRUE.}
 
-\item{rtol_ecm}{a tolerance parameter used in the stopping rule of the ECM
-algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
-fitted. If the difference in marginal likelihood between two consecutive
-iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.}
+\item{tol_ecm}{a tolerance parameter used for the ECM stopping rule, defined
+as the absolute change in the joint marginal likelihood between two
+consecutive iterations. It is used when 'GPS', 'K-gamma' or 'general-gamma'
+model is fitted. Default to be 1e-4.}
 
 \item{rtol_efron}{a tolerance parameter used when 'efron' model is fitted.
 Default to 1e-10. See 'stats::nlminb' for detail.}

@@ -1,4 +1,17 @@
 test_that("pvEBayes", {
+  #' @srrstats {BS5.3, BS5.4, BS5.5}
+  #' The empirical Bayes methods implemented in \pkg{pvEBayes} do not rely on
+  #' stochastic sampling, and therefore do not produce the types of
+  #' convergence diagnostics typically associated with full Bayesian modeling.
+  #' Convergence in the ECM algorithm is reached (at least to a sub-optimal).
+  #' This is ensured by monotonically increased log joint marginal likelihood,
+  #' as proved by Tan et al. (*Stat. in Med*, 2025). In the implementation
+  #' the convergency of ECM algorithm is checked by comparing the absolute
+  #' difference in log likelihood between two consecutive iterations to a
+  #' tolerance argument "tol_ecm".
+  #' @srrstats {G5.8, G5.8a, G5.8b, G5.8c, G5.8d}
+  #' Edge condition tests are provided below.
+
   valid_matrix <- matrix(c(70, 40, 44, 50, 52, 60, 70, 80), nrow = 2)
   rownames(valid_matrix) <- c("AE_1", "AE_2")
   colnames(valid_matrix) <- c("drug_1", "drug_2", "drug_3", "drug_4")
@@ -10,17 +23,23 @@ test_that("pvEBayes", {
   E <- estimate_null_expected_count(valid_matrix)
 
   # test invalid input
-  invalid_matrix = matrix(c(-70, 40, 44, 50, 52, 60, 70, 80), nrow = 2)
-  invalid_E = E
-  invalid_E[1,1] = -10
+  invalid_matrix <- matrix(c(-70, 40, 44, 50, 52, 60, 70, 80), nrow = 2)
+  invalid_E <- E
+  invalid_E[1, 1] <- -10
 
   expect_warning(
     .is_valid_contin_table(contin_table = invalid_matrix)
-    )
+  )
+  expect_error(
+    pvEBayes(contin_table = integer(0), model = "GPS")
+  )
+  expect_error(
+    pvEBayes(contin_table = matrix(NA, 2, 2), model = "GPS")
+  )
 
   ## valid contin_table + invalid E
   expect_error(
-    pvEBayes(contin_table = valid_matrix, model = "GPS" , E = invalid_E)
+    pvEBayes(contin_table = valid_matrix, model = "GPS", E = invalid_E)
   )
 
 
@@ -43,8 +62,10 @@ test_that("pvEBayes", {
   )
 
   expect_message(
-    pvEBayes(contin_table = valid_matrix, model = "general-gamma",
-             alpha = 0.5, K = 4)
+    pvEBayes(
+      contin_table = valid_matrix, model = "general-gamma",
+      alpha = 0.5, K = 4
+    )
   )
 
 
@@ -101,8 +122,9 @@ test_that("pvEBayes", {
 
   ## KM
   grid <- .grid_based_on_hist_log_scale_sobol(valid_matrix,
-                                              E,
-                                              max_draws = FALSE)
+    E,
+    max_draws = FALSE
+  )
 
   fit_km <- pvEBayes(
     contin_table = valid_matrix,
@@ -139,8 +161,8 @@ test_that("pvEBayes", {
 
   all_fit_e <- extract_all_fitted_models(e_selection)
   # check for NA, NaN,Inf for log likelihood.
-  check_failure_fit <- function(loglik){
-    res = is.finite(loglik)
+  check_failure_fit <- function(loglik) {
+    res <- is.finite(loglik)
     res
   }
 

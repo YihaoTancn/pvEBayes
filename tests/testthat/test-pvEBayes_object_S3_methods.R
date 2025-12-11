@@ -28,7 +28,7 @@ test_that("pvEBayes object associated functions", {
 
 
 
-  #check for errors
+  # check for errors
   expect_error(
     extract_all_fitted_models(1)
   )
@@ -84,5 +84,4 @@ test_that("pvEBayes object associated functions", {
   expect_error(
     summary(obj, return = 123)
   )
-
 })

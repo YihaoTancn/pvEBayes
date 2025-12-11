@@ -12,7 +12,7 @@ pvEBayes(
   p = NULL,
   c0 = NULL,
   maxi = NULL,
-  rtol_ecm = 1e-04,
+  tol_ecm = 1e-04,
   rtol_efron = 1e-10,
   rtol_KM = 1e-06,
   n_posterior_draws = 1000,
@@ -46,10 +46,10 @@ uniform. See Narasimhan and Efron (2020) for detail.}
 
 \item{maxi}{a upper limit of iteration for the ECM algorithm.}
 
-\item{rtol_ecm}{a tolerance parameter used in the stopping rule of the ECM
-algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
-fitted. If the difference in marginal likelihood between two consecutive
-iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.}
+\item{tol_ecm}{a tolerance parameter used for the ECM stopping rule, defined
+as the absolute change in the joint marginal likelihood between two
+consecutive iterations. It is used when 'GPS', 'K-gamma' or 'general-gamma'
+model is fitted. Default to be 1e-4.}
 
 \item{rtol_efron}{a tolerance parameter used when 'efron' model is fitted.
 Default to 1e-10. See 'stats::nlminb' for detail.}
@@ -117,19 +117,14 @@ ref_table <- statin2025_44
 
 # set up signal matrix with one signal at entry (1,1)
 sig_mat <- matrix(1, nrow(ref_table), ncol(ref_table))
-sig_mat[1, 1] <- 2
+sig_mat[c(1,5),1] = 2
 
-# set up structural zero matrix
-Z <- matrix(0, nrow(ref_table), ncol(ref_table))
-Z[5, 1] <- 1
 
 simu_table <- generate_contin_table(
   ref_table = ref_table,
   signal_mat = sig_mat,
-  n_table = 1,
-  Variation = TRUE,
-  zi_indic_mat = Z
-)[[1]][[1]]
+  n_table = 1
+)[[1]]
 
 
 # fit general-gamma model with a specified alpha
@@ -161,6 +156,65 @@ fit_efron <- pvEBayes(
   n_posterior_draws = 1000
 )
 }
+
+# fit GPS model and comapre with 'openEBGM'
+
+
+fit_gps = pvEBayes(simu_table, model = "GPS")
+
+
+\dontrun{
+
+## Optional comparison with openEBGM (only if installed)
+
+## tol_ecm is the absolute tolerance for ECM stopping rule.
+## It is set to ensure comparability to `openEBGM`.
+
+fit_gps = pvEBayes(simu_table, model = "GPS", tol_ecm = 1e-2)
+
+if (requireNamespace("openEBGM", quietly = TRUE)) {
+
+E = estimate_null_expected_count(simu_table)
+simu_table_stacked <- as.data.frame(as.table(simu_table))
+simu_table_stacked$E = as.vector(E)
+colnames(simu_table_stacked) = c("var1", "var2", "N", "E")
+simu_table_stacked_squash = openEBGM::autoSquash(simu_table_stacked)
+
+hyper_estimates <- openEBGM::hyperEM(simu_table_stacked_squash,
+  theta_init = c(2, 1, 2, 2, 0.2),
+  method = "nlminb",
+  N_star = NULL,
+  zeroes = TRUE,
+  param_upper = Inf,
+  LL_tol = 1e-2,
+  max_iter = 10000)
+}
+
+theta_hat <- hyper_estimates$estimates
+qn <- openEBGM::Qn(theta_hat,
+                   N = simu_table_stacked$N,
+                   E = simu_table_stacked$E)
+
+simu_table_stacked$q05 = openEBGM::quantBisect(5,
+                                               theta_hat = theta_hat,
+                                               N = simu_table_stacked$N,
+                                               E = simu_table_stacked$E,
+                                               qn = qn)
+
+##obtain the detected signal provided by openEBGM
+simu_table_stacked \%>\%
+    subset(q05 > 1.001)
+
+##detected signal from pvEBayes presented in the same way as openEBGM
+fit_gps \%>\%
+    summary(return = "posterior draws") \%>\%
+    apply(c(2,3), quantile, prob = 0.05) \%>\%
+    as.table() \%>\%
+    as.data.frame() \%>\%
+    subset(Freq > 1.001)
+
+}
+
 
 }
 \references{

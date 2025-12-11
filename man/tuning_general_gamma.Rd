@@ -11,7 +11,7 @@ tuning_general_gamma(
   return_all_fit = FALSE,
   return_all_AIC = TRUE,
   return_all_BIC = TRUE,
-  rtol_ecm = 1e-04
+  tol_ecm = 1e-04
 )
 }
 \arguments{
@@ -23,10 +23,10 @@ is hyperparameter in general-gamma model which is numeric and between 0
 and 1. If is NULL, a default set of alpha values (0, 0.1, 0.3, 0.5, 0.7, 0.9)
 will be used.}
 
-\item{rtol_ecm}{a tolerance parameter used in the stopping rule of the ECM
-algorithm. It is used when 'GPS', 'K-gamma' or 'general-gamma' model is
-fitted. If the difference in marginal likelihood between two consecutive
-iterations is less than eps, the ECM algorithm stops. Default to be 1e-4.}
+\item{tol_ecm}{a tolerance parameter used for the ECM stopping rule, defined
+as the absolute change in the joint marginal likelihood between two
+consecutive iterations. It is used when 'GPS', 'K-gamma' or 'general-gamma'
+model is fitted. Default to be 1e-4.}
 }
 \value{
 a list of fitted models with hyperparameter alpha selected by AIC or BIC.
