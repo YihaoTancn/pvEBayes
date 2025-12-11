@@ -117,7 +117,7 @@ ref_table <- statin2025_44
 
 # set up signal matrix with one signal at entry (1,1)
 sig_mat <- matrix(1, nrow(ref_table), ncol(ref_table))
-sig_mat[c(1,5),1] = 2
+sig_mat[c(1, 5), 1] <- 2
 
 
 simu_table <- generate_contin_table(
@@ -160,8 +160,7 @@ fit_efron <- pvEBayes(
 # fit GPS model and comapre with 'openEBGM'
 
 
-fit_gps = pvEBayes(simu_table, model = "GPS")
-
+fit_gps <- pvEBayes(simu_table, model = "GPS")
 
 \dontrun{
 
@@ -170,51 +169,51 @@ fit_gps = pvEBayes(simu_table, model = "GPS")
 ## tol_ecm is the absolute tolerance for ECM stopping rule.
 ## It is set to ensure comparability to `openEBGM`.
 
-fit_gps = pvEBayes(simu_table, model = "GPS", tol_ecm = 1e-2)
+fit_gps <- pvEBayes(simu_table, model = "GPS", tol_ecm = 1e-2)
 
 if (requireNamespace("openEBGM", quietly = TRUE)) {
+  E <- estimate_null_expected_count(simu_table)
+  simu_table_stacked <- as.data.frame(as.table(simu_table))
+  simu_table_stacked$E <- as.vector(E)
+  colnames(simu_table_stacked) <- c("var1", "var2", "N", "E")
+  simu_table_stacked_squash <- openEBGM::autoSquash(simu_table_stacked)
 
-E = estimate_null_expected_count(simu_table)
-simu_table_stacked <- as.data.frame(as.table(simu_table))
-simu_table_stacked$E = as.vector(E)
-colnames(simu_table_stacked) = c("var1", "var2", "N", "E")
-simu_table_stacked_squash = openEBGM::autoSquash(simu_table_stacked)
-
-hyper_estimates <- openEBGM::hyperEM(simu_table_stacked_squash,
-  theta_init = c(2, 1, 2, 2, 0.2),
-  method = "nlminb",
-  N_star = NULL,
-  zeroes = TRUE,
-  param_upper = Inf,
-  LL_tol = 1e-2,
-  max_iter = 10000)
+  hyper_estimates <- openEBGM::hyperEM(simu_table_stacked_squash,
+    theta_init = c(2, 1, 2, 2, 0.2),
+    method = "nlminb",
+    N_star = NULL,
+    zeroes = TRUE,
+    param_upper = Inf,
+    LL_tol = 1e-2,
+    max_iter = 10000
+  )
 }
 
 theta_hat <- hyper_estimates$estimates
 qn <- openEBGM::Qn(theta_hat,
-                   N = simu_table_stacked$N,
-                   E = simu_table_stacked$E)
+  N = simu_table_stacked$N,
+  E = simu_table_stacked$E
+)
 
-simu_table_stacked$q05 = openEBGM::quantBisect(5,
-                                               theta_hat = theta_hat,
-                                               N = simu_table_stacked$N,
-                                               E = simu_table_stacked$E,
-                                               qn = qn)
+simu_table_stacked$q05 <- openEBGM::quantBisect(5,
+  theta_hat = theta_hat,
+  N = simu_table_stacked$N,
+  E = simu_table_stacked$E,
+  qn = qn
+)
 
-##obtain the detected signal provided by openEBGM
+## obtain the detected signal provided by openEBGM
 simu_table_stacked \%>\%
-    subset(q05 > 1.001)
+  subset(q05 > 1.001)
 
-##detected signal from pvEBayes presented in the same way as openEBGM
+## detected signal from pvEBayes presented in the same way as openEBGM
 fit_gps \%>\%
-    summary(return = "posterior draws") \%>\%
-    apply(c(2,3), quantile, prob = 0.05) \%>\%
-    as.table() \%>\%
-    as.data.frame() \%>\%
-    subset(Freq > 1.001)
-
+  summary(return = "posterior draws") \%>\%
+  apply(c(2, 3), quantile, prob = 0.05) \%>\%
+  as.table() \%>\%
+  as.data.frame() \%>\%
+  subset(Freq > 1.001)
 }
-
 
 }
 \references{
