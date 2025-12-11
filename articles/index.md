@@ -2,5 +2,5 @@
 
 ### All vignettes
 
-- [Analyzing SRS frequency table with
+- [Introduction to
   pvEBayes](https://yihaotancn.github.io/pvEBayes/articles/pvEBayes-introduction.md):

@@ -201,5 +201,5 @@ Statistician*. 1999; 1;53(3):177-90.
 
 ### All vignettes
 
-- [Analyzing SRS frequency table with
+- [Introduction to
   pvEBayes](https://yihaotancn.github.io/pvEBayes/articles/pvEBayes-introduction.md):

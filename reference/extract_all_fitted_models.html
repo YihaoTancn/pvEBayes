@@ -20,7 +20,7 @@ object, which is the output of the pvEBayes_tune() function."></head><body>
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/pvEBayes-introduction.html">Analyzing SRS frequency table with pvEBayes</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/pvEBayes-introduction.html">Introduction to pvEBayes</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -75,25 +75,24 @@ is not of the correct class.</p></dd>
 <span class="r-in"><span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span></span>
 <span class="r-in"><span>  return_all_fit <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The alpha value selected under AIC is 0,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The alpha value selected under BIC is 0.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The alpha value selected under AIC is 0.3,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The alpha value selected under BIC is 0.3.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   alpha      AIC      BIC num_mixture</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1   0.0 1226.166 1273.831         200</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2   0.1 1226.166 1273.831         200</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 3   0.3 1226.166 1273.831         200</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 4   0.5 1226.166 1273.831         200</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 5   0.7 1226.166 1273.831         200</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 6   0.9 1226.166 1273.831         200</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1   0.0      NaN      NaN           7</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2   0.1 32.16579 32.40411           1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 3   0.3 32.16579 32.40411           1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 4   0.5 32.16579 32.40411           1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 5   0.7 32.16579 32.40411           1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 6   0.9 44.16579 44.88076           3</span>
 <span class="r-in"><span><span class="fu">extract_all_fitted_models</span><span class="op">(</span><span class="va">tuned_object</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $best_model_AIC</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 200 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.3.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 1 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.031 seconds.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0021 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No posterior draws were generated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -101,12 +100,11 @@ is not of the correct class.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $best_model_BIC</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 200 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.3.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 1 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.031 seconds.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0021 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No posterior draws were generated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -116,11 +114,10 @@ is not of the correct class.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 200 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 7 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.031 seconds.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.008 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No posterior draws were generated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -129,11 +126,10 @@ is not of the correct class.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.1.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 200 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 1 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0305 seconds.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0023 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No posterior draws were generated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -142,11 +138,10 @@ is not of the correct class.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.3.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 200 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 1 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0307 seconds.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0021 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No posterior draws were generated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -155,11 +150,10 @@ is not of the correct class.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.5.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 200 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 1 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0306 seconds.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0022 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No posterior draws were generated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -168,11 +162,10 @@ is not of the correct class.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.7.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 200 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 1 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0305 seconds.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0024 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No posterior draws were generated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -181,21 +174,20 @@ is not of the correct class.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.9.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 200 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 3 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0305 seconds.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.0027 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No posterior draws were generated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $all_AIC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1226.166 1226.166 1226.166 1226.166 1226.166 1226.166</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]      NaN 32.16579 32.16579 32.16579 32.16579 44.16579</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $all_BIC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1273.831 1273.831 1273.831 1273.831 1273.831 1273.831</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]      NaN 32.40411 32.40411 32.40411 32.40411 44.88076</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

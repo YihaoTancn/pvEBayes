@@ -1,4 +1,4 @@
-# Analyzing SRS frequency table with pvEBayes
+# Introduction to pvEBayes
 
 ### Disproportionality Analysis
 
@@ -101,16 +101,15 @@ dataset. Other models mentioned above could be used by modifying the
 hyperparameter value of \$ = 0.5\$ using the pvEBayes() function.
 
 ``` r
+gg_given_alpha <- pvEBayes(statin2025_44,
+  model = "general-gamma",
+  alpha = 0.5
+)
 
-gg_given_alpha <-  pvEBayes(statin2025_44,
- model = "general-gamma",
- alpha = 0.5
- )
-
- gg_given_alpha_detected_signal <- summary(gg_given_alpha,
- return = "detected signal"
- )
- sum(gg_given_alpha_detected_signal)
+gg_given_alpha_detected_signal <- summary(gg_given_alpha,
+  return = "detected signal"
+)
+sum(gg_given_alpha_detected_signal)
 #> [1] 105
 ```
 
@@ -125,7 +124,6 @@ BIC, which can be accessed through ‘AIC()’ or ‘BIC()’ functions, as
 shown below:
 
 ``` r
-
 AIC(gg_given_alpha)
 #> [1] 3802.753
 
@@ -140,12 +138,11 @@ doing so, one can use the ‘pvEBayes_tune()’ function, which implements
 these steps. The relevant code is given below:
 
 ``` r
-
 gg_tune_statin44 <- pvEBayes_tune(statin2025_44,
- model = "general-gamma",
- alpha_vec = c(0, 0.1, 0.3, 0.5, 0.7, 0.9),
- use_AIC = TRUE
- )
+  model = "general-gamma",
+  alpha_vec = c(0, 0.1, 0.3, 0.5, 0.7, 0.9),
+  use_AIC = TRUE
+)
 #> The alpha value selected under AIC is 0.3,
 #> The alpha value selected under BIC is 0.1.
 #>   alpha      AIC      BIC num_mixture
@@ -165,17 +162,16 @@ plot functions can be accessed through the ‘plot()’ with argument type =
 “heatmap” or type = “eyeplot”.
 
 ``` r
-
 heatmap_gg_tune_statin44 <- plot(gg_tune_statin44,
- type = "heatmap",
- num_top_AEs = 10,
- cutoff_signal = 1.001
- )
+  type = "heatmap",
+  num_top_AEs = 10,
+  cutoff_signal = 1.001
+)
 
 heatmap_gg_tune_statin44 +
- theme(
-   legend.position = "top"
- )
+  theme(
+    legend.position = "top"
+  )
 ```
 
 ![](pvEBayes-introduction_files/figure-html/heatmap-1.png)
@@ -187,21 +183,20 @@ probability of being a signal are given. A deeper blue color indicates
 stronger evidence for a signal.
 
 ``` r
-
 eyeplot_gg_tune_statin44 <- plot(gg_tune_statin44,
- type = "eyeplot",
- num_top_AEs = 8,
- N_threshold = 1,
- log_scale = FALSE,
- text_shift = 2.3,
- text_size = 3,
- x_lim_scalar = 1.2
- ) 
+  type = "eyeplot",
+  num_top_AEs = 8,
+  N_threshold = 1,
+  log_scale = FALSE,
+  text_shift = 2.3,
+  text_size = 3,
+  x_lim_scalar = 1.2
+)
 
 eyeplot_gg_tune_statin44 +
- theme(
-   legend.position = "top"
- )
+  theme(
+    legend.position = "top"
+  )
 ```
 
 ![](pvEBayes-introduction_files/figure-html/eyeplot-1.png)

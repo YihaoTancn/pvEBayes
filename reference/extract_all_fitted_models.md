@@ -36,25 +36,24 @@ tuned_object <- pvEBayes_tune(valid_matrix,
   model = "general-gamma",
   return_all_fit = TRUE
 )
-#> The alpha value selected under AIC is 0,
-#> The alpha value selected under BIC is 0.
+#> The alpha value selected under AIC is 0.3,
+#> The alpha value selected under BIC is 0.3.
 #>   alpha      AIC      BIC num_mixture
-#> 1   0.0 1226.166 1273.831         200
-#> 2   0.1 1226.166 1273.831         200
-#> 3   0.3 1226.166 1273.831         200
-#> 4   0.5 1226.166 1273.831         200
-#> 5   0.7 1226.166 1273.831         200
-#> 6   0.9 1226.166 1273.831         200
+#> 1   0.0      NaN      NaN           7
+#> 2   0.1 32.16579 32.40411           1
+#> 3   0.3 32.16579 32.40411           1
+#> 4   0.5 32.16579 32.40411           1
+#> 5   0.7 32.16579 32.40411           1
+#> 6   0.9 44.16579 44.88076           3
 extract_all_fitted_models(tuned_object)
 #> $best_model_AIC
 #> Object of class 'pvEBayes'
 #> 
-#> General-gamma model with hyperparameter alpha = 0.
-#> Estimated prior is a mixture of 200 gamma distributions.
+#> General-gamma model with hyperparameter alpha = 0.3.
+#> Estimated prior is a mixture of 1 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.031 seconds.
-#> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> Running time of the general-gamma model fitting: 0.0021 seconds.
+#> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -62,12 +61,11 @@ extract_all_fitted_models(tuned_object)
 #> $best_model_BIC
 #> Object of class 'pvEBayes'
 #> 
-#> General-gamma model with hyperparameter alpha = 0.
-#> Estimated prior is a mixture of 200 gamma distributions.
+#> General-gamma model with hyperparameter alpha = 0.3.
+#> Estimated prior is a mixture of 1 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.031 seconds.
-#> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> Running time of the general-gamma model fitting: 0.0021 seconds.
+#> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -77,11 +75,10 @@ extract_all_fitted_models(tuned_object)
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.
-#> Estimated prior is a mixture of 200 gamma distributions.
+#> Estimated prior is a mixture of 7 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.031 seconds.
-#> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> Running time of the general-gamma model fitting: 0.008 seconds.
+#> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -90,11 +87,10 @@ extract_all_fitted_models(tuned_object)
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.1.
-#> Estimated prior is a mixture of 200 gamma distributions.
+#> Estimated prior is a mixture of 1 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0305 seconds.
-#> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> Running time of the general-gamma model fitting: 0.0023 seconds.
+#> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -103,11 +99,10 @@ extract_all_fitted_models(tuned_object)
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.3.
-#> Estimated prior is a mixture of 200 gamma distributions.
+#> Estimated prior is a mixture of 1 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0307 seconds.
-#> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> Running time of the general-gamma model fitting: 0.0021 seconds.
+#> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -116,11 +111,10 @@ extract_all_fitted_models(tuned_object)
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
-#> Estimated prior is a mixture of 200 gamma distributions.
+#> Estimated prior is a mixture of 1 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0306 seconds.
-#> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> Running time of the general-gamma model fitting: 0.0022 seconds.
+#> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -129,11 +123,10 @@ extract_all_fitted_models(tuned_object)
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.7.
-#> Estimated prior is a mixture of 200 gamma distributions.
+#> Estimated prior is a mixture of 1 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0305 seconds.
-#> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> Running time of the general-gamma model fitting: 0.0024 seconds.
+#> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -142,20 +135,19 @@ extract_all_fitted_models(tuned_object)
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.9.
-#> Estimated prior is a mixture of 200 gamma distributions.
+#> Estimated prior is a mixture of 3 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0305 seconds.
-#> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0016 seconds.
+#> Running time of the general-gamma model fitting: 0.0027 seconds.
+#> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
 #> 
 #> 
 #> $all_AIC
-#> [1] 1226.166 1226.166 1226.166 1226.166 1226.166 1226.166
+#> [1]      NaN 32.16579 32.16579 32.16579 32.16579 44.16579
 #> 
 #> $all_BIC
-#> [1] 1273.831 1273.831 1273.831 1273.831 1273.831 1273.831
+#> [1]      NaN 32.40411 32.40411 32.40411 32.40411 44.88076
 #> 
 ```

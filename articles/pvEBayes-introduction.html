@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Analyzing SRS frequency table with pvEBayes • pvEBayes</title>
+<title>Introduction to pvEBayes • pvEBayes</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Analyzing SRS frequency table with pvEBayes">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to pvEBayes">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/pvEBayes-introduction.html">Analyzing SRS frequency table with pvEBayes</a></li>
+<li><a class="dropdown-item" href="../articles/pvEBayes-introduction.html">Introduction to pvEBayes</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -56,7 +56,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Analyzing SRS frequency table with pvEBayes</h1>
+      <h1>Introduction to pvEBayes</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/YihaoTancn/pvEBayes/blob/main/vignettes/pvEBayes-introduction.Rmd" class="external-link"><code>vignettes/pvEBayes-introduction.Rmd</code></a></small>
@@ -207,16 +207,15 @@ dataset. Other models mentioned above could be used by modifying the
 ‘model’ argument. For illustration, we fit the model with a fixed
 hyperparameter value of $ = 0.5$ using the pvEBayes() function.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">gg_given_alpha</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/pvEBayes.html">pvEBayes</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
-<span> model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span>
-<span> alpha <span class="op">=</span> <span class="fl">0.5</span></span>
-<span> <span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gg_given_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes.html">pvEBayes</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
+<span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.5</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span> <span class="va">gg_given_alpha_detected_signal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gg_given_alpha</span>,</span>
-<span> return <span class="op">=</span> <span class="st">"detected signal"</span></span>
-<span> <span class="op">)</span></span>
-<span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">gg_given_alpha_detected_signal</span><span class="op">)</span></span>
+<span><span class="va">gg_given_alpha_detected_signal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gg_given_alpha</span>,</span>
+<span>  return <span class="op">=</span> <span class="st">"detected signal"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">gg_given_alpha_detected_signal</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 105</span></span></code></pre></div>
 <p>The return argument specifies which component the summary function
 should return. Valid options include: “prior parameters”, “likelihood”,
@@ -227,8 +226,7 @@ we show the detected signals.</p>
 BIC, which can be accessed through ‘AIC()’ or ‘BIC()’ functions, as
 shown below:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">gg_given_alpha</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">gg_given_alpha</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3802.753</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC</a></span><span class="op">(</span><span class="va">gg_given_alpha</span><span class="op">)</span></span>
@@ -240,12 +238,11 @@ AIC or BIC, and select the model with the lowest AIC or BIC. Instead of
 manually doing so, one can use the ‘pvEBayes_tune()’ function, which
 implements these steps. The relevant code is given below:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes_tune.html">pvEBayes_tune</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
-<span> model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span>
-<span> alpha_vec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
-<span> use_AIC <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span> <span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes_tune.html">pvEBayes_tune</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
+<span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span>
+<span>  alpha_vec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
+<span>  use_AIC <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; The alpha value selected under AIC is 0.3,</span></span>
 <span><span class="co">#&gt; The alpha value selected under BIC is 0.1.</span></span>
 <span><span class="co">#&gt;   alpha      AIC      BIC num_mixture</span></span>
@@ -265,17 +262,16 @@ both signal detection and estimation, which are heatmap and eyeplot.
 These plot functions can be accessed through the ‘plot()’ with argument
 type = “heatmap” or type = “eyeplot”.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">heatmap_gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg_tune_statin44</span>,</span>
-<span> type <span class="op">=</span> <span class="st">"heatmap"</span>,</span>
-<span> num_top_AEs <span class="op">=</span> <span class="fl">10</span>,</span>
-<span> cutoff_signal <span class="op">=</span> <span class="fl">1.001</span></span>
-<span> <span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">heatmap_gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg_tune_statin44</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"heatmap"</span>,</span>
+<span>  num_top_AEs <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  cutoff_signal <span class="op">=</span> <span class="fl">1.001</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">heatmap_gg_tune_statin44</span> <span class="op">+</span></span>
-<span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>   legend.position <span class="op">=</span> <span class="st">"top"</span></span>
-<span> <span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>    legend.position <span class="op">=</span> <span class="st">"top"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="pvEBayes-introduction_files/figure-html/heatmap-1.png" class="r-plt" width="768"></p>
 <p>The above heatmap visualizes the signal detection result for the
 fitted general-gamma model. For each AE-drug combination, the number of
@@ -283,21 +279,20 @@ reports (N), the estimated null value (E), and the estimated posterior
 probability of being a signal are given. A deeper blue color indicates
 stronger evidence for a signal.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">eyeplot_gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg_tune_statin44</span>,</span>
-<span> type <span class="op">=</span> <span class="st">"eyeplot"</span>,</span>
-<span> num_top_AEs <span class="op">=</span> <span class="fl">8</span>,</span>
-<span> N_threshold <span class="op">=</span> <span class="fl">1</span>,</span>
-<span> log_scale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span> text_shift <span class="op">=</span> <span class="fl">2.3</span>,</span>
-<span> text_size <span class="op">=</span> <span class="fl">3</span>,</span>
-<span> x_lim_scalar <span class="op">=</span> <span class="fl">1.2</span></span>
-<span> <span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">eyeplot_gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg_tune_statin44</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"eyeplot"</span>,</span>
+<span>  num_top_AEs <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  N_threshold <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  log_scale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  text_shift <span class="op">=</span> <span class="fl">2.3</span>,</span>
+<span>  text_size <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  x_lim_scalar <span class="op">=</span> <span class="fl">1.2</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">eyeplot_gg_tune_statin44</span> <span class="op">+</span></span>
-<span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>   legend.position <span class="op">=</span> <span class="st">"top"</span></span>
-<span> <span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>    legend.position <span class="op">=</span> <span class="st">"top"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="pvEBayes-introduction_files/figure-html/eyeplot-1.png" class="r-plt" width="768"></p>
 <p>The above eyeplot visualizes empirical posterior inferences on 10
 prominent AEs across 6 statin drugs through computed empirical Bayesian

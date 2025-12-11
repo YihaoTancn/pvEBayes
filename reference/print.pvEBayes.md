@@ -36,15 +36,5 @@ obj <- pvEBayes(
 )
 
 print(obj)
-#> Object of class 'pvEBayes'
 #> 
-#> General-gamma model with hyperparameter alpha = 0.5.
-#> Estimated prior is a mixture of 19 gamma distributions.
-#> 
-#> Running time of the general-gamma model fitting: 0.2353 seconds.
-#> Running time for posterior draws 
-#> (10000 signal strength posterior draws per AE-drug pair):0.391 seconds.
-#> 
-#> Extract estimated prior parameters, discovered signals
-#> and signal strength posterior draws using `summary()`.
 ```
