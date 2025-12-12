@@ -5,6 +5,17 @@ discussion on contributing to this and other tidyverse packages, please
 see the [development contributing guide](https://rstd.io/tidy-contrib)
 and our [code review principles](https://code-review.tidyverse.org/).
 
+## Package lifecycle
+
+pvEBayes is an actively developed research software package that
+implements parametric/nonparametric empirical Bayes methods for
+disproportionality analysis in pharmacovigilance.
+
+At present, pvEBayes is in the stable lifecycle stage. The core
+statistical methodologies has been implemented. Ongoing development
+focuses on expanding documentation, additional examples and vignettes
+and support for new SRS datasets.
+
 ## Fixing typos
 
 You can fix typos, spelling mistakes, or grammatical errors in the
