@@ -33,9 +33,9 @@ test_that("pvEBayes", {
   expect_error(
     pvEBayes(contin_table = integer(0), model = "GPS")
   )
-  expect_error(
+  expect_warning(expect_error(
     pvEBayes(contin_table = matrix(NA, 2, 2), model = "GPS")
-  )
+  ))
 
   ## valid contin_table + invalid E
   expect_error(
