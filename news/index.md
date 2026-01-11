@@ -1,6 +1,12 @@
 # Changelog
 
+## pvEBayes 0.2.1
+
+\*Removed the dependency on ‘SobolSequence’.
+
 ## pvEBayes 0.2.0
+
+CRAN release: 2025-12-15
 
 - Added a new implementation of the Koenker-Mizera (KM) model using the
   ‘CVXR’ package.

@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">pvEBayes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -227,10 +227,10 @@ BIC, which can be accessed through ‘AIC()’ or ‘BIC()’ functions, as
 shown below:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">gg_given_alpha</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 3802.753</span></span>
+<span><span class="co">#&gt; [1] 3796.813</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC</a></span><span class="op">(</span><span class="va">gg_given_alpha</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4016.649</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 3999.452</span></span></code></pre></div>
 <p>In practice, one can specify a list of candidate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
 values, fit the general-gamma model for each, compute the corresponding
@@ -243,15 +243,15 @@ implements these steps. The relevant code is given below:</p>
 <span>  alpha_vec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
 <span>  use_AIC <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; The alpha value selected under AIC is 0.3,</span></span>
-<span><span class="co">#&gt; The alpha value selected under BIC is 0.1.</span></span>
+<span><span class="co">#&gt; The alpha value selected under AIC is 0.5,</span></span>
+<span><span class="co">#&gt; The alpha value selected under BIC is 0.</span></span>
 <span><span class="co">#&gt;   alpha      AIC      BIC num_mixture</span></span>
-<span><span class="co">#&gt; 1   0.0 4551.612 4697.962          13</span></span>
-<span><span class="co">#&gt; 2   0.1 3799.011 3990.392          17</span></span>
+<span><span class="co">#&gt; 1   0.0 3803.082 3960.690          14</span></span>
+<span><span class="co">#&gt; 2   0.1 3799.012 3990.393          17</span></span>
 <span><span class="co">#&gt; 3   0.3 3798.874 4001.513          18</span></span>
-<span><span class="co">#&gt; 4   0.5 3802.753 4016.649          19</span></span>
-<span><span class="co">#&gt; 5   0.7 3822.367 4081.295          23</span></span>
-<span><span class="co">#&gt; 6   0.9 3906.526 4323.061          37</span></span></code></pre></div>
+<span><span class="co">#&gt; 4   0.5 3796.813 3999.452          18</span></span>
+<span><span class="co">#&gt; 5   0.7 3824.280 4083.208          23</span></span>
+<span><span class="co">#&gt; 6   0.9 3912.529 4340.322          38</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -272,7 +272,7 @@ type = “heatmap” or type = “eyeplot”.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
 <span>    legend.position <span class="op">=</span> <span class="st">"top"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="pvEBayes-introduction_files/figure-html/heatmap-1.png" class="r-plt" width="768"></p>
+<p><img src="pvEBayes-introduction_files/figure-html/heatmap-1.png" class="r-plt" alt="" width="768"></p>
 <p>The above heatmap visualizes the signal detection result for the
 fitted general-gamma model. For each AE-drug combination, the number of
 reports (N), the estimated null value (E), and the estimated posterior
@@ -293,7 +293,7 @@ stronger evidence for a signal.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
 <span>    legend.position <span class="op">=</span> <span class="st">"top"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="pvEBayes-introduction_files/figure-html/eyeplot-1.png" class="r-plt" width="768"></p>
+<p><img src="pvEBayes-introduction_files/figure-html/eyeplot-1.png" class="r-plt" alt="" width="768"></p>
 <p>The above eyeplot visualizes empirical posterior inferences on 10
 prominent AEs across 6 statin drugs through computed empirical Bayesian
 posterior distributions of signal strengths

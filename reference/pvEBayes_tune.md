@@ -128,13 +128,13 @@ fit <- pvEBayes_tune(statin2025_44,
   model = "general-gamma",
   alpha_vec = c(0, 0.1, 0.3, 0.5, 0.7, 0.9)
 )
-#> The alpha value selected under AIC is 0.3,
-#> The alpha value selected under BIC is 0.1.
+#> The alpha value selected under AIC is 0.5,
+#> The alpha value selected under BIC is 0.
 #>   alpha      AIC      BIC num_mixture
-#> 1   0.0 4551.612 4697.962          13
-#> 2   0.1 3799.011 3990.392          17
+#> 1   0.0 3803.082 3960.690          14
+#> 2   0.1 3799.012 3990.393          17
 #> 3   0.3 3798.874 4001.513          18
-#> 4   0.5 3802.753 4016.649          19
-#> 5   0.7 3822.367 4081.295          23
-#> 6   0.9 3906.526 4323.061          37
+#> 4   0.5 3796.813 3999.452          18
+#> 5   0.7 3824.280 4083.208          23
+#> 6   0.9 3912.529 4340.322          38
 ```
