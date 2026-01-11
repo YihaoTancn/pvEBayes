@@ -1,6 +1,6 @@
 Package: pvEBayes
 Title: Empirical Bayes Methods for Pharmacovigilance
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
     person(
     "Yihao", "Tan", 
@@ -39,7 +39,6 @@ Imports:
     graphics,
     magrittr,
     methods,
-    SobolSequence,
     stats,
     wacolors,
     Rcpp,

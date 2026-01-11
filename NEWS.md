@@ -1,3 +1,7 @@
+# pvEBayes 0.2.1
+
+*Removed the dependency on 'SobolSequence'.
+
 # pvEBayes 0.2.0
 
 * Added a new implementation of the Koenker-Mizera (KM) model using the 'CVXR' package.
