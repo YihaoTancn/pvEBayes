@@ -15,6 +15,23 @@ AE-reports are summarized into an $I \times J$ contingency table, where
 the $(i,j)$-th cell catalogs the observed count $N_{ij}$ indicating the
 number of cases involving $i$-th AE and the $j$-th drug.
 
+Current disproportionality analysis mainly focuses on *signal detection*
+which seeks to determine whether the observation $N_{ij}$ is
+substantially greater than the corresponding null baseline $E_{ij}$.
+Under the Poisson model, that is to say, its signal strength
+$\lambda_{ij}$ is significantly greater than 1.
+
+In addition to *signal detection*, Tan et al. (*Stat. in Med.*, 2025)
+broaden the role of disproportionality to *signal estimation*. The use
+of the flexible non-parametric empirical Bayes models enables more
+nuanced empirical Bayes posterior inference (signal strength $\lambda$
+estimation and uncertainty quantification). This allows researchers to
+distinguish AE-drug pairs that would appear similar under a binary
+signal detection framework. For example, the AE-drug pairs with signal
+strengths of 1.5 and 4.0 could both be significantly greater than 1 and
+detected as a signal. Such differences in signal strength may have
+distinct implications in medical and clinical contexts.
+
 Methods implemented in this package assumes the observed count $N_{ij}$
 conditional on $E_{ij}$ is that
 $$N_{ij} \mid E_{ij} \sim \operatorname{Poisson}\left( E_{ij}\lambda_{ij} \right),$$
@@ -41,21 +58,42 @@ where
 $\widehat{\text{p}}\left( N_{ij} \right) = \int_{0}^{\infty}\widehat{g}\left( \lambda_{ij} \right)f_{\text{pois}}\left( N_{ij} \mid \lambda_{ij}E_{ij} \right)\ d\lambda_{ij}$.
 
 All empirical Bayes models implemented in ‘pvEBayes’ share the structure
-described above; they differ in their assumptions on the prior
-distribution. The Gamma-Poisson Shrinker (GPS) adopts a two-component
-gamma mixture prior. The K-gamma model generalizes GPS by allowing a
-K-component gamma mixture, where K is user-specified. The Koenker-Mizera
-(KM) and Efron models use a nonparametric discrete mixture prior, with
-point masses on a pre-specified grid. The general-gamma model employs a
-nonparametric sparse gamma mixture distribution.
+described above; they differ by their assumptions on the prior
+distribution. Implemented methods include the Gamma-Poisson Shrinker
+(GPS), Koenker-Mizera (KM) method, Efron’s nonparametric empirical Bayes
+approach, the K-gamma model, and the general-gamma model. The selection
+of the prior distribution is critical in Bayesian analysis. The GPS
+model uses a gamma mixture prior by assuming the signal/non-signal
+structure in SRS data. However, in real-world setting, signal strengths
+$\left( \lambda_{ij} \right)$ are often heterogeneous and thus follows a
+multi-modal distribution, making it difficult to assume a parametric
+prior. Non-parametric empirical Bayes models (KM, Efron, K-gamma and
+general-gamma) address this challenge by utilizing a flexible prior with
+a general mixture form and estimating the prior distribution in a
+data-driven way.
 
-Package ‘pvEBayes’ provides implementations for the empirical Bayes
-methods for pharmacovigilance mentioned above. It provides tools for
-effectively fitting these models to the spontaneous reporting system
-(SRS) frequency tables, extracting summaries, performing hyperparameter
-tuning, and generating graphical summaries (eye plots and heatmaps) for
-signal detection and estimation. In the following we provide an example
-(borrowed from Tan et al.) of SRS data analyzing with ‘pvEBayes’.
+The KM method has an existing implementation in the `REBayes` package,
+but it relies on Mosek, a commercial convex optimization solver, which
+may limit accessibility due to licensing issues. The `pvEBayes` package
+provides an alternative fully open-source implementation of the KM
+method using `CVXR`. Efron’s method also has a general nonparametric
+empirical Bayes implementation in the `deconvolveR` package; however,
+that implementation does not support an exposure or offset parameter in
+the Poisson model, which corresponds to the expected null value
+$E_{ij}$. In `pvEBayes`, the implementation of Efron’s method is adapted
+and modified from `deconvolveR` to support $E_{ij}$ in the Poisson
+model. In addition, this package implements the novel bi-level
+Expectation Conditional Maximization (ECM) algorithm proposed by Tan et
+al. (2025) for efficient parameter estimation in gamma mixture prior
+based models mentioned above.
+
+Package ‘pvEBayes’ provides a suite of streamlined tools for effectively
+fitting these models to the spontaneous reporting system (SRS) frequency
+tables, extracting summaries, performing hyperparameter tuning, and
+generating graphical summaries (eye plots and heatmaps) for signal
+detection and estimation. In the following we provide an example,
+borrowed from Tan et al. (*arxiv*, 2025), of SRS data analyzing with
+‘pvEBayes’.
 
 ### Analyzing FDA statin SRS data with pvEBayes
 

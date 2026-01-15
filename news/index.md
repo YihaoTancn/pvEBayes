@@ -2,6 +2,8 @@
 
 ## pvEBayes 0.2.1
 
+CRAN release: 2026-01-11
+
 \*Removed the dependency on ‘SobolSequence’.
 
 ## pvEBayes 0.2.0
