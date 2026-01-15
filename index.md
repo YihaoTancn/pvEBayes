@@ -76,6 +76,9 @@ drug, where $i = 1,...,I$ and $j = 1,...,J$.
   algorithm from Tan et al. (*Stat. in Med.*, 2025) for prior estimation
   for gamma-mixture prior based models (GPS, K-gamma, general-gamma).
 
+For a detailed methodological description, see Tan et al.  (*Stat. in
+Med.*, 2025).
+
 ## Installation
 
 The stable version of `pvEBayes` can be installed from CRAN:
