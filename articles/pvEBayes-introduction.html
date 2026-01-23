@@ -104,14 +104,14 @@ detection</em> which seeks to determine whether the observation
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">N_{ij}</annotation></semantics></math>
 is substantially greater than the corresponding null baseline
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">E_{ij}</annotation></semantics></math>.
-Under the Poisson model, that is to say, its signal strength
+Or equivalently, its signal strength
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">\lambda_{ij}</annotation></semantics></math>
 is significantly greater than 1.</p>
 <p>In addition to <em>signal detection</em>, Tan et al. (<em>Stat. in
 Med.</em>, 2025) broaden the role of disproportionality to <em>signal
-estimation</em>. The use of the flexible non-parametric empirical Bayes
-models enables more nuanced empirical Bayes posterior inference (signal
-strength
+strength estimation</em>. The use of the flexible non-parametric
+empirical Bayes models enables more nuanced empirical Bayes posterior
+inference (signal strength
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
 estimation and uncertainty quantification). This allows researchers to
 distinguish AE-drug pairs that would appear similar under a binary
@@ -124,8 +124,8 @@ distinct implications in medical and clinical contexts.</p>
 conditional on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">E_{ij}</annotation></semantics></math>
 is that
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∣</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∼</mo><mo>Poisson</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>λ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation} \label{eqn:model-poisson-likelihood}
-N_{ij} \mid E_{ij} \sim \operatorname{Poisson}(E_{ij}\lambda_{ij}),  
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∣</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∼</mo><mo>Poisson</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>λ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="0.222em"></mspace><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>2</mn><mi>…</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation} \label{eqn:model-poisson-likelihood}
+N_{ij} \mid E_{ij} \sim \operatorname{Poisson}(E_{ij}\lambda_{ij}), \ N_{ij} = 0, 1, 2 \dots,  
 \end{equation}</annotation></semantics></math> where the parameter
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda_{ij} \geq 0</annotation></semantics></math>
 is the relative reporting ratio, the signal strength, for the
@@ -158,14 +158,14 @@ consequently estimated from the data by maximizing the log marginal
 likelihood:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo>=</mo><munder><mo>argmax</mo><mi>g</mi></munder><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>I</mi></munderover><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>J</mi></munderover><mo>log</mo><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
 \hat g = \mathop{\arg \max}\limits_{g} \sum_{i=1}^I \sum_{j=1}^J \log p(N_{ij}).
-</annotation></semantics></math> Then, the estimated posterior density
-of
+</annotation></semantics></math> Then, the estimated empirical Bayes
+posterior density of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
 given
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">N_{ij}</annotation></semantics></math>
 is:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mtext mathvariant="normal">p</mtext><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>λ</mi><mo>∣</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><mover><mi>g</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>λ</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>f</mi><mtext mathvariant="normal">pois</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∣</mo><mi>λ</mi><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mover><mtext mathvariant="normal">p</mtext><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">
-\hat{\text{p}}(\lambda \mid N_{ij}) = \frac{\hat g(\lambda) f_{\text{pois}}(N_{ij} \mid \lambda E_{ij})}{\hat{\text{p}}(N_{ij})},
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mtext mathvariant="normal">p</mtext><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>λ</mi><mo>∣</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><mover><mi>g</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>λ</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>f</mi><mtext mathvariant="normal">pois</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∣</mo><mi>λ</mi><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mover><mtext mathvariant="normal">p</mtext><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mo>,</mo><mspace width="0.222em"></mspace><mi>λ</mi><mo>&gt;</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\hat{\text{p}}(\lambda \mid N_{ij}) = \frac{\hat g(\lambda) f_{\text{pois}}(N_{ij} \mid \lambda E_{ij})}{\hat{\text{p}}(N_{ij})}, \ \lambda &gt; 0,
 </annotation></semantics></math> where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mtext mathvariant="normal">p</mtext><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mi>∞</mi></msubsup><mover><mi>g</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>λ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>f</mi><mtext mathvariant="normal">pois</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∣</mo><msub><mi>λ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>E</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.222em"></mspace><mi>d</mi><msub><mi>λ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\hat{\text{p}}(N_{ij}) = \int_0^{\infty} \hat g(\lambda_{ij})f_{\text{pois}}(N_{ij}\mid \lambda_{ij}E_{ij}) \ d\lambda_{ij}</annotation></semantics></math>.</p>
 <p>All empirical Bayes models implemented in ‘pvEBayes’ share the
@@ -319,9 +319,9 @@ type = “heatmap” or type = “eyeplot”.</p>
 <p><img src="pvEBayes-introduction_files/figure-html/heatmap-1.png" class="r-plt" alt="" width="768"></p>
 <p>The above heatmap visualizes the signal detection result for the
 fitted general-gamma model. For each AE-drug combination, the number of
-reports (N), the estimated null value (E), and the estimated posterior
-probability of being a signal are given. A deeper blue color indicates
-stronger evidence for a signal.</p>
+reports (N), the estimated null value (E), and the estimated empirical
+Bayes posterior probability of being a signal are given. A deeper blue
+color indicates stronger evidence for a signal.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eyeplot_gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg_tune_statin44</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"eyeplot"</span>,</span>

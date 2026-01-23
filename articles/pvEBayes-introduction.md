@@ -17,24 +17,24 @@ number of cases involving $i$-th AE and the $j$-th drug.
 
 Current disproportionality analysis mainly focuses on *signal detection*
 which seeks to determine whether the observation $N_{ij}$ is
-substantially greater than the corresponding null baseline $E_{ij}$.
-Under the Poisson model, that is to say, its signal strength
-$\lambda_{ij}$ is significantly greater than 1.
+substantially greater than the corresponding null baseline $E_{ij}$. Or
+equivalently, its signal strength $\lambda_{ij}$ is significantly
+greater than 1.
 
 In addition to *signal detection*, Tan et al. (*Stat. in Med.*, 2025)
-broaden the role of disproportionality to *signal estimation*. The use
-of the flexible non-parametric empirical Bayes models enables more
-nuanced empirical Bayes posterior inference (signal strength $\lambda$
-estimation and uncertainty quantification). This allows researchers to
-distinguish AE-drug pairs that would appear similar under a binary
-signal detection framework. For example, the AE-drug pairs with signal
-strengths of 1.5 and 4.0 could both be significantly greater than 1 and
-detected as a signal. Such differences in signal strength may have
+broaden the role of disproportionality to *signal strength estimation*.
+The use of the flexible non-parametric empirical Bayes models enables
+more nuanced empirical Bayes posterior inference (signal strength
+$\lambda$ estimation and uncertainty quantification). This allows
+researchers to distinguish AE-drug pairs that would appear similar under
+a binary signal detection framework. For example, the AE-drug pairs with
+signal strengths of 1.5 and 4.0 could both be significantly greater than
+1 and detected as a signal. Such differences in signal strength may have
 distinct implications in medical and clinical contexts.
 
 Methods implemented in this package assumes the observed count $N_{ij}$
 conditional on $E_{ij}$ is that
-$$N_{ij} \mid E_{ij} \sim \operatorname{Poisson}\left( E_{ij}\lambda_{ij} \right),$$
+$$N_{ij} \mid E_{ij} \sim \operatorname{Poisson}\left( E_{ij}\lambda_{ij} \right),\ N_{ij} = 0,1,2\ldots,$$
 where the parameter $\lambda_{ij} \geq 0$ is the relative reporting
 ratio, the signal strength, for the $(i,j)$-th pair measuring the ratio
 of the actual expected count arising due to dependence to the null
@@ -52,8 +52,9 @@ of a Poisson random variable with mean $\lambda$ evaluated at $N$. Under
 the empirical Bayes framework, the prior distribution is consequently
 estimated from the data by maximizing the log marginal likelihood:
 $$\widehat{g} = \operatorname{argmax}\limits_{g}\sum\limits_{i = 1}^{I}\sum\limits_{j = 1}^{J}\log p\left( N_{ij} \right).$$
-Then, the estimated posterior density of $\lambda$ given $N_{ij}$ is:
-$$\widehat{\text{p}}\left( \lambda \mid N_{ij} \right) = \frac{\widehat{g}(\lambda)f_{\text{pois}}\left( N_{ij} \mid \lambda E_{ij} \right)}{\widehat{\text{p}}\left( N_{ij} \right)},$$
+Then, the estimated empirical Bayes posterior density of $\lambda$ given
+$N_{ij}$ is:
+$$\widehat{\text{p}}\left( \lambda \mid N_{ij} \right) = \frac{\widehat{g}(\lambda)f_{\text{pois}}\left( N_{ij} \mid \lambda E_{ij} \right)}{\widehat{\text{p}}\left( N_{ij} \right)},\ \lambda > 0,$$
 where
 $\widehat{\text{p}}\left( N_{ij} \right) = \int_{0}^{\infty}\widehat{g}\left( \lambda_{ij} \right)f_{\text{pois}}\left( N_{ij} \mid \lambda_{ij}E_{ij} \right)\ d\lambda_{ij}$.
 
@@ -216,9 +217,9 @@ heatmap_gg_tune_statin44 +
 
 The above heatmap visualizes the signal detection result for the fitted
 general-gamma model. For each AE-drug combination, the number of reports
-(N), the estimated null value (E), and the estimated posterior
-probability of being a signal are given. A deeper blue color indicates
-stronger evidence for a signal.
+(N), the estimated null value (E), and the estimated empirical Bayes
+posterior probability of being a signal are given. A deeper blue color
+indicates stronger evidence for a signal.
 
 ``` r
 eyeplot_gg_tune_statin44 <- plot(gg_tune_statin44,

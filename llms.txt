@@ -6,7 +6,8 @@ Gamma-Poisson Shrinker (GPS), K-gamma, general-gamma, Koenker-Mizera
 (KM), and Efron models. It provides tools for fitting these models to
 the spontaneous reporting system (SRS) frequency tables, extracting
 summaries, performing hyperparameter tuning, and generating graphical
-summaries (eye plots and heatmaps) for signal detection and estimation.
+summaries (eye plots and heatmaps) for signal detection and signal
+strength estimation.
 
 **Spontaneous Reporting System (SRS) Table**: An drug safety SRS dataset
 catalogs AE reports on *I* AE rows across *J* drug columns. Let $N_{ij}$
@@ -16,7 +17,8 @@ drug, where $i = 1,...,I$ and $j = 1,...,J$.
 **Empirical Bayes modeling for disproportionality analysis**:
 
 - Model each AE-drug count as
-  $N_{ij} \sim \text{Poisson}\left( \lambda_{ij}E_{ij} \right)$.
+  $N_{ij} \sim \text{Poisson}\left( \lambda_{ij}E_{ij} \right)$,
+  $N_{ij} = 0,1,2,\ldots$
 
 - $E_{ij}$: expected baseline value assuming no AE-drug association.
 
@@ -24,19 +26,19 @@ drug, where $i = 1,...,I$ and $j = 1,...,J$.
   (i,j)-th AE-drug pair (multiplicative deviation from the null baseline
   value).
 
-**From signal detection to signal estimation**
+**From signal detection to signal strength $\lambda$ estimation**
 
 - Traditional disproportionality analysis emphasizes **signal
   detection**: identify AE-drug pairs with observed counts substantially
   larger than its null value, i.e., $\lambda_{ij} > 1$.
 
-- Tan et al. (*Stat. in Med.*, 2025) extend this to **signal
+- Tan et al. (*Stat. in Med.*, 2025) extend this to **signal strength
   estimation**: estimate $\{\lambda_{ij}\}$ and quantify uncertainty via
   flexible nonparametric empirical Bayes posterior distribution.
 
 - Signal estimation helps distinguish AE-drug pairs that look identical
-  under a binary signal detection framework (e.g., () vs ()), which can
-  have substantially different clinical implications.
+  under a binary signal detection framework (e.g., $\lambda = 1.5$ vs
+  $\lambda = 4.0$), which can have different clinical implications.
 
 **Methods implemented in `pvEBayes` (differ by prior assumptions):**
 
@@ -55,8 +57,10 @@ drug, where $i = 1,...,I$ and $j = 1,...,J$.
 - GPS uses a 2 gamma mixture prior motivated by a signal/non-signal
   structure.
 
-- Real-world signal strengths (\_{ij}) can be heterogeneous and
-  multi-modal, making simple parametric priors hard to justify.
+- Real-world signal strengths $\lambda_{ij}$ can be heterogeneous, and
+  the underlying (prior) distribution over $\lambda_{ij}$ may be
+  multi-modal with multiple distinct peaks, making simple parametric
+  priors hard to justify.
 
 - Nonparametric empirical Bayes methods (KM, Efron, general-gamma)
   address this challenge by utilizing a flexible prior with a general
@@ -69,8 +73,8 @@ drug, where $i = 1,...,I$ and $j = 1,...,J$.
   reliance on the commercial Mosek solver used by `REBayes`).
 
 - Adapts Efron’s approach from `deconvolveR` to support the
-  exposure/offset (E\_{ij}) in the Poisson model (not supported in the
-  original implementation) .
+  exposure/offset $E_{ij}$ in the Poisson model (not supported in the
+  original implementation).
 
 - Implements the bi-level Expectation Conditional Maximization (ECM)
   algorithm from Tan et al. (*Stat. in Med.*, 2025) for prior estimation
