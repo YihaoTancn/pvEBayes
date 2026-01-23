@@ -13,12 +13,11 @@ Contemporary drug postmarketing surveillance largely relies on the collection of
 
 Current disproportionality analysis mainly focuses on *signal detection* 
 which seeks to determine whether the observation $N_{ij}$ is substantially 
-greater than the corresponding null baseline $E_{ij}$. Under the Poisson model, 
-that is to say, its signal strength $\lambda_{ij}$ is significantly greater 
-than 1.
+greater than the corresponding null baseline $E_{ij}$. Or equivalently,
+its signal strength $\lambda_{ij}$ is significantly greater than 1.
 
 In addition to *signal detection*, Tan et al. (*Stat. in Med.*, 2025) broaden 
-the role of disproportionality to *signal estimation*. The use of the flexible 
+the role of disproportionality to *signal strength estimation*. The use of the flexible 
 non-parametric empirical Bayes models enables more nuanced empirical Bayes 
 posterior inference (signal strength $\lambda$ estimation and uncertainty quantification). This allows researchers to distinguish AE-drug pairs that would appear similar under a binary signal 
 detection framework. For example, the AE-drug pairs with signal strengths of 
@@ -28,7 +27,7 @@ medical and clinical contexts.
 
 Methods implemented in this package assumes the observed count $N_{ij}$ conditional on $E_{ij}$ is that
 \begin{equation} \label{eqn:model-poisson-likelihood}
-N_{ij} \mid E_{ij} \sim \operatorname{Poisson}(E_{ij}\lambda_{ij}),  
+N_{ij} \mid E_{ij} \sim \operatorname{Poisson}(E_{ij}\lambda_{ij}), \ N_{ij} = 0, 1, 2 \dots,  
 \end{equation}
 where the parameter $\lambda_{ij} \geq 0$ is the relative reporting ratio, the signal strength, for the $(i, j)$-th pair measuring the ratio of the actual expected count arising due to dependence to the null baseline expected count. Therefore, $\{\lambda_{ij}\}$ are our key parameters of interest. A large $\lambda_{ij}$ indicates a strong association between a drug and an AE.
 
@@ -40,9 +39,9 @@ where $f_{\text{pois}}(N \mid \lambda)$ is the probability mass function of a Po
 \[
 \hat g = \mathop{\arg \max}\limits_{g} \sum_{i=1}^I \sum_{j=1}^J \log p(N_{ij}).
 \]
-Then, the estimated posterior density of $\lambda$ given $N_{ij}$ is:
+Then, the estimated empirical Bayes posterior density of $\lambda$ given $N_{ij}$ is:
 \[
-\hat{\text{p}}(\lambda \mid N_{ij}) = \frac{\hat g(\lambda) f_{\text{pois}}(N_{ij} \mid \lambda E_{ij})}{\hat{\text{p}}(N_{ij})},
+\hat{\text{p}}(\lambda \mid N_{ij}) = \frac{\hat g(\lambda) f_{\text{pois}}(N_{ij} \mid \lambda E_{ij})}{\hat{\text{p}}(N_{ij})}, \ \lambda > 0,
 \]
 where $\hat{\text{p}}(N_{ij}) = \int_0^{\infty} \hat g(\lambda_{ij})f_{\text{pois}}(N_{ij}\mid \lambda_{ij}E_{ij}) \ d\lambda_{ij}$.
 
@@ -159,7 +158,7 @@ heatmap_gg_tune_statin44 +
   )
 ```
 
-The above heatmap visualizes the signal detection result for the fitted general-gamma model. For each AE-drug combination, the number of reports (N), the estimated null value (E), and the estimated posterior probability of being a signal are given. A deeper blue color indicates stronger evidence for a signal.
+The above heatmap visualizes the signal detection result for the fitted general-gamma model. For each AE-drug combination, the number of reports (N), the estimated null value (E), and the estimated empirical Bayes posterior probability of being a signal are given. A deeper blue color indicates stronger evidence for a signal.
 
 ```{r eyeplot, include = TRUE, fig.height=6, fig.width=8}
 eyeplot_gg_tune_statin44 <- plot(gg_tune_statin44,
