@@ -12,9 +12,9 @@ test_that("pvEBayes", {
   #' @srrstats {G5.8, G5.8a, G5.8b, G5.8c, G5.8d}
   #' Edge condition tests are provided below.
 
-  valid_matrix <- matrix(c(1400, 800,  880, 1000, 1040, 1200, 1400, 1600), nrow = 2)
+  valid_matrix <- matrix(c(1400, 800,  880, 1000, 1040, 1200, 1400, 1600),
+                         nrow = 2)
   rownames(valid_matrix) <- c("AE_1", "AE_2")
-  #rownames(valid_matrix) <- c("AE_1", "AE_2", "AE_3")
   colnames(valid_matrix) <- c("drug_1", "drug_2", "drug_3", "drug_4")
   expect_equal(.is_valid_contin_table(valid_matrix), TRUE)
   result <- estimate_null_expected_count(valid_matrix)
@@ -122,13 +122,10 @@ test_that("pvEBayes", {
   expect_equal(is.pvEBayes(fit_gg_dt), TRUE)
 
   ## KM
-  grid <- .grid_based_on_hist_log_scale_sobol(valid_matrix,
-    E,
-    max_draws = FALSE
-  )
+
 
   fit_km <- pvEBayes(
-    contin_table = valid_matrix,
+    contin_table = statin42,
     model = "KM"
   )
   print_tmp <- print(fit_km)
@@ -137,6 +134,12 @@ test_that("pvEBayes", {
 
 
   ## efron
+
+  grid <- .grid_based_on_hist_log_scale_sobol(valid_matrix,
+                                              E,
+                                              max_draws = FALSE
+  )
+
   fit_e <- pvEBayes(
     contin_table = valid_matrix,
     model = "efron", p = 40, c0 = 0.01
