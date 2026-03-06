@@ -464,9 +464,9 @@ estimate_null_expected_count <- function(contin_table) {
 #' @returns a list of CVXR optimizer outputs
 #' @keywords internal
 .KM_fit <- function(N, E, rtol_KM = 1e-6) {
-  n_draws <- prod(dim(N)) * 2
-  if (n_draws >= 600) {
-    n_draws <- 600
+  n_draws <- prod(dim(N)) * 1.5
+  if (n_draws >= 400) {
+    n_draws <- 400
   }
   grid <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = n_draws)
   fit <- .km_eb_fit(as.vector(N),
