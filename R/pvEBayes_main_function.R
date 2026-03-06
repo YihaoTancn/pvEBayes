@@ -321,7 +321,7 @@ estimate_null_expected_count <- function(contin_table) {
   prob <- CVXR::Problem(objective, constraints)
   res <- tryCatch(
     CVXR::psolve(prob,
-      solver = "CLARABEL",
+      solver = "ECOS",
       reltol = rtol_KM,
       verbose = verb
     ),
@@ -330,7 +330,7 @@ estimate_null_expected_count <- function(contin_table) {
 
   if (is.null(res)) {
     res <- CVXR::psolve(prob,
-      solver = "ECOS",
+      solver = "CLARABEL",
       reltol = rtol_KM,
       verbose = verb
     )
