@@ -306,7 +306,7 @@ estimate_null_expected_count <- function(contin_table) {
 #' @returns a list of CVXR optimizer outputs
 #' @keywords internal
 #' @noRd
-.KWDual_CVXR <- function(A, d, w, rtol_KM = 1e-6, verb = FALSE) {
+.KWDual_CVXR <- function(A, d, w, rtol_KM = 1e-4, verb = FALSE) {
   m <- ncol(A)
 
   A_mat <- A
@@ -315,7 +315,7 @@ estimate_null_expected_count <- function(contin_table) {
 
   objective <- CVXR::Maximize(CVXR::sum_entries(w * log(gexpr)))
   constraints <- list(
-    fvar >= 0,
+    fvar >= 1e-12,
     CVXR::sum_entries(d * fvar) == 1,
     gexpr >= 1e-8
   )
@@ -332,7 +332,7 @@ estimate_null_expected_count <- function(contin_table) {
         #reltol = 1e-3,# rtol_KM,
         verbose = verb,
         num_iter = 200L,
-        min_terminate_step_length = 1e-6,
+        min_terminate_step_length = 1e-3,
         min_switch_step_length = 1e-3,
         reltol = rtol_KM,
         abstol = 1e-4,
@@ -463,7 +463,7 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' @returns a list of CVXR optimizer outputs
 #' @keywords internal
-.KM_fit <- function(N, E, rtol_KM = 1e-6) {
+.KM_fit <- function(N, E, rtol_KM = 1e-4) {
   n_draws <- prod(dim(N)) * 1.5
   if (n_draws >= 400) {
     n_draws <- 400
