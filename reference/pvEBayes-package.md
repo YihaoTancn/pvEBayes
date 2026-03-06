@@ -66,7 +66,8 @@ Poisson model, which corresponds to the expected null value \\E\_{ij}\\.
 In `pvEBayes`, the implementation of the Efron's method is adapted and
 modified from `deconvolveR` to support \\E\_{ij}\\ in Poisson model.
 
-For an introduction to `pvEBayes`, see the vignette.
+For a detailed introduction to `pvEBayes`, see Tan et al. (*arxiv*,
+2025) and package Vignette.
 
 ## References
 
