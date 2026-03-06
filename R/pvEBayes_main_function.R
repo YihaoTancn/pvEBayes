@@ -321,7 +321,7 @@ estimate_null_expected_count <- function(contin_table) {
 
   prob <- CVXR::Problem(objective, constraints)
 
-  solvers <- c("CLARABEL", "ECOS")
+  solvers <- c("CLARABEL", "ECOS", "SCS")
   last_msg <- NULL
 
   for (s in solvers) {
