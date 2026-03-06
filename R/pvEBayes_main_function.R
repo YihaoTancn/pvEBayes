@@ -341,6 +341,18 @@ estimate_null_expected_count <- function(contin_table) {
   fhat[fhat < 0] <- 0
   ghat <- as.vector(A_mat %*% (fhat * d))
 
+
+  ghat[!is.finite(ghat)] <- 0
+  ghat[ghat < 0] <- 0
+  ghat[ghat < 1e-12] <- 0
+
+  s <- sum(ghat)
+  if (!is.finite(s) || s <= 0) {
+    stop("KM prior is invalid after numerical cleanup.")
+  }
+
+  ghat <- ghat / s
+
   list(f = fhat, g = ghat)
 }
 
