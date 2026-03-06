@@ -5,7 +5,7 @@ Fit a Koenker-Mizera (KM) model for a contingency table.
 ## Usage
 
 ``` r
-.KM_fit(N, E, rtol_KM = 1e-06)
+.KM_fit(N, E, rtol_KM = 1e-04)
 ```
 
 ## Arguments
