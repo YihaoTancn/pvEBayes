@@ -77,7 +77,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.
 #> Estimated prior is a mixture of 7 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0065 seconds.
+#> Running time of the general-gamma model fitting: 0.0064 seconds.
 #> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
