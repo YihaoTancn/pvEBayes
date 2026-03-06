@@ -316,21 +316,27 @@ estimate_null_expected_count <- function(contin_table) {
   objective <- CVXR::Maximize(CVXR::sum_entries(w * log(gexpr)))
   constraints <- list(
     fvar >= 0,
-    CVXR::sum_entries(d * fvar) == 1
+    CVXR::sum_entries(d * fvar) == 1,
+    gexpr >= 1e-8
   )
 
   prob <- CVXR::Problem(objective, constraints)
 
   solvers <- c("CLARABEL", "ECOS", "SCS")
   last_msg <- NULL
-
   for (s in solvers) {
     ans <- tryCatch({
       obj_value <- CVXR::psolve(
         prob,
         solver = s,
+        #reltol = 1e-3,# rtol_KM,
+        verbose = verb,
+        num_iter = 200L,
+        min_terminate_step_length = 1e-6,
+        min_switch_step_length = 1e-3,
         reltol = rtol_KM,
-        verbose = verb
+        abstol = 1e-4,
+        feastol = 1e-5
       )
 
       fhat <- as.numeric(CVXR::value(fvar))
@@ -458,9 +464,9 @@ estimate_null_expected_count <- function(contin_table) {
 #' @returns a list of CVXR optimizer outputs
 #' @keywords internal
 .KM_fit <- function(N, E, rtol_KM = 1e-6) {
-  n_draws <- prod(dim(N)) * 3
-  if (n_draws >= 1000) {
-    n_draws <- 1000
+  n_draws <- prod(dim(N)) * 2
+  if (n_draws >= 600) {
+    n_draws <- 600
   }
   grid <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = n_draws)
   fit <- .km_eb_fit(as.vector(N),
