@@ -159,7 +159,7 @@ estimate_null_expected_count <- function(contin_table) {
 #' @noRd
 .seq_sobol <- function(from, to, length.out) {
   sobol_seq <- numeric(length.out)
-  for (i in 0:(length.out-1)) {
+  for (i in 0:(length.out - 1)) {
     x <- 0
     k <- i
     base <- 0.5
@@ -316,18 +316,28 @@ estimate_null_expected_count <- function(contin_table) {
   objective <- CVXR::Maximize(CVXR::sum_entries(w * log(gexpr)))
   constraints <- list(
     fvar >= 0,
-    CVXR::sum_entries(d * fvar) == 1,
-    gexpr >= 1e-12
+    CVXR::sum_entries(d * fvar) == 1
   )
-
   prob <- CVXR::Problem(objective, constraints)
-  res <- CVXR::psolve(prob,
-    solver = NULL,
-    reltol = rtol_KM,
-    verbose = verb
+
+  res <- tryCatch(
+    CVXR::psolve(prob,
+      solver = "CLARABEL",
+      reltol = rtol_KM,
+      verbose = verb
+    ),
+    error = function(e) NULL
   )
 
-  #fhat <- as.vector(res$getValue(fvar))
+  if (is.null(res)) {
+    res <- CVXR::psolve(prob,
+      solver = "ECOS",
+      reltol = rtol_KM,
+      verbose = verb
+    )
+  }
+
+
   fhat <- as.vector(CVXR::value(fvar))
   fhat[fhat < 0] <- 0
   ghat <- as.vector(A_mat %*% (fhat * d))
