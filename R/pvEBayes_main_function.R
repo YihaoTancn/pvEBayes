@@ -319,7 +319,6 @@ estimate_null_expected_count <- function(contin_table) {
     CVXR::sum_entries(d * fvar) == 1
   )
   prob <- CVXR::Problem(objective, constraints)
-
   res <- tryCatch(
     CVXR::psolve(prob,
       solver = "CLARABEL",
@@ -342,7 +341,7 @@ estimate_null_expected_count <- function(contin_table) {
   fhat[fhat < 0] <- 0
   ghat <- as.vector(A_mat %*% (fhat * d))
 
-  list(f = fhat, g = ghat, status = CVXR::status(prob))
+  list(f = fhat, g = ghat)
 }
 
 
