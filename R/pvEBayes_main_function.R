@@ -318,43 +318,108 @@ estimate_null_expected_count <- function(contin_table) {
     fvar >= 0,
     CVXR::sum_entries(d * fvar) == 1
   )
+
   prob <- CVXR::Problem(objective, constraints)
-  res <- tryCatch(
-    CVXR::psolve(prob,
-      solver = "ECOS",
-      reltol = rtol_KM,
-      verbose = verb
-    ),
-    error = function(e) NULL
-  )
 
-  if (is.null(res)) {
-    res <- CVXR::psolve(prob,
-      solver = "CLARABEL",
-      reltol = rtol_KM,
-      verbose = verb
-    )
+  solvers <- c("CLARABEL", "ECOS")
+  last_msg <- NULL
+
+  for (s in solvers) {
+    ans <- tryCatch({
+      obj_value <- CVXR::psolve(
+        prob,
+        solver = s,
+        reltol = rtol_KM,
+        verbose = verb
+      )
+
+      fhat <- as.numeric(CVXR::value(fvar))
+
+      if (is.null(fhat) || length(fhat) != m) {
+        stop(sprintf("Solver %s returned invalid length for fhat.", s))
+      }
+
+      fhat[!is.finite(fhat)] <- 0
+      fhat[fhat < 0] <- 0
+
+      ss <- sum(fhat)
+
+      if (!is.finite(ss) || ss <= 0) {
+        stop(sprintf("Solver %s returned no positive finite mass.", s))
+      }
+
+      fhat <- fhat / ss
+      ghat <- as.vector(A_mat %*% (fhat * d))
+
+      list(
+        f = fhat,
+        g = ghat,
+        solver = s,
+        objective_value = obj_value
+      )
+    }, error = function(e) {
+      last_msg <<- conditionMessage(e)
+      NULL
+    })
+
+    if (!is.null(ans)) {
+      return(ans)
+    }
   }
 
-
-  fhat <- as.vector(CVXR::value(fvar))
-  fhat[fhat < 0] <- 0
-  ghat <- as.vector(A_mat %*% (fhat * d))
-
-
-  ghat[!is.finite(ghat)] <- 0
-  ghat[ghat < 0] <- 0
-  ghat[ghat < 1e-12] <- 0
-
-  s <- sum(ghat)
-  if (!is.finite(s) || s <= 0) {
-    stop("KM prior is invalid after numerical cleanup.")
-  }
-
-  ghat <- ghat / s
-
-  list(f = fhat, g = ghat)
+  stop("All KM solvers failed. Last error: ", last_msg)
 }
+
+
+# .KWDual_CVXR <- function(A, d, w, rtol_KM = 1e-6, verb = FALSE) {
+#   m <- ncol(A)
+#
+#   A_mat <- A
+#   fvar <- CVXR::Variable(m)
+#   gexpr <- A_mat %*% (fvar * d)
+#
+#   objective <- CVXR::Maximize(CVXR::sum_entries(w * log(gexpr)))
+#   constraints <- list(
+#     fvar >= 0,
+#     CVXR::sum_entries(d * fvar) == 1
+#   )
+#   prob <- CVXR::Problem(objective, constraints)
+#   res <- tryCatch(
+#     CVXR::psolve(prob,
+#       solver = "ECOS",
+#       reltol = rtol_KM,
+#       verbose = verb
+#     ),
+#     error = function(e) NULL
+#   )
+#
+#   if (is.null(res)) {
+#     res <- CVXR::psolve(prob,
+#       solver = "CLARABEL",
+#       reltol = rtol_KM,
+#       verbose = verb
+#     )
+#   }
+#
+#
+#   fhat <- as.vector(CVXR::value(fvar))
+#   fhat[fhat < 0] <- 0
+#   ghat <- as.vector(A_mat %*% (fhat * d))
+#
+#
+#   ghat[!is.finite(ghat)] <- 0
+#   ghat[ghat < 0] <- 0
+#   ghat[ghat < 1e-12] <- 0
+#
+#   s <- sum(ghat)
+#   if (!is.finite(s) || s <= 0) {
+#     stop("KM prior is invalid after numerical cleanup.")
+#   }
+#
+#   ghat <- ghat / s
+#
+#   list(f = fhat, g = ghat)
+# }
 
 
 #' Fit a Koenker-Mizera (KM) model for a contingency table.
