@@ -316,21 +316,23 @@ estimate_null_expected_count <- function(contin_table) {
   objective <- CVXR::Maximize(CVXR::sum_entries(w * log(gexpr)))
   constraints <- list(
     fvar >= 0,
-    CVXR::sum_entries(d * fvar) == 1
+    CVXR::sum_entries(d * fvar) == 1,
+    gexpr >= 1e-12
   )
 
   prob <- CVXR::Problem(objective, constraints)
-  res <- CVXR::solve(prob,
-    solver = "ECOS",
+  res <- CVXR::psolve(prob,
+    solver = NULL,
     reltol = rtol_KM,
     verbose = verb
   )
 
-  fhat <- as.vector(res$getValue(fvar))
+  #fhat <- as.vector(res$getValue(fvar))
+  fhat <- as.vector(CVXR::value(fvar))
   fhat[fhat < 0] <- 0
   ghat <- as.vector(A_mat %*% (fhat * d))
 
-  list(f = fhat, g = ghat, status = res$status)
+  list(f = fhat, g = ghat, status = CVXR::status(prob))
 }
 
 

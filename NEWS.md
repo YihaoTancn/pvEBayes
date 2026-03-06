@@ -1,3 +1,7 @@
+# pvEBayes 0.2.2
+
+*Updated the CVXR interface for compatibility with CVXR (>= 1.8.1).
+
 # pvEBayes 0.2.1
 
 *Removed the dependency on 'SobolSequence'.
