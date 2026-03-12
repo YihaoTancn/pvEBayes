@@ -77,7 +77,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.
 #> Estimated prior is a mixture of 7 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0062 seconds.
+#> Running time of the general-gamma model fitting: 0.0064 seconds.
 #> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
@@ -101,7 +101,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.3.
 #> Estimated prior is a mixture of 1 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 6e-04 seconds.
+#> Running time of the general-gamma model fitting: 7e-04 seconds.
 #> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
@@ -137,7 +137,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.9.
 #> Estimated prior is a mixture of 3 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0012 seconds.
+#> Running time of the general-gamma model fitting: 0.0013 seconds.
 #> No posterior draws were generated.
 #> 
 #> Extract estimated prior parameters, discovered signals
