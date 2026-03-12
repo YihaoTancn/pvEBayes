@@ -25,7 +25,7 @@ test_that("pvEBayes", {
   E <- estimate_null_expected_count(valid_matrix)
 
   # test invalid input
-  invalid_matrix <- matrix(c(-70, 40, 44, 50, 52, 60, 70, 80), nrow = 2)
+  invalid_matrix <- matrix(c(-1400, 800, 880, 1000, 1040, 1200, 1400, 1600), nrow = 2)
   invalid_E <- E
   invalid_E[1, 1] <- -10
 
@@ -126,7 +126,7 @@ test_that("pvEBayes", {
 
 
   fit_km <- pvEBayes(
-    contin_table = statin42,
+    contin_table = valid_matrix,
     model = "KM"
   )
   print_tmp <- print(fit_km)
