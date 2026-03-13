@@ -2,6 +2,8 @@
 
 ## pvEBayes 0.2.2
 
+CRAN release: 2026-03-13
+
 \*Updated the CVXR interface for compatibility with CVXR (\>= 1.8.1).
 
 ## pvEBayes 0.2.1
