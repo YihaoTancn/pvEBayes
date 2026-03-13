@@ -329,7 +329,6 @@ estimate_null_expected_count <- function(contin_table) {
       obj_value <- CVXR::psolve(
         prob,
         solver = s,
-        #reltol = 1e-3,# rtol_KM,
         verbose = verb,
         num_iter = 200L,
         min_terminate_step_length = 1e-3,
@@ -364,7 +363,7 @@ estimate_null_expected_count <- function(contin_table) {
         objective_value = obj_value
       )
     }, error = function(e) {
-      last_msg <<- conditionMessage(e)
+      last_msg <- conditionMessage(e)
       NULL
     })
 
@@ -377,55 +376,6 @@ estimate_null_expected_count <- function(contin_table) {
 }
 
 
-# .KWDual_CVXR <- function(A, d, w, rtol_KM = 1e-6, verb = FALSE) {
-#   m <- ncol(A)
-#
-#   A_mat <- A
-#   fvar <- CVXR::Variable(m)
-#   gexpr <- A_mat %*% (fvar * d)
-#
-#   objective <- CVXR::Maximize(CVXR::sum_entries(w * log(gexpr)))
-#   constraints <- list(
-#     fvar >= 0,
-#     CVXR::sum_entries(d * fvar) == 1
-#   )
-#   prob <- CVXR::Problem(objective, constraints)
-#   res <- tryCatch(
-#     CVXR::psolve(prob,
-#       solver = "ECOS",
-#       reltol = rtol_KM,
-#       verbose = verb
-#     ),
-#     error = function(e) NULL
-#   )
-#
-#   if (is.null(res)) {
-#     res <- CVXR::psolve(prob,
-#       solver = "CLARABEL",
-#       reltol = rtol_KM,
-#       verbose = verb
-#     )
-#   }
-#
-#
-#   fhat <- as.vector(CVXR::value(fvar))
-#   fhat[fhat < 0] <- 0
-#   ghat <- as.vector(A_mat %*% (fhat * d))
-#
-#
-#   ghat[!is.finite(ghat)] <- 0
-#   ghat[ghat < 0] <- 0
-#   ghat[ghat < 1e-12] <- 0
-#
-#   s <- sum(ghat)
-#   if (!is.finite(s) || s <= 0) {
-#     stop("KM prior is invalid after numerical cleanup.")
-#   }
-#
-#   ghat <- ghat / s
-#
-#   list(f = fhat, g = ghat)
-# }
 
 
 #' Fit a Koenker-Mizera (KM) model for a contingency table.
