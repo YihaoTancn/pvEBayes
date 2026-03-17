@@ -103,12 +103,39 @@
 #' @importFrom data.table .SD
 #'
 #' @srrstats {G1.0} Reference section reports the related literature.
-#' @srrstats {G1.1} The bi-level Expectation Conditional Maximization (ECM)
-#' algorithm for gamma mixture based prior models (including GPS, K-gamma and
-#' general-gamma) It is the first implementation of a novel algorithm. Our
-#' implementation for Koenker-Mizera (KM) and Efron methods are improvement
-#' to \code{REBayes} and \code{deconvolveR} package respectively to fit into
-#' disproportionality analysis on spontaneous reporting systems SRS data.
+#' @srrstats {G1.1}
+#' There is no other package that directly provides the methods implemented in
+#' `pvEBayes`, which is a suite of empirical Bayes approaches for signal
+#' detection and signal strength estimation in disproportionality analysis.
+#' Currently, there are some existing R packages applying SRS data mining.
+#' These packages focus only on signal detection.
+#'
+#' Methods implemented in `pvEBayes` include Gamma-Poisson Shrinker (GPS),
+#' Koenker–Mizera method (KM), Efron, K-gamma and general-gamma. `pvEBayes`
+#' package provides the first implementation of K-gamma and general-gamma.
+#' There are a few packages that provide functions that can, in theory, be used
+#' to provide implementations of our methods; however, substantial modifications
+#' and customizations are needed.
+#'
+#' The Gamma-Poisson Shrinker (GPS) is also available from another R package:
+#' `openEBGM`. In `pvEBayes`, the GPS is implemented by our bi-level Expectation
+#' Conditional Maximization (ECM) algorithm, offering faster and more stable GPS
+#' model fitting.
+#'
+#' The KM has a general nonparametric empirical Bayes implementation in the
+#' `REBayes` package. But `REBayes` relies on `Mosek`, a commercial convex
+#' optimization solver, which may limit accessibility due to licensing issues.
+#' The `pvEBayes` package provides an alternative fully open-source
+#' implementation of the KM method using `CVXR`.
+#'
+#' The Efron method has a general nonparametric empirical Bayes implementation
+#' in the `deconvolveR` package; however, that implementation does not support
+#' an exposure or offset parameter in the Poisson model, which corresponds to
+#' the expected null value ‘E’. In `pvEBayes`, the implementation of Efron
+#' method is adapted and modified from `deconvolveR` to support ‘E’ to model
+#' the SRS table.
+#'
+#'
 #' @srrstats {G1.2} see the 'CONTRIBUTING.md' for states of development.
 #' @srrstats {G1.3} All statistical terminologies are clarified and
 #' unambiguously defined
