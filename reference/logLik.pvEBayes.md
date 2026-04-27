@@ -34,6 +34,20 @@ fit <- pvEBayes(
   contin_table = statin2025_44, model = "general-gamma",
   alpha = 0.3, n_posterior_draws = NULL
 )
+#> ℹ Fitting general-gamma model...
+#> ✔ Fitting general-gamma model... [202ms]
+#> 
+#> Object of class 'pvEBayes'
+#> 
+#> General-gamma model with hyperparameter alpha = 0.3.
+#> Estimated prior is a mixture of 18 gamma distributions.
+#> 
+#> Running time of the general-gamma model fitting: 0.2101 seconds.
+#> Optimizer convergence: successful.
+#> No posterior draws were generated.
+#> 
+#> Extract estimated prior parameters, discovered signals
+#> and signal strength posterior draws using `summary()`.
 
 logLik(fit)
 #> [1] -1845.437

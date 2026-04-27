@@ -63,8 +63,11 @@ specified hyperparameter, if is required. Supported models include the
 <span>  tol_ecm <span class="op">=</span> <span class="fl">1e-04</span>,</span>
 <span>  rtol_efron <span class="op">=</span> <span class="fl">1e-10</span>,</span>
 <span>  rtol_KM <span class="op">=</span> <span class="fl">1e-06</span>,</span>
+<span>  km_optimizer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ECOS"</span>, <span class="st">"CLARABEL"</span>, <span class="st">"SCS"</span><span class="op">)</span>,</span>
 <span>  n_posterior_draws <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  E <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  E <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  message <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -129,6 +132,14 @@ Default to 1e-10. See 'stats::nlminb' for detail.</p></dd>
 Default to be 1e-6. See 'CVXR::solve' for detail.</p></dd>
 
 
+<dt id="arg-km-optimizer">km_optimizer<a class="anchor" aria-label="anchor" href="#arg-km-optimizer"></a></dt>
+<dd><p>a character vector specifying the optimizer(s) in CVXR
+used to fit the KM model. Supported values are <code>"ECOS"</code>, <code>"CLARABEL"</code>, and
+<code>"SCS"</code>. If multiple optimizers are supplied, they are tried sequentially
+and the first successfully fitted result is returned. Defaults to
+c("ECOS", "CLARABEL", "SCS")<code>. See </code>CVXR::psolve` for detail.</p></dd>
+
+
 <dt id="arg-n-posterior-draws">n_posterior_draws<a class="anchor" aria-label="anchor" href="#arg-n-posterior-draws"></a></dt>
 <dd><p>a number of posterior draws for each AE-drug
 combination.</p></dd>
@@ -139,12 +150,25 @@ combination.</p></dd>
 frequency table. If <code>NULL</code> (default), the expected counts are estimated
 from the SRS data using 'estimate_null_expected_count()'.</p></dd>
 
+
+<dt id="arg-message">message<a class="anchor" aria-label="anchor" href="#arg-message"></a></dt>
+<dd><p>logical, indicating whether to print fitting information.
+Default to be TRUE.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>additional parameters to be passed to optimizer for 'KM' model.
+See 'CVXR::solve' for detail.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The function returns an S3 object of class <code>pvEBayes</code> containing the
 estimated model parameters as well as posterior draws for each AE-drug
 combination if the number of posterior draws is specified.</p>
+<p>The <code>convergence</code> component is an integer code: <code>0</code> indicates successful
+convergence of the optimizer, while <code>1</code> indicates that the optimizer did not
+converge.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -165,8 +189,9 @@ improper prior still offering a reasonable posterior inference that
 represents the strongest shrinkage of the "general-gamma" model.</p>
 <p>Parameter estimation for the "KM" model is formulated as a convex
 optimization problem. The objective function and constraints follow the same
-construction as in <span class="pkg">REBayes</span>. Parameter estimation is performed using
-the open-source convex optimization package <span class="pkg">CVXR</span>.</p>
+construction as in <span class="pkg">REBayes</span> (see 'REBayes::KWDual()'). Parameter
+estimation is performed using the open-source convex optimization package
+<span class="pkg">CVXR</span>.</p>
 <p>The implementation of the "efron" model in this package is adapted from the
 <span class="pkg">deconvolveR</span> package, developed by Bradley Efron and
 Balasubramanian Narasimhan. The original implementation in <span class="pkg">deconvolveR</span>
@@ -224,12 +249,47 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-in"><span>  E <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>  maxi <span class="op">=</span> <span class="cn">NULL</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting general-gamma model...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[191ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[37ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.3.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 4 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.199 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0454 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># fit K-gamma model with K = 3</span></span></span>
 <span class="r-in"><span><span class="va">fit_Kgamma</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">simu_table</span>, model <span class="op">=</span> <span class="st">"K-gamma"</span>,</span></span>
 <span class="r-in"><span>  K <span class="op">=</span> <span class="fl">3</span>, n_posterior_draws <span class="op">=</span> <span class="fl">1000</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting K-gamma model...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting K-gamma model... <span style="color: #B2B2B2;">[23ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[32ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> K-gamma model with number of gamma mixture components K = 3.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the K-gamma model fitting: 0.031 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0399 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># fit Efron model with specified hyperparameters</span></span></span>
@@ -249,6 +309,23 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">fit_gps</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span><span class="va">simu_table</span>, model <span class="op">=</span> <span class="st">"GPS"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting GPS model...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting GPS model... <span style="color: #B2B2B2;">[18ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[32ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> GPS (2-gamma) model is fitted</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the GPS model fitting: 0.0256 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0399 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span></span></span>

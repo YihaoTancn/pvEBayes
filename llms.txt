@@ -175,6 +175,8 @@ Statistician*. 1999; 1;53(3):177-90.
 - [`eyeplot_pvEBayes()`](https://yihaotancn.github.io/pvEBayes/reference/eyeplot_pvEBayes.md)
   : Generate an eyeplot showing the distribution of posterior draws for
   selected drugs and adverse events
+- [`faers_opioid_mental`](https://yihaotancn.github.io/pvEBayes/reference/faers_opioid_mental.md)
+  : FDA opioid dataset with 243 mental-related adverse events
 - [`gbca2025`](https://yihaotancn.github.io/pvEBayes/reference/gbca2025.md)
   : FDA GBCA dataset with 1328 adverse events
 - [`gbca2025_69`](https://yihaotancn.github.io/pvEBayes/reference/gbca2025_69.md)
@@ -209,6 +211,10 @@ Statistician*. 1999; 1;53(3):177-90.
   : FDA statin dataset with 42 adverse events
 - [`summary(`*`<pvEBayes>`*`)`](https://yihaotancn.github.io/pvEBayes/reference/summary.pvEBayes.md)
   : Summary method for a pvEBayes object
+- [`summary_table_pvEBayes()`](https://yihaotancn.github.io/pvEBayes/reference/summary_table_pvEBayes.md)
+  : Obtain a summary table for a pvEBayes object
+- [`vigi_opioid_mental`](https://yihaotancn.github.io/pvEBayes/reference/vigi_opioid_mental.md)
+  : VigiBase opioid dataset with 100 mental-related adverse events
 
 # Articles
 

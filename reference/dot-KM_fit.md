@@ -5,7 +5,13 @@ Fit a Koenker-Mizera (KM) model for a contingency table.
 ## Usage
 
 ``` r
-.KM_fit(N, E, rtol_KM = 1e-04)
+.KM_fit(
+  N,
+  E,
+  rtol_KM = 1e-04,
+  km_optimizer = c("ECOS", "CLARABEL", "SCS"),
+  ...
+)
 ```
 
 ## Arguments
@@ -23,6 +29,19 @@ Fit a Koenker-Mizera (KM) model for a contingency table.
 - rtol_KM:
 
   The relative tolerance on the duality gap.
+
+- km_optimizer:
+
+  Character vector specifying the optimizer(s) used to fit the KM model.
+  Supported values are `"ECOS"`, `"CLARABEL"`, and `"SCS"`. If multiple
+  optimizers are supplied, they are tried sequentially and the first
+  successfully fitted result is returned. Defaults to c("ECOS",
+  "CLARABEL", "SCS")\`.
+
+- ...:
+
+  additional parameters to be passed to optimizer for 'KM' model. See
+  'CVXR::solve' for detail.
 
 ## Value
 

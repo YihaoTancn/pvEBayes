@@ -19,8 +19,11 @@ pvEBayes(
   tol_ecm = 1e-04,
   rtol_efron = 1e-10,
   rtol_KM = 1e-06,
+  km_optimizer = c("ECOS", "CLARABEL", "SCS"),
   n_posterior_draws = 1000,
-  E = NULL
+  E = NULL,
+  message = TRUE,
+  ...
 )
 ```
 
@@ -83,6 +86,14 @@ pvEBayes(
   a tolerance parameter used when 'KM' model is fitted. Default to be
   1e-6. See 'CVXR::solve' for detail.
 
+- km_optimizer:
+
+  a character vector specifying the optimizer(s) in CVXR used to fit the
+  KM model. Supported values are `"ECOS"`, `"CLARABEL"`, and `"SCS"`. If
+  multiple optimizers are supplied, they are tried sequentially and the
+  first successfully fitted result is returned. Defaults to c("ECOS",
+  "CLARABEL", "SCS")`. See `CVXR::psolve\` for detail.
+
 - n_posterior_draws:
 
   a number of posterior draws for each AE-drug combination.
@@ -93,11 +104,25 @@ pvEBayes(
   table. If `NULL` (default), the expected counts are estimated from the
   SRS data using 'estimate_null_expected_count()'.
 
+- message:
+
+  logical, indicating whether to print fitting information. Default to
+  be TRUE.
+
+- ...:
+
+  additional parameters to be passed to optimizer for 'KM' model. See
+  'CVXR::solve' for detail.
+
 ## Value
 
 The function returns an S3 object of class `pvEBayes` containing the
 estimated model parameters as well as posterior draws for each AE-drug
 combination if the number of posterior draws is specified.
+
+The `convergence` component is an integer code: `0` indicates successful
+convergence of the optimizer, while `1` indicates that the optimizer did
+not converge.
 
 ## Details
 
@@ -122,8 +147,9 @@ model.
 
 Parameter estimation for the "KM" model is formulated as a convex
 optimization problem. The objective function and constraints follow the
-same construction as in REBayes. Parameter estimation is performed using
-the open-source convex optimization package CVXR.
+same construction as in REBayes (see 'REBayes::KWDual()'). Parameter
+estimation is performed using the open-source convex optimization
+package CVXR.
 
 The implementation of the "efron" model in this package is adapted from
 the deconvolveR package, developed by Bradley Efron and Balasubramanian
@@ -187,12 +213,47 @@ fit <- pvEBayes(
   E = NULL,
   maxi = NULL
 )
+#> ℹ Fitting general-gamma model...
+#> ✔ Fitting general-gamma model... [191ms]
+#> 
+#> ℹ Generating 1000 posterior draws...
+#> ✔ Generating 1000 posterior draws... [37ms]
+#> 
+#> Object of class 'pvEBayes'
+#> 
+#> General-gamma model with hyperparameter alpha = 0.3.
+#> Estimated prior is a mixture of 4 gamma distributions.
+#> 
+#> Running time of the general-gamma model fitting: 0.199 seconds.
+#> Optimizer convergence: successful.
+#> Running time for posterior draws 
+#> (1000 signal strength posterior draws per AE-drug pair):0.0454 seconds.
+#> 
+#> Extract estimated prior parameters, discovered signals
+#> and signal strength posterior draws using `summary()`.
 
 # fit K-gamma model with K = 3
 fit_Kgamma <- pvEBayes(
   contin_table = simu_table, model = "K-gamma",
   K = 3, n_posterior_draws = 1000
 )
+#> ℹ Fitting K-gamma model...
+#> ✔ Fitting K-gamma model... [23ms]
+#> 
+#> ℹ Generating 1000 posterior draws...
+#> ✔ Generating 1000 posterior draws... [32ms]
+#> 
+#> Object of class 'pvEBayes'
+#> 
+#> K-gamma model with number of gamma mixture components K = 3.
+#> 
+#> Running time of the K-gamma model fitting: 0.031 seconds.
+#> Optimizer convergence: successful.
+#> Running time for posterior draws 
+#> (1000 signal strength posterior draws per AE-drug pair):0.0399 seconds.
+#> 
+#> Extract estimated prior parameters, discovered signals
+#> and signal strength posterior draws using `summary()`.
 
 
 # fit Efron model with specified hyperparameters
@@ -212,6 +273,23 @@ fit_efron <- pvEBayes(
 
 
 fit_gps <- pvEBayes(simu_table, model = "GPS")
+#> ℹ Fitting GPS model...
+#> ✔ Fitting GPS model... [18ms]
+#> 
+#> ℹ Generating 1000 posterior draws...
+#> ✔ Generating 1000 posterior draws... [32ms]
+#> 
+#> Object of class 'pvEBayes'
+#> 
+#> GPS (2-gamma) model is fitted
+#> 
+#> Running time of the GPS model fitting: 0.0256 seconds.
+#> Optimizer convergence: successful.
+#> Running time for posterior draws 
+#> (1000 signal strength posterior draws per AE-drug pair):0.0399 seconds.
+#> 
+#> Extract estimated prior parameters, discovered signals
+#> and signal strength posterior draws using `summary()`.
 
 if (FALSE) { # \dontrun{
 
