@@ -145,20 +145,20 @@ gg_given_alpha <- pvEBayes(statin2025_44,
   alpha = 0.5
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [321ms]
+#> ✔ Fitting general-gamma model... [343ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [94ms]
+#> ✔ Generating 1000 posterior draws... [103ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3302 seconds.
+#> Running time of the general-gamma model fitting: 0.3514 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.196 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.2143 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

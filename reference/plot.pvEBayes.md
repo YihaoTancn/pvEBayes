@@ -41,7 +41,7 @@ A [ggplot](https://ggplot2.tidyverse.org/reference/ggplot.html) object.
 ``` r
 obj <- pvEBayes(statin2025_44, model = "general-gamma", alpha = 0.5)
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [304ms]
+#> ✔ Fitting general-gamma model... [323ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
 #> ✔ Generating 1000 posterior draws... [36ms]
@@ -51,10 +51,10 @@ obj <- pvEBayes(statin2025_44, model = "general-gamma", alpha = 0.5)
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3124 seconds.
+#> Running time of the general-gamma model fitting: 0.3315 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0444 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0445 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

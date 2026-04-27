@@ -214,20 +214,20 @@ fit <- pvEBayes(
   maxi = NULL
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [191ms]
+#> ✔ Fitting general-gamma model... [211ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [37ms]
+#> ✔ Generating 1000 posterior draws... [39ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.3.
 #> Estimated prior is a mixture of 4 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.199 seconds.
+#> Running time of the general-gamma model fitting: 0.2187 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0454 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0465 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -241,16 +241,16 @@ fit_Kgamma <- pvEBayes(
 #> ✔ Fitting K-gamma model... [23ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [32ms]
+#> ✔ Generating 1000 posterior draws... [34ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> K-gamma model with number of gamma mixture components K = 3.
 #> 
-#> Running time of the K-gamma model fitting: 0.031 seconds.
+#> Running time of the K-gamma model fitting: 0.0306 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0399 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0412 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -277,16 +277,16 @@ fit_gps <- pvEBayes(simu_table, model = "GPS")
 #> ✔ Fitting GPS model... [18ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [32ms]
+#> ✔ Generating 1000 posterior draws... [33ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> GPS (2-gamma) model is fitted
 #> 
-#> Running time of the GPS model fitting: 0.0256 seconds.
+#> Running time of the GPS model fitting: 0.025 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0399 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0401 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
