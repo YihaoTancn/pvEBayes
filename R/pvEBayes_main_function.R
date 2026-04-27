@@ -34,11 +34,7 @@
 #'
 calculate_tilde_e <- function(contin_table) {
   contin_table <- as.matrix(contin_table)
-  stopifnot(
-    is.numeric(contin_table),
-    all(contin_table >= 0),
-    all(contin_table == floor(contin_table))
-  )
+  .is_valid_contin_table(contin_table)
   I <- nrow(contin_table)
   J <- ncol(contin_table)
   res <- contin_table[, J] %*% t(contin_table[I, ]) /
@@ -57,20 +53,94 @@ calculate_tilde_e <- function(contin_table) {
 #' @keywords internal
 #' @noRd
 .is_valid_contin_table <- function(contin_table) {
-  is_valid <- is.numeric(contin_table) &
-    all(contin_table >= 0) &
-    (all(contin_table == floor(contin_table)))
-
-  if (is_valid == FALSE) {
-    warning(
-      paste0(
-        "contin_table must be a matrix with",
-        " each entry being non-negative integer."
-      )
-    )
+  I <- nrow(contin_table)
+  J <- ncol(contin_table)
+  arg_name <- deparse(substitute(contin_table))
+  if (!is.numeric(contin_table)) {
+    stop("Invalid input: '%s' is not numeric." %>%
+      sprintf(arg_name))
   }
-  is_valid
+
+  if (any(is.na(contin_table))) {
+    stop("Invalid input: '%s' contains NA or NaN values." %>%
+      sprintf(arg_name))
+  }
+
+  if (any(is.infinite(contin_table))) {
+    stop("Invalid input: '%s' contains infinite (Inf/-Inf) values." %>%
+      sprintf(arg_name))
+  }
+
+  if (any(contin_table < 0)) {
+    stop("Invalid input: '%s' contains negative values." %>%
+      sprintf(arg_name))
+  }
+  if (any(rowSums(contin_table) == 0) | any(colSums(contin_table) == 0)) {
+    stop(paste0(
+      "Invalid input: '%s' contains at least",
+      " one row or column that is entirely zero."
+    ) %>%
+      sprintf(arg_name))
+  }
+  if (any(contin_table[I, ] == 0) | any(contin_table[, J] == 0)) {
+    stop(paste0(
+      "Invalid input: reference (I-th) row or (J-th) column in",
+      " '%s' contains at least one zero.",
+      " For detailed information, see the package vignette."
+    ) %>%
+      sprintf(arg_name))
+  }
+
+  if (any(contin_table != floor(contin_table))) {
+    stop("Invalid input: '%s' contains non-integer values." %>%
+      sprintf(arg_name))
+  }
+
+  TRUE
 }
+
+
+#' Check if a input is a valid positive numeric table
+#'
+#' @param x an IxJ numeric table
+#'
+#' @returns logical.
+#' @keywords internal
+#' @noRd
+.is_valid_numeric_table <- function(x) {
+  I <- nrow(x)
+  J <- ncol(x)
+  arg_name <- deparse(substitute(x))
+  if (!is.numeric(x)) {
+    stop("Invalid input: '%s' is not numeric." %>%
+      sprintf(arg_name))
+  }
+
+  if (any(is.na(x))) {
+    stop("Invalid input: '%s' contains NA or NaN values." %>%
+      sprintf(arg_name))
+  }
+
+  if (any(is.infinite(x))) {
+    stop("Invalid input: '%s' contains infinite (Inf/-Inf) values." %>%
+      sprintf(arg_name))
+  }
+
+  if (any(x < 0)) {
+    stop("Invalid input: '%s' contains negative values." %>%
+      sprintf(arg_name))
+  }
+  if (any(x == 0)) {
+    stop(paste0(
+      "Invalid input: '%s' contains at least",
+      " one zero entry."
+    ) %>%
+      sprintf(arg_name))
+  }
+
+  TRUE
+}
+
 
 
 
@@ -128,7 +198,16 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' @keywords internal
 #' @noRd
+#' @srrstats {G2.9} If row or column names are missing from `contin_table`,
+#' default names are assigned and a diagnostic message is issued to inform the
+#' user of this preprocessing step.
 .set_default_names <- function(contin_table) {
+  message(
+    paste0(
+      "`contin_table` is missing row or column names;",
+      " default names have been assigned."
+    )
+  )
   I <- nrow(contin_table)
   J <- ncol(contin_table)
   AE_names <- vapply(1:I, function(e) {
@@ -258,12 +337,19 @@ estimate_null_expected_count <- function(contin_table) {
 #' @param v a vector of grid values
 #' @param exposure a vector of observation specific exposures. In the context
 #' of SRS mining, it is a vector of expected null baseline values.
+#' @param km_optimizer Character vector specifying the optimizer(s) used to fit
+#' the KM model. Supported values are `"ECOS"`, `"CLARABEL"`, and `"SCS"`.
+#' If multiple optimizers are supplied, they are tried sequentially and the
+#' first successfully fitted result is returned. Defaults to
+#' c("ECOS", "CLARABEL", "SCS")`.
 #' @param ... other parameters passed to the CVXR optimizer.
 #'
 #' @returns a list of CVXR optimizer outputs
 #' @keywords internal
 #' @noRd
-.km_eb_fit <- function(x, v, exposure = NULL, ...) {
+.km_eb_fit <- function(x, v,
+                       km_optimizer = c("ECOS", "CLARABEL", "SCS"),
+                       exposure = NULL, ...) {
   n <- length(x)
 
   m <- length(v)
@@ -281,11 +367,14 @@ estimate_null_expected_count <- function(contin_table) {
     )
   }
 
-  f <- .KWDual_CVXR(A, d, w, ...)
+  f <- .KWDual_CVXR(A, d, w,
+    km_optimizer = km_optimizer,
+    ...
+  )
   logLik <- n * sum(w * log(f$g))
   z <- list(
     x = v, y = f$f, g = f$g, logLik = logLik,
-    status = f$status
+    convergence = f$convergence
   )
   z
 }
@@ -301,12 +390,20 @@ estimate_null_expected_count <- function(contin_table) {
 #' reciprocal of grid values.
 #' @param w weights for observations.
 #' @param rtol_KM relative tolerance for optimization algorithm.
-#' @param verb
+#' @param km_optimizer Character vector specifying the optimizer(s) used to fit
+#' the KM model. Supported values are `"ECOS"`, `"CLARABEL"`, and `"SCS"`.
+#' If multiple optimizers are supplied, they are tried sequentially and the
+#' first successfully fitted result is returned. Defaults to
+#' c("ECOS", "CLARABEL", "SCS")`.
+#' @param ... additional parameters to be passed to optimizer for 'KM' model.
+#' See 'CVXR::solve' for detail.
 #'
 #' @returns a list of CVXR optimizer outputs
 #' @keywords internal
 #' @noRd
-.KWDual_CVXR <- function(A, d, w, rtol_KM = 1e-4, verb = FALSE) {
+.KWDual_CVXR <- function(A, d, w, rtol_KM = 1e-4,
+                         km_optimizer = c("ECOS", "CLARABEL", "SCS"),
+                         ...) {
   m <- ncol(A)
 
   A_mat <- A
@@ -322,52 +419,59 @@ estimate_null_expected_count <- function(contin_table) {
 
   prob <- CVXR::Problem(objective, constraints)
 
-  solvers <- c("CLARABEL", "ECOS", "SCS")
+  solvers <- km_optimizer
   last_msg <- NULL
   for (s in solvers) {
-    ans <- tryCatch({
-      obj_value <- CVXR::psolve(
-        prob,
-        solver = s,
-        verbose = verb,
-        num_iter = 200L,
-        min_terminate_step_length = 1e-3,
-        min_switch_step_length = 1e-3,
-        reltol = rtol_KM,
-        abstol = 1e-4,
-        feastol = 1e-5
-      )
+    ans <- tryCatch(
+      {
+        obj_value <- CVXR::psolve(
+          prob,
+          solver = s,
+          num_iter = 200L,
+          min_terminate_step_length = 1e-3,
+          min_switch_step_length = 1e-3,
+          reltol = rtol_KM,
+          abstol = 1e-4,
+          feastol = 1e-5,
+          ...
+        )
 
-      fhat <- as.numeric(CVXR::value(fvar))
+        fhat <- as.numeric(CVXR::value(fvar))
 
-      if (is.null(fhat) || length(fhat) != m) {
-        stop(sprintf("Solver %s returned invalid length for fhat.", s))
+        if (is.null(fhat) || length(fhat) != m) {
+          stop(sprintf("Solver %s returned invalid length for fhat.", s))
+        }
+
+        fhat[!is.finite(fhat)] <- 0
+        fhat[fhat < 0] <- 0
+
+        ss <- sum(fhat)
+
+        if (!is.finite(ss) || ss <= 0) {
+          stop(sprintf("Solver %s returned no positive finite mass.", s))
+        }
+
+        fhat <- fhat / ss
+        ghat <- as.vector(A_mat %*% (fhat * d))
+
+        list(
+          f = fhat,
+          g = ghat,
+          solver = s,
+          objective_value = obj_value
+        )
+      },
+      error = function(e) {
+        last_msg <- conditionMessage(e)
+        NULL
       }
-
-      fhat[!is.finite(fhat)] <- 0
-      fhat[fhat < 0] <- 0
-
-      ss <- sum(fhat)
-
-      if (!is.finite(ss) || ss <= 0) {
-        stop(sprintf("Solver %s returned no positive finite mass.", s))
-      }
-
-      fhat <- fhat / ss
-      ghat <- as.vector(A_mat %*% (fhat * d))
-
-      list(
-        f = fhat,
-        g = ghat,
-        solver = s,
-        objective_value = obj_value
-      )
-    }, error = function(e) {
-      last_msg <- conditionMessage(e)
-      NULL
-    })
-
+    )
     if (!is.null(ans)) {
+      if (CVXR::status(prob) == "optimal") {
+        ans$convergence <- 0
+      } else {
+        ans$convergence <- 1
+      }
       return(ans)
     }
   }
@@ -385,6 +489,13 @@ estimate_null_expected_count <- function(contin_table) {
 #' @param E A matrix of expected counts under the null model for the SRS
 #' frequency table.
 #' @param rtol_KM The relative tolerance on the duality gap.
+#' @param km_optimizer Character vector specifying the optimizer(s) used to fit
+#' the KM model. Supported values are `"ECOS"`, `"CLARABEL"`, and `"SCS"`.
+#' If multiple optimizers are supplied, they are tried sequentially and the
+#' first successfully fitted result is returned. Defaults to
+#' c("ECOS", "CLARABEL", "SCS")`.
+#' @param ... additional parameters to be passed to optimizer for 'KM' model.
+#' See 'CVXR::solve' for detail.
 #'
 #' @details
 #'
@@ -413,20 +524,28 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' @returns a list of CVXR optimizer outputs
 #' @keywords internal
-.KM_fit <- function(N, E, rtol_KM = 1e-4) {
+.KM_fit <- function(N, E, rtol_KM = 1e-4,
+                    km_optimizer = c("ECOS", "CLARABEL", "SCS"),
+                    ...) {
   n_draws <- prod(dim(N)) * 1.5
   if (n_draws >= 400) {
     n_draws <- 400
   }
+  if (n_draws < 50) {
+    n_draws <- 50
+  }
   grid <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = n_draws)
   fit <- .km_eb_fit(as.vector(N),
     v = grid, exposure = as.vector(E),
-    rtol_KM = rtol_KM
+    rtol_KM = rtol_KM,
+    km_optimizer = km_optimizer,
+    ...
   )
   g <- fit$y
-
-
-  out <- list(g = g, grid = grid, loglik = fit$logLik)
+  out <- list(
+    g = g, grid = grid, loglik = fit$logLik,
+    convergence = fit$convergence
+  )
   out
 }
 
@@ -471,7 +590,14 @@ estimate_null_expected_count <- function(contin_table) {
 #' @returns a list of optimizer outputs
 #' @keywords internal
 .E_fit <- function(N, E, c0 = 1, pDegree = 5, aStart = 1, rel.tol) {
-  tau <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = 3010)
+  n_draws <- prod(dim(N)) * 1.5
+  if (n_draws >= 400) {
+    n_draws <- 400
+  }
+  if (n_draws < 50) {
+    n_draws <- 50
+  }
+  tau <- .grid_based_on_hist_log_scale_sobol(N, E, max_draws = n_draws)
   x <- as.vector(N)
   E <- as.vector(E)
   P <- vapply(tau, function(ee) {
@@ -482,9 +608,6 @@ estimate_null_expected_count <- function(contin_table) {
     scale = FALSE
   ))
   Q <- apply(Q, 2, function(w) w / sqrt(sum(w * w)))
-
-
-
 
   loglik_1 <- function(a) {
     g0 <- Q %*% a
@@ -590,7 +713,7 @@ estimate_null_expected_count <- function(contin_table) {
 
   list(
     a = mle, g = g, grid = tau, loglik = -loglik_not_pena(mle),
-    df = k
+    df = k, convergence = result$convergence
   )
 }
 
@@ -700,6 +823,11 @@ estimate_null_expected_count <- function(contin_table) {
     eps,
     dirichlet
   )
+  if (result$iter >= maxi) {
+    result$convergence <- 1
+  } else {
+    result$convergence <- 0
+  }
   result
 }
 
@@ -815,6 +943,7 @@ estimate_null_expected_count <- function(contin_table) {
                                            nsim = 1000) {
   grid <- object$grid
   esti_prior <- object$g
+
   lambda_sim <- post_draw_discrete_cpp(
     grid,
     esti_prior,
@@ -874,9 +1003,18 @@ estimate_null_expected_count <- function(contin_table) {
 #' Default to 1e-10. See 'stats::nlminb' for detail.
 #' @param rtol_KM a tolerance parameter used when 'KM' model is fitted.
 #' Default to be 1e-6. See 'CVXR::solve' for detail.
+#' @param km_optimizer a character vector specifying the optimizer(s) in CVXR
+#' used to fit the KM model. Supported values are `"ECOS"`, `"CLARABEL"`, and
+#' `"SCS"`. If multiple optimizers are supplied, they are tried sequentially
+#' and the first successfully fitted result is returned. Defaults to
+#' c("ECOS", "CLARABEL", "SCS")`. See `CVXR::psolve` for detail.
 #' @param E A matrix of expected counts under the null model for the SRS
 #' frequency table. If `NULL` (default), the expected counts are estimated
 #' from the SRS data using 'estimate_null_expected_count()'.
+#' @param message logical, indicating whether to print fitting information.
+#' Default to be TRUE.
+#' @param ... additional parameters to be passed to optimizer for 'KM' model.
+#' See 'CVXR::solve' for detail.
 #'
 #'
 #' @details
@@ -901,8 +1039,9 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' Parameter estimation for the "KM" model is formulated as a convex
 #' optimization problem. The objective function and constraints follow the same
-#' construction as in \pkg{REBayes}. Parameter estimation is performed using
-#' the open-source convex optimization package \pkg{CVXR}.
+#' construction as in \pkg{REBayes} (see 'REBayes::KWDual()'). Parameter
+#' estimation is performed using the open-source convex optimization package
+#' \pkg{CVXR}.
 #'
 #'
 #' The implementation of the "efron" model in this package is adapted from the
@@ -950,6 +1089,10 @@ estimate_null_expected_count <- function(contin_table) {
 #' The function returns an S3 object of class `pvEBayes` containing the
 #' estimated model parameters as well as posterior draws for each AE-drug
 #' combination if the number of posterior draws is specified.
+#'
+#' The `convergence` component is an integer code: `0` indicates successful
+#' convergence of the optimizer, while `1` indicates that the optimizer did not
+#' converge.
 #'
 #' @export
 #'
@@ -1074,7 +1217,7 @@ estimate_null_expected_count <- function(contin_table) {
 #' @srrstats {G3.0} The algorithm do not compare floating points for equality.
 #' @srrstats {G5.4b} The examples field provide a comparison of implementation
 #' of GPS model showing that both implementation correctly detect the signal.
-#' @srrstats {BS5.3, BS5.4, BS5.5}
+#' @srrstats {BS5.3, BS5.5}
 #' The empirical Bayes methods implemented in \pkg{pvEBayes} do not rely on
 #' stochastic sampling, and therefore do not produce the types of
 #' convergence diagnostics typically associated with full Bayesian modeling.
@@ -1089,12 +1232,17 @@ pvEBayes <- function(contin_table, model = "general-gamma",
                      tol_ecm = 1e-4,
                      rtol_efron = 1e-10,
                      rtol_KM = 1e-6,
+                     km_optimizer = c("ECOS", "CLARABEL", "SCS"),
                      n_posterior_draws = 1000,
-                     E = NULL) {
+                     E = NULL,
+                     message = TRUE,
+                     ...) {
   h <- NULL
   contin_table <- as.matrix(contin_table)
-  if (.is_valid_contin_table(contin_table) == FALSE) {
-    stop()
+
+  .is_valid_contin_table(contin_table)
+  if (!is.logical(message)) {
+    stop("'message' must be either TRUE or FALSE.")
   }
   if (is.null(colnames(contin_table)) ||
     is.null(rownames(contin_table))) {
@@ -1103,8 +1251,7 @@ pvEBayes <- function(contin_table, model = "general-gamma",
   if (is.null(E)) {
     E <- calculate_tilde_e(contin_table)
   } else {
-    if (!(all(E >= 0) &&
-      identical(dim(E), dim(contin_table)))
+    if (!(identical(dim(E), dim(contin_table)))
     ) {
       stop(
         paste0(
@@ -1113,6 +1260,7 @@ pvEBayes <- function(contin_table, model = "general-gamma",
         )
       )
     }
+    .is_valid_numeric_table(E)
   }
   E <- as.matrix(E)
   if (!(length(model) == 1 &&
@@ -1175,11 +1323,22 @@ pvEBayes <- function(contin_table, model = "general-gamma",
     }
   }
   start_time <- Sys.time()
+  if (message) {
+    cli::cli_progress_step("Fitting {model} model...")
+  }
   if (model == "KM") {
+    if (!is.character(km_optimizer) ||
+      length(km_optimizer) < 1L ||
+      anyNA(km_optimizer)) {
+      stop("`km_optimizer` must be a character vector.")
+    }
+
     res <- .KM_fit(
       contin_table,
       E,
-      rtol_KM = rtol_KM
+      rtol_KM = rtol_KM,
+      km_optimizer = km_optimizer,
+      ...
     )
     generate_posterior_fun <- .generate_posterior_grid_based
   } else if (model == "efron") {
@@ -1215,8 +1374,10 @@ pvEBayes <- function(contin_table, model = "general-gamma",
     res$alpha <- alpha
     generate_posterior_fun <- .generate_posterior_gamma_mix
   }
-
-  end_time <- Sys.time() # start the clock
+  if (message) {
+    cli::cli_progress_done()
+  }
+  end_time <- Sys.time()
 
   res$fit_time <- difftime(end_time, start_time)
   res$draws_time <- NULL
@@ -1227,12 +1388,19 @@ pvEBayes <- function(contin_table, model = "general-gamma",
     res$n_posterior_draws <- n_posterior_draws
     res$draws_time <- NULL
   } else {
+    if (message) {
+      cli::cli_progress_step("Generating {n_posterior_draws} posterior draws...")
+    }
     res$posterior_draws <- generate_posterior_fun(contin_table,
       E,
       res,
       nsim = n_posterior_draws
     )
+    if (message) {
+      cli::cli_progress_done()
+    }
     end_time2 <- Sys.time()
+    res$n_posterior_draws <- n_posterior_draws
     res$draws_time <- difftime(end_time2, end_time)
   }
 
@@ -1241,6 +1409,9 @@ pvEBayes <- function(contin_table, model = "general-gamma",
   res$E <- E
 
   class(res) <- "pvEBayes"
+  if (message == TRUE) {
+    print(res)
+  }
   res
 }
 
@@ -1341,9 +1512,9 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
                           tol_ecm = 1e-4,
                           rtol_efron = 1e-10,
                           E = NULL) {
-  if (!.is_valid_contin_table(contin_table)) {
-    stop("Please provide a valid 'contin_table'")
-  }
+  contin_table <- as.matrix(contin_table)
+  .is_valid_contin_table(contin_table)
+
   if (!(is.logical(return_all_fit) && length(return_all_fit) == 1)) {
     stop("'return_all_fit' must be a single logical value (TRUE or FALSE).")
   }
@@ -1363,8 +1534,7 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
   if (is.null(E)) {
     E <- calculate_tilde_e(contin_table)
   } else {
-    if (!(all(E >= 0) &&
-      identical(dim(E), dim(contin_table)))
+    if (!(identical(dim(E), dim(contin_table)))
     ) {
       stop(
         paste0(
@@ -1373,6 +1543,7 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
         )
       )
     }
+    .is_valid_numeric_table(E)
   }
   E <- as.matrix(E)
   if (!(length(model) == 1 &&
@@ -1524,7 +1695,8 @@ tuning_general_gamma <- function(contin_table,
       pvEBayes(
         contin_table = contin_table, model = "general-gamma",
         alpha = e, n_posterior_draws = NULL,
-        tol_ecm = tol_ecm
+        tol_ecm = tol_ecm,
+        message = FALSE
       )
     })
   AICs <- fits %>% vapply(AIC.pvEBayes, FUN.VALUE = numeric(1))
@@ -1634,7 +1806,8 @@ tuning_efron <- function(contin_table,
         contin_table = contin_table, model = "efron",
         p = e$p, c0 = e$c0,
         n_posterior_draws = NULL,
-        rtol_efron = rtol_efron
+        rtol_efron = rtol_efron,
+        message = FALSE
       )
     })
   AICs <- fits %>% vapply(AIC.pvEBayes, FUN.VALUE = numeric(1))

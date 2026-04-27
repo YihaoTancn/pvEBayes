@@ -1,5 +1,5 @@
 test_that("pvEBayes", {
-  #' @srrstats {BS5.3, BS5.4, BS5.5}
+  #' @srrstats {BS5.3, BS5.5}
   #' The empirical Bayes methods implemented in \pkg{pvEBayes} do not rely on
   #' stochastic sampling, and therefore do not produce the types of
   #' convergence diagnostics typically associated with full Bayesian modeling.
@@ -26,18 +26,26 @@ test_that("pvEBayes", {
 
   # test invalid input
   invalid_matrix <- matrix(c(-1400, 800, 880, 1000, 1040, 1200, 1400, 1600), nrow = 2)
+  invalid_matrix2 <- apply(valid_matrix, c(1, 2), as.character) # character input
+  invalid_matrix3 <- valid_matrix + 0i # complex number input
   invalid_E <- E
   invalid_E[1, 1] <- -10
 
-  expect_warning(
+  expect_error(
     .is_valid_contin_table(contin_table = invalid_matrix)
+  )
+  expect_error(
+    .is_valid_contin_table(contin_table = invalid_matrix2)
+  )
+  expect_error(
+    .is_valid_contin_table(contin_table = invalid_matrix3)
   )
   expect_error(
     pvEBayes(contin_table = integer(0), model = "GPS")
   )
-  expect_warning(expect_error(
+  expect_error(
     pvEBayes(contin_table = matrix(NA, 2, 2), model = "GPS")
-  ))
+  )
 
   ## valid contin_table + invalid E
   expect_error(

@@ -15,8 +15,11 @@ pvEBayes(
   tol_ecm = 1e-04,
   rtol_efron = 1e-10,
   rtol_KM = 1e-06,
+  km_optimizer = c("ECOS", "CLARABEL", "SCS"),
   n_posterior_draws = 1000,
-  E = NULL
+  E = NULL,
+  message = TRUE,
+  ...
 )
 }
 \arguments{
@@ -57,17 +60,33 @@ Default to 1e-10. See 'stats::nlminb' for detail.}
 \item{rtol_KM}{a tolerance parameter used when 'KM' model is fitted.
 Default to be 1e-6. See 'CVXR::solve' for detail.}
 
+\item{km_optimizer}{a character vector specifying the optimizer(s) in CVXR
+used to fit the KM model. Supported values are \code{"ECOS"}, \code{"CLARABEL"}, and
+\code{"SCS"}. If multiple optimizers are supplied, they are tried sequentially
+and the first successfully fitted result is returned. Defaults to
+c("ECOS", "CLARABEL", "SCS")\verb{. See }CVXR::psolve` for detail.}
+
 \item{n_posterior_draws}{a number of posterior draws for each AE-drug
 combination.}
 
 \item{E}{A matrix of expected counts under the null model for the SRS
 frequency table. If \code{NULL} (default), the expected counts are estimated
 from the SRS data using 'estimate_null_expected_count()'.}
+
+\item{message}{logical, indicating whether to print fitting information.
+Default to be TRUE.}
+
+\item{...}{additional parameters to be passed to optimizer for 'KM' model.
+See 'CVXR::solve' for detail.}
 }
 \value{
 The function returns an S3 object of class \code{pvEBayes} containing the
 estimated model parameters as well as posterior draws for each AE-drug
 combination if the number of posterior draws is specified.
+
+The \code{convergence} component is an integer code: \code{0} indicates successful
+convergence of the optimizer, while \code{1} indicates that the optimizer did not
+converge.
 }
 \description{
 This function fits a non-parametric empirical Bayes model to an AE-drug
@@ -96,8 +115,9 @@ represents the strongest shrinkage of the "general-gamma" model.
 
 Parameter estimation for the "KM" model is formulated as a convex
 optimization problem. The objective function and constraints follow the same
-construction as in \pkg{REBayes}. Parameter estimation is performed using
-the open-source convex optimization package \pkg{CVXR}.
+construction as in \pkg{REBayes} (see 'REBayes::KWDual()'). Parameter
+estimation is performed using the open-source convex optimization package
+\pkg{CVXR}.
 
 The implementation of the "efron" model in this package is adapted from the
 \pkg{deconvolveR} package, developed by Bradley Efron and

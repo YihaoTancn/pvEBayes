@@ -143,6 +143,9 @@
 #' @srrstats {G1.4a} All internal functions are documented with roxygen2.
 #' @srrstats {G1.5} Vignette reproduces the results in the associated
 #' publications.
+#' @srrstats {G2.10} All tabular inputs are coerced to matrix format before any
+#' manipulation. Subsequent column-extraction operations use `drop = FALSE` to
+#' ensure consistent behavior and avoid class-dependent simplification.
 #' @srrstats {G5.0} Several FAERS datasets are included and they are
 #' illustrated in example and vignette.
 #' @srrstats {G5.1} Relevant datasets are provided. See 'data.R'.
@@ -170,12 +173,12 @@
 #' procedures. Consequently, the package does not implement convergence checkers
 #' that are commonly used to assess the convergence of a full Bayesian sampler.
 #'
-#' Estimation in \pkg{pvEBayes} is performed through deterministic optimization
-#' methods: convex optimizer for the KM, log marginal likelihood optimizer for
-#' Efron model, and an ECM algorithm for the general-gamma model. These
-#' procedures have termination criteria determined by optimization tolerances
-#' rather than stochastic convergence diagnostics. The convergence criteria
-#' rtol_ecm, rtol_KM and rtol_efron are appropriately documented in the
+#' Parameter estimations in \pkg{pvEBayes} is performed through deterministic
+#' optimization methods: convex optimizer for the KM, log marginal likelihood
+#' optimizer for Efron model, and an ECM algorithm for the general-gamma model.
+#' These procedures have termination criteria determined by optimization
+#' tolerances rather than stochastic convergence diagnostics. The convergence
+#' criteria rtol_ecm, rtol_KM and rtol_efron are appropriately documented in the
 #' function-level documentation.
 #' @srrstats {BS2.1, BS2.1a} \pkg{pvEBayes} implements appropriate input checks
 #' to ensure that all user-supplied data objects are valid. The behavior of
@@ -226,7 +229,7 @@
 #' @srrstats {BS5.1} Return values include appropriate metadata on
 #' types (or classes) and dimensions of input data.
 #'
-#' @srrstats {BS5.3, BS5.4, bs5.5}
+#' @srrstats {BS5.3, bs5.5}
 #' The empirical Bayes methods implemented in \pkg{pvEBayes} do not rely on
 #' stochastic sampling, and therefore do not produce the types of
 #' convergence diagnostics typically associated with full Bayesian modeling.
