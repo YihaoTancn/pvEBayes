@@ -28,6 +28,8 @@ test_that("pvEBayes", {
   invalid_matrix <- matrix(c(-1400, 800, 880, 1000, 1040, 1200, 1400, 1600), nrow = 2)
   invalid_matrix2 <- apply(valid_matrix, c(1, 2), as.character) # character input
   invalid_matrix3 <- valid_matrix + 0i # complex number input
+  invalid_matrix4 <- valid_matrix
+  invalid_matrix4[1,] <- 0
   invalid_E <- E
   invalid_E[1, 1] <- -10
 
@@ -39,6 +41,10 @@ test_that("pvEBayes", {
   )
   expect_error(
     .is_valid_contin_table(contin_table = invalid_matrix3)
+  )
+
+  expect_error(
+    .is_valid_contin_table(contin_table = invalid_matrix4)
   )
   expect_error(
     pvEBayes(contin_table = integer(0), model = "GPS")
