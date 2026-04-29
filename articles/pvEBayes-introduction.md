@@ -101,6 +101,8 @@ borrowed from Tan et al. (*arxiv*, 2025), of SRS data analyzing with
 ``` r
 library(pvEBayes)
 library(ggplot2)
+
+set.seed(1)
 # load the SRS data
 data("statin2025_44")
 
@@ -145,20 +147,20 @@ gg_given_alpha <- pvEBayes(statin2025_44,
   alpha = 0.5
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [343ms]
+#> ✔ Fitting general-gamma model... [347ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [103ms]
+#> ✔ Generating 1000 posterior draws... [96ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3514 seconds.
+#> Running time of the general-gamma model fitting: 0.3557 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.2143 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.1986 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -166,15 +168,29 @@ gg_given_alpha <- pvEBayes(statin2025_44,
 gg_given_alpha_detected_signal <- summary(gg_given_alpha,
   return = "detected signal"
 )
+#> Signal detection result with default threshold parameters is provided. To specify threshold parameter, see 'get_posterior_prob()'.
 sum(gg_given_alpha_detected_signal)
-#> [1] 105
+#> [1] 107
 ```
 
 The return argument specifies which component the summary function
 should return. Valid options include: “prior parameters”, “likelihood”,
 “detected signal”, and “posterior draws”. If it is set to NULL
 (default), all components will be returned in a list. In this example,
-we show the detected signals.
+we show the detected signals. The ‘summary()’ method reports detected
+signals using the default cutoff value and threshold:
+$$p\left( \lambda_{ij} > 1.001 \mid N_{ij} \right) > 0.95$$ Users can
+customize signal detection with both the cutoff and the posterior
+probability threshold through the ‘get_posterior_prob()’ function. For
+example, the code below identifies signals using a cutoff value of
+`1.01` and a posterior probability threshold of `0.99`:
+
+``` r
+gg_customize_detected_signal <- get_posterior_prob(gg_given_alpha,
+                                                     cutoff_signal = 1.01) > 0.99
+sum(gg_customize_detected_signal)
+#> [1] 95
+```
 
 In this package, we suggest tuning the general-gamma model by AIC or
 BIC, which can be accessed through ‘AIC()’ or ‘BIC()’ functions, as
@@ -209,6 +225,50 @@ gg_tune_statin44 <- pvEBayes_tune(statin2025_44,
 #> 4   0.5 3796.813 3999.452          18
 #> 5   0.7 3824.280 4083.208          23
 #> 6   0.9 3912.529 4340.322          38
+```
+
+The
+[`pvEBayes_tune()`](https://yihaotancn.github.io/pvEBayes/reference/pvEBayes_tune.md)
+also support hyperparameter tuning for `efron` model. The `efron` model
+has two hyperparameters, `p` and `c0`, so tuning is performed by a
+two-dimensional grid search over the candidate values supplied through
+`p_vec` and `c0`. Because all combinations of these values are
+evaluated, this step can be time-consuming when large candidate grids
+are used.
+
+``` r
+
+e_tune_statin44 <- pvEBayes_tune(statin2025_44,
+  model = "efron",
+  p_vec = c(40, 60, 80),
+  c0 = c(0.001, 0.01, 0.1),
+  use_AIC = TRUE
+)
+#> The hyperparameters selected under AIC is (p = 80, c0 = 0.1),
+#> The hyperparameters selected under BIC is (p = 80, c0 = 0.1).,
+#>    p    c0      AIC      BIC
+#> 1 40 0.001 2802.602 2915.593
+#> 2 60 0.001 2796.279 2937.171
+#> 3 80 0.001 2808.363 2983.048
+#> 4 40 0.010 2804.672 2913.968
+#> 5 60 0.010 2798.204 2937.983
+#> 6 80 0.010 2807.676 2972.522
+#> 7 40 0.100 2841.045 2943.353
+#> 8 60 0.100 2789.335 2865.166
+#> 9 80 0.100 2779.490 2858.647
+
+e_tune_statin44
+#> Object of class 'pvEBayes'
+#> 
+#> efron model is fitted with hyperparameters (p = 80, c0 = 0.1).
+#> 
+#> Running time of the efron model fitting: 0.161 seconds.
+#> Optimizer convergence: successful.
+#> Running time for posterior draws 
+#> (1000 signal strength posterior draws per AE-drug pair):0.0271 seconds.
+#> 
+#> Extract estimated prior parameters, discovered signals
+#> and signal strength posterior draws using `summary()`.
 ```
 
 ### Visualization
@@ -281,6 +341,11 @@ Signal Strength Estimation in Spontaneous Reporting Systems Data.
 Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for
 Empirical Bayes Methods in Pharmacovigilance. *arXiv*:2512.01057
 (stat.AP). <https://doi.org/10.48550/arXiv.2512.01057>
+
+Tan Y, Markatou M, Chakraborty S. A Review of Statistical Methods for
+Spontaneous Reporting System Data Mining: Signal Detection and Beyond.
+*arXiv*:2604.18898 (stat.AP).
+<https://doi.org/10.48550/arXiv.2604.18898>
 
 Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound
 Decisions, and Empirical Bayes Rules. *Journal of the American

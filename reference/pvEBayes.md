@@ -137,13 +137,14 @@ empirical Bayes model with a two gamma mixture prior distribution.
 Methods "K-gamma" and "general-gamma" are non-parametric empirical Bayes
 models, introduced by Tan et al. (2025). The number of mixture
 components "K" needs to be prespecified when fitting a "K-gamma" model.
-For "general-gamma", the mixture weights are regularized by a Dirichlet
-hyper prior with hyperparameter \\0 \leq \alpha \< 1\\ that controls the
-shrinkage strength. As "alpha" approaches 0, less non-empty mixture
-components exist in the fitted model. When \\\alpha = 0\\, the Dirichlet
-distribution is an improper prior still offering a reasonable posterior
-inference that represents the strongest shrinkage of the "general-gamma"
-model.
+When the number of mixture components is unknown, we recommend using the
+"general-gamma" model instead. For "general-gamma", the mixture weights
+are regularized by a Dirichlet hyper prior with hyperparameter \\0 \leq
+\alpha \< 1\\ that controls the shrinkage strength. As "alpha"
+approaches 0, less non-empty mixture components exist in the fitted
+model. When \\\alpha = 0\\, the Dirichlet distribution is an improper
+prior still offering a reasonable posterior inference that represents
+the strongest shrinkage of the "general-gamma" model.
 
 Parameter estimation for the "KM" model is formulated as a convex
 optimization problem. The objective function and constraints follow the
@@ -214,20 +215,20 @@ fit <- pvEBayes(
   maxi = NULL
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [211ms]
+#> ✔ Fitting general-gamma model... [209ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [39ms]
+#> ✔ Generating 1000 posterior draws... [38ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.3.
 #> Estimated prior is a mixture of 4 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.2187 seconds.
+#> Running time of the general-gamma model fitting: 0.2165 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0465 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0446 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -241,16 +242,16 @@ fit_Kgamma <- pvEBayes(
 #> ✔ Fitting K-gamma model... [23ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [34ms]
+#> ✔ Generating 1000 posterior draws... [31ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> K-gamma model with number of gamma mixture components K = 3.
 #> 
-#> Running time of the K-gamma model fitting: 0.0306 seconds.
+#> Running time of the K-gamma model fitting: 0.0302 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0412 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0377 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -277,16 +278,16 @@ fit_gps <- pvEBayes(simu_table, model = "GPS")
 #> ✔ Fitting GPS model... [18ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [33ms]
+#> ✔ Generating 1000 posterior draws... [31ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> GPS (2-gamma) model is fitted
 #> 
-#> Running time of the GPS model fitting: 0.025 seconds.
+#> Running time of the GPS model fitting: 0.0247 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0401 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0379 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

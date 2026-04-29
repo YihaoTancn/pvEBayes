@@ -214,6 +214,8 @@ with ‘pvEBayes’.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/YihaoTancn/pvEBayes" class="external-link">pvEBayes</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># load the SRS data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"statin2025_44"</span><span class="op">)</span></span>
 <span></span>
@@ -256,20 +258,20 @@ hyperparameter value of $ = 0.5$ using the pvEBayes() function.</p>
 <span>  alpha <span class="op">=</span> <span class="fl">0.5</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Fitting general-gamma model...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[343ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[347ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[103ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[96ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Object of class 'pvEBayes'</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; General-gamma model with hyperparameter alpha = 0.5.</span></span>
 <span><span class="co">#&gt; Estimated prior is a mixture of 18 gamma distributions.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Running time of the general-gamma model fitting: 0.3514 seconds.</span></span>
+<span><span class="co">#&gt; Running time of the general-gamma model fitting: 0.3557 seconds.</span></span>
 <span><span class="co">#&gt; Optimizer convergence: successful.</span></span>
 <span><span class="co">#&gt; Running time for posterior draws </span></span>
-<span><span class="co">#&gt; (1000 signal strength posterior draws per AE-drug pair):0.2143 seconds.</span></span>
+<span><span class="co">#&gt; (1000 signal strength posterior draws per AE-drug pair):0.1986 seconds.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Extract estimated prior parameters, discovered signals</span></span>
 <span><span class="co">#&gt; and signal strength posterior draws using `summary()`.</span></span>
@@ -277,17 +279,31 @@ hyperparameter value of $ = 0.5$ using the pvEBayes() function.</p>
 <span><span class="va">gg_given_alpha_detected_signal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gg_given_alpha</span>,</span>
 <span>  return <span class="op">=</span> <span class="st">"detected signal"</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Signal detection result with default threshold parameters is provided. To specify threshold parameter, see 'get_posterior_prob()'.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">gg_given_alpha_detected_signal</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 105</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 107</span></span></code></pre></div>
 <p>The return argument specifies which component the summary function
 should return. Valid options include: “prior parameters”, “likelihood”,
 “detected signal”, and “posterior draws”. If it is set to NULL
 (default), all components will be returned in a list. In this example,
-we show the detected signals.</p>
+we show the detected signals. The ‘summary()’ method reports detected
+signals using the default cutoff value and threshold:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>λ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&gt;</mo><mn>1.001</mn><mo>∣</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>&gt;</mo><mn>0.95</mn></mrow><annotation encoding="application/x-tex">\begin{equation}
+p(\lambda_{ij} &gt; 1.001 \mid N_{ij}) &gt; 0.95
+\end{equation}</annotation></semantics></math> Users can customize
+signal detection with both the cutoff and the posterior probability
+threshold through the ‘get_posterior_prob()’ function. For example, the
+code below identifies signals using a cutoff value of <code>1.01</code>
+and a posterior probability threshold of <code>0.99</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gg_customize_detected_signal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_posterior_prob.html">get_posterior_prob</a></span><span class="op">(</span><span class="va">gg_given_alpha</span>,</span>
+<span>                                                     cutoff_signal <span class="op">=</span> <span class="fl">1.01</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.99</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">gg_customize_detected_signal</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 95</span></span></code></pre></div>
 <p>In this package, we suggest tuning the general-gamma model by AIC or
 BIC, which can be accessed through ‘AIC()’ or ‘BIC()’ functions, as
 shown below:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">gg_given_alpha</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3796.813</span></span>
 <span></span>
@@ -299,7 +315,7 @@ values, fit the general-gamma model for each, compute the corresponding
 AIC or BIC, and select the model with the lowest AIC or BIC. Instead of
 manually doing so, one can use the ‘pvEBayes_tune()’ function, which
 implements these steps. The relevant code is given below:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes_tune.html">pvEBayes_tune</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
 <span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span>
 <span>  alpha_vec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
@@ -314,6 +330,46 @@ implements these steps. The relevant code is given below:</p>
 <span><span class="co">#&gt; 4   0.5 3796.813 3999.452          18</span></span>
 <span><span class="co">#&gt; 5   0.7 3824.280 4083.208          23</span></span>
 <span><span class="co">#&gt; 6   0.9 3912.529 4340.322          38</span></span></code></pre></div>
+<p>The <code><a href="../reference/pvEBayes_tune.html">pvEBayes_tune()</a></code> also support hyperparameter tuning
+for <code>efron</code> model. The <code>efron</code> model has two
+hyperparameters, <code>p</code> and <code>c0</code>, so tuning is
+performed by a two-dimensional grid search over the candidate values
+supplied through <code>p_vec</code> and <code>c0</code>. Because all
+combinations of these values are evaluated, this step can be
+time-consuming when large candidate grids are used.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">e_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes_tune.html">pvEBayes_tune</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
+<span>  model <span class="op">=</span> <span class="st">"efron"</span>,</span>
+<span>  p_vec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">60</span>, <span class="fl">80</span><span class="op">)</span>,</span>
+<span>  c0 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>  use_AIC <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; The hyperparameters selected under AIC is (p = 80, c0 = 0.1),</span></span>
+<span><span class="co">#&gt; The hyperparameters selected under BIC is (p = 80, c0 = 0.1).,</span></span>
+<span><span class="co">#&gt;    p    c0      AIC      BIC</span></span>
+<span><span class="co">#&gt; 1 40 0.001 2802.602 2915.593</span></span>
+<span><span class="co">#&gt; 2 60 0.001 2796.279 2937.171</span></span>
+<span><span class="co">#&gt; 3 80 0.001 2808.363 2983.048</span></span>
+<span><span class="co">#&gt; 4 40 0.010 2804.672 2913.968</span></span>
+<span><span class="co">#&gt; 5 60 0.010 2798.204 2937.983</span></span>
+<span><span class="co">#&gt; 6 80 0.010 2807.676 2972.522</span></span>
+<span><span class="co">#&gt; 7 40 0.100 2841.045 2943.353</span></span>
+<span><span class="co">#&gt; 8 60 0.100 2789.335 2865.166</span></span>
+<span><span class="co">#&gt; 9 80 0.100 2779.490 2858.647</span></span>
+<span></span>
+<span><span class="va">e_tune_statin44</span></span>
+<span><span class="co">#&gt; Object of class 'pvEBayes'</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; efron model is fitted with hyperparameters (p = 80, c0 = 0.1).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Running time of the efron model fitting: 0.161 seconds.</span></span>
+<span><span class="co">#&gt; Optimizer convergence: successful.</span></span>
+<span><span class="co">#&gt; Running time for posterior draws </span></span>
+<span><span class="co">#&gt; (1000 signal strength posterior draws per AE-drug pair):0.0271 seconds.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Extract estimated prior parameters, discovered signals</span></span>
+<span><span class="co">#&gt; and signal strength posterior draws using `summary()`.</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -323,7 +379,7 @@ implements these steps. The relevant code is given below:</p>
 both signal detection and estimation, which are heatmap and eyeplot.
 These plot functions can be accessed through the ‘plot()’ with argument
 type = “heatmap” or type = “eyeplot”.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">heatmap_gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg_tune_statin44</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"heatmap"</span>,</span>
 <span>  num_top_AEs <span class="op">=</span> <span class="fl">10</span>,</span>
@@ -340,7 +396,7 @@ fitted general-gamma model. For each AE-drug combination, the number of
 reports (N), the estimated null value (E), and the estimated empirical
 Bayes posterior probability of being a signal are given. A deeper blue
 color indicates stronger evidence for a signal.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eyeplot_gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg_tune_statin44</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"eyeplot"</span>,</span>
 <span>  num_top_AEs <span class="op">=</span> <span class="fl">8</span>,</span>
@@ -380,6 +436,9 @@ Signal Strength Estimation in Spontaneous Reporting Systems Data.
 <p>Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for
 Empirical Bayes Methods in Pharmacovigilance. <em>arXiv</em>:2512.01057
 (stat.AP). <a href="https://doi.org/10.48550/arXiv.2512.01057" class="external-link uri">https://doi.org/10.48550/arXiv.2512.01057</a></p>
+<p>Tan Y, Markatou M, Chakraborty S. A Review of Statistical Methods for
+Spontaneous Reporting System Data Mining: Signal Detection and Beyond.
+<em>arXiv</em>:2604.18898 (stat.AP). <a href="https://doi.org/10.48550/arXiv.2604.18898" class="external-link uri">https://doi.org/10.48550/arXiv.2604.18898</a></p>
 <p>Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound
 Decisions, and Empirical Bayes Rules. <em>Journal of the American
 Statistical Association</em> 2014; 109(506): 674–685, <a href="https://doi.org/10.1080/01621459.2013.869224" class="external-link uri">https://doi.org/10.1080/01621459.2013.869224</a></p>

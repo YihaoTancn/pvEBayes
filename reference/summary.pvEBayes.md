@@ -50,8 +50,9 @@ If `return` is specified, the function returns the requested component:
 
 - `detected signal`:
 
-  A logical matrix indicating AE-drug pairs with posterior signal
-  probability at least 0.95.
+  A logical matrix indicating AE-drug pairs if \\P(\lambda \> 1.001
+  \mid N) \> 0.95\\. For signal detection with specified threshold
+  parameters, see 'get_posterior_prob()'
 
 - `posterior draws`:
 
@@ -65,34 +66,35 @@ obj <- pvEBayes(
   alpha = 0.5, n_posterior_draws = 10000
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [323ms]
+#> ✔ Fitting general-gamma model... [322ms]
 #> 
 #> ℹ Generating 10000 posterior draws...
-#> ✔ Generating 10000 posterior draws... [458ms]
+#> ✔ Generating 10000 posterior draws... [448ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3305 seconds.
+#> Running time of the general-gamma model fitting: 0.3296 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (10000 signal strength posterior draws per AE-drug pair):0.4657 seconds.
+#> (10000 signal strength posterior draws per AE-drug pair):0.4553 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
 
 summary(obj)
+#> Posterior probabilities with default threshold parameters is provided. To specify threshold parameter, see 'get_posterior_prob()'.
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3305 seconds.
+#> Running time of the general-gamma model fitting: 0.3296 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (10000 signal strength posterior draws per AE-drug pair):0.4657 seconds.
+#> (10000 signal strength posterior draws per AE-drug pair):0.4553 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

@@ -23,6 +23,8 @@
 - [`generate_contin_table()`](https://yihaotancn.github.io/pvEBayes/reference/generate_contin_table.md)
   : Generate random contingency tables based on a reference table
   embedded signals,and possibly with zero inflation
+- [`get_posterior_prob()`](https://yihaotancn.github.io/pvEBayes/reference/get_posterior_prob.md)
+  : Obtain posterior probability of being a signal
 - [`heatmap_pvEBayes()`](https://yihaotancn.github.io/pvEBayes/reference/heatmap_pvEBayes.md)
   : Generate a heatmap plot visualizing posterior probabilities for
   selected drugs and adverse events

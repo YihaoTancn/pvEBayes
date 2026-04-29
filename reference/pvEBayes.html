@@ -180,13 +180,15 @@ signal detection in Spontaneous Reporting System (SRS) data table.</p>
 Bayes model with a two gamma mixture prior distribution.</p>
 <p>Methods "K-gamma" and "general-gamma" are non-parametric empirical Bayes
 models, introduced by Tan et al. (2025). The number of mixture components "K"
-needs to be prespecified when fitting a "K-gamma" model. For "general-gamma",
-the mixture weights are regularized by a Dirichlet hyper prior with
-hyperparameter \(0 \leq \alpha &lt; 1\) that controls the shrinkage strength.
-As "alpha" approaches 0, less non-empty mixture components exist in the
-fitted model. When \(\alpha = 0\), the Dirichlet distribution is an
-improper prior still offering a reasonable posterior inference that
-represents the strongest shrinkage of the "general-gamma" model.</p>
+needs to be prespecified when fitting a "K-gamma" model. When the number of
+mixture components is unknown, we recommend using the "general-gamma" model
+instead. For "general-gamma", the mixture weights are regularized by a
+Dirichlet hyper prior with hyperparameter \(0 \leq \alpha &lt; 1\) that
+controls the shrinkage strength. As "alpha" approaches 0, less non-empty
+mixture components exist in the fitted model. When \(\alpha = 0\), the
+Dirichlet distribution is an improper prior still offering a reasonable
+posterior inference that represents the strongest shrinkage of the
+"general-gamma" model.</p>
 <p>Parameter estimation for the "KM" model is formulated as a convex
 optimization problem. The objective function and constraints follow the same
 construction as in <span class="pkg">REBayes</span> (see 'REBayes::KWDual()'). Parameter
@@ -250,20 +252,20 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-in"><span>  maxi <span class="op">=</span> <span class="cn">NULL</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting general-gamma model...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[211ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[209ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[39ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[38ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.3.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 4 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.2187 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.2165 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0465 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0446 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -277,16 +279,16 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting K-gamma model... <span style="color: #B2B2B2;">[23ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[34ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[31ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> K-gamma model with number of gamma mixture components K = 3.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the K-gamma model fitting: 0.0306 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the K-gamma model fitting: 0.0302 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0412 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0377 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -313,16 +315,16 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting GPS model... <span style="color: #B2B2B2;">[18ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[33ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[31ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GPS (2-gamma) model is fitted</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the GPS model fitting: 0.025 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the GPS model fitting: 0.0247 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0401 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0379 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>

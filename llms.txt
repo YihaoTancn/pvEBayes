@@ -7,14 +7,16 @@ Gamma-Poisson Shrinker (GPS), K-gamma, general-gamma, Koenker-Mizera
 the spontaneous reporting system (SRS) frequency tables, extracting
 summaries, performing hyperparameter tuning, and generating graphical
 summaries (eye plots and heatmaps) for signal detection and signal
-strength estimation.
+strength estimation. The package does not perform SRS frequency table
+preprocessing, such as raw individual case safety reports (ICSRs)
+aggregrating. These steps should be handled before using `pvEBayes`.
 
 **Spontaneous Reporting System (SRS) Table**: An drug safety SRS dataset
 catalogs AE reports on *I* AE rows across *J* drug columns. Let $N_{ij}$
 denote the number of reported cases for the *i*-th AE and the *j*-th
 drug, where $i = 1,...,I$ and $j = 1,...,J$.
 
-**Empirical Bayes modeling for disproportionality analysis**:
+**Empirical Bayes modeling for SRS data mining**:
 
 - Model each AE-drug count as
   $N_{ij} \sim \text{Poisson}\left( \lambda_{ij}E_{ij} \right)$,
@@ -28,9 +30,9 @@ drug, where $i = 1,...,I$ and $j = 1,...,J$.
 
 **From signal detection to signal strength $\lambda$ estimation**
 
-- Traditional disproportionality analysis emphasizes **signal
-  detection**: identify AE-drug pairs with observed counts substantially
-  larger than its null value, i.e., $\lambda_{ij} > 1$.
+- Traditional SRS data mining emphasizes **signal detection**: identify
+  AE-drug pairs with observed counts substantially larger than its null
+  value, i.e., $\lambda_{ij} > 1$.
 
 - Tan et al. (*Stat. in Med.*, 2025) extend this to **signal strength
   estimation**: estimate $\{\lambda_{ij}\}$ and quantify uncertainty via
@@ -147,6 +149,11 @@ Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for
 Empirical Bayes Methods in Pharmacovigilance. *arXiv*:2512.01057
 (stat.AP). <https://doi.org/10.48550/arXiv.2512.01057>
 
+Tan Y, Markatou M, Chakraborty S. A Review of Statistical Methods for
+Spontaneous Reporting System Data Mining: Signal Detection and Beyond.
+*arXiv*:2604.18898 (stat.AP).
+<https://doi.org/10.48550/arXiv.2604.18898>
+
 Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound
 Decisions, and Empirical Bayes Rules. *Journal of the American
 Statistical Association* 2014; 109(506): 674–685,
@@ -184,6 +191,8 @@ Statistician*. 1999; 1;53(3):177-90.
 - [`generate_contin_table()`](https://yihaotancn.github.io/pvEBayes/reference/generate_contin_table.md)
   : Generate random contingency tables based on a reference table
   embedded signals,and possibly with zero inflation
+- [`get_posterior_prob()`](https://yihaotancn.github.io/pvEBayes/reference/get_posterior_prob.md)
+  : Obtain posterior probability of being a signal
 - [`heatmap_pvEBayes()`](https://yihaotancn.github.io/pvEBayes/reference/heatmap_pvEBayes.md)
   : Generate a heatmap plot visualizing posterior probabilities for
   selected drugs and adverse events
