@@ -105,13 +105,15 @@ Bayes model with a two gamma mixture prior distribution.
 
 Methods "K-gamma" and "general-gamma" are non-parametric empirical Bayes
 models, introduced by Tan et al. (2025). The number of mixture components "K"
-needs to be prespecified when fitting a "K-gamma" model. For "general-gamma",
-the mixture weights are regularized by a Dirichlet hyper prior with
-hyperparameter \eqn{0 \leq \alpha < 1} that controls the shrinkage strength.
-As "alpha" approaches 0, less non-empty mixture components exist in the
-fitted model. When \eqn{\alpha = 0}, the Dirichlet distribution is an
-improper prior still offering a reasonable posterior inference that
-represents the strongest shrinkage of the "general-gamma" model.
+needs to be prespecified when fitting a "K-gamma" model. When the number of
+mixture components is unknown, we recommend using the "general-gamma" model
+instead. For "general-gamma", the mixture weights are regularized by a
+Dirichlet hyper prior with hyperparameter \eqn{0 \leq \alpha < 1} that
+controls the shrinkage strength. As "alpha" approaches 0, less non-empty
+mixture components exist in the fitted model. When \eqn{\alpha = 0}, the
+Dirichlet distribution is an improper prior still offering a reasonable
+posterior inference that represents the strongest shrinkage of the
+"general-gamma" model.
 
 Parameter estimation for the "KM" model is formulated as a convex
 optimization problem. The objective function and constraints follow the same

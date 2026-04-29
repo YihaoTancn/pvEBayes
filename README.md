@@ -22,14 +22,16 @@ K-gamma, general-gamma, Koenker-Mizera (KM), and Efron models. It provides tools
 for fitting these models to the spontaneous reporting system (SRS) frequency 
 tables, extracting summaries, performing hyperparameter tuning, and generating 
 graphical summaries (eye plots and heatmaps) for signal detection and signal 
-strength estimation.
+strength estimation. The package does not perform SRS frequency table 
+preprocessing, such as raw individual case safety reports (ICSRs) aggregrating. 
+These steps should be handled before using `pvEBayes`.
 
 **Spontaneous Reporting System (SRS) Table**: An drug safety SRS dataset 
 catalogs AE reports on *I* AE rows across *J* drug columns. Let ${N_{ij}}$ 
 denote the number of reported cases for the *i*-th AE and the *j*-th drug, 
 where ${i = 1,..., I}$ and ${j = 1,..., J}$. 
 
-**Empirical Bayes modeling for disproportionality analysis**: 
+**Empirical Bayes modeling for SRS data mining**: 
 
   - Model each AE-drug count as 
   $N_{ij} \sim \text{Poisson}(\lambda_{ij} E_{ij})$, $N_{ij} = 0, 1, 2, \dots$
@@ -42,7 +44,7 @@ where ${i = 1,..., I}$ and ${j = 1,..., J}$.
 
 **From signal detection to signal strength $\lambda$ estimation**
 
-  - Traditional disproportionality analysis emphasizes **signal detection**: 
+  - Traditional SRS data mining emphasizes **signal detection**: 
   identify AE-drug pairs with observed counts substantially larger than 
   its null value, i.e., $\lambda_{ij} > 1$.
   
@@ -164,6 +166,10 @@ https://doi.org/10.1002/sim.70195.
 Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for Empirical Bayes 
 Methods in Pharmacovigilance. *arXiv*:2512.01057 (stat.AP). 
 https://doi.org/10.48550/arXiv.2512.01057
+
+Tan Y, Markatou M, Chakraborty S. A Review of Statistical Methods for 
+Spontaneous Reporting System Data Mining: Signal Detection and Beyond. 
+*arXiv*:2604.18898 (stat.AP). https://doi.org/10.48550/arXiv.2604.18898
 
 Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound
 Decisions, and Empirical Bayes Rules. *Journal of the American

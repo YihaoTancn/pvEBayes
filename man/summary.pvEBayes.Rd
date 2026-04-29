@@ -26,8 +26,9 @@ If \code{return} is specified, the function returns the requested component:
 \describe{
 \item{\verb{prior parameters}}{A list of estimated prior parameters.}
 \item{\code{likelihood}}{The fitted model log marginal likelihood.}
-\item{\verb{detected signal}}{A logical matrix indicating AE-drug pairs with
-posterior signal probability at least 0.95.}
+\item{\verb{detected signal}}{A logical matrix indicating AE-drug pairs if
+\eqn{P(\lambda > 1.001 \mid N) > 0.95}. For signal detection with specified
+threshold parameters, see 'get_posterior_prob()'}
 \item{\verb{posterior draws}}{Posterior draws of the signal strength for each
 AE-drug pair. }
 }

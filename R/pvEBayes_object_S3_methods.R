@@ -174,13 +174,16 @@ posterior_draws <- function(obj,
 #'
 #' @param obj a \code{pvEBayes} object, which is the output of the function
 #' \link{pvEBayes} or \link{pvEBayes_tune}.
+#' @param cutoff_signal numeric. Threshold for signal detection. An AE-drug
+#' combination is classified as a detected signal if its 5th posterior
+#' percentile exceeds this threshold.
 #'
 #' @returns a matrix
-#' @keywords internal
-#' @noRd
-.get_posterior_prob <- function(obj) {
+#' @export
+#'
+get_posterior_prob <- function(obj, cutoff_signal = 1.001) {
   tmp <- obj$posterior_draws
-  (tmp > 1.001) %>%
+  (tmp > cutoff_signal) %>%
     apply(c(2, 3), mean)
 }
 
@@ -1046,8 +1049,9 @@ summary_table_pvEBayes <- function(x, cutoff_signal = 1.001) {
 #' \describe{
 #'   \item{`prior parameters`}{A list of estimated prior parameters.}
 #'   \item{`likelihood`}{The fitted model log marginal likelihood.}
-#'   \item{`detected signal`}{A logical matrix indicating AE-drug pairs with
-#'   posterior signal probability at least 0.95.}
+#'   \item{`detected signal`}{A logical matrix indicating AE-drug pairs if
+#'   \eqn{P(\lambda > 1.001 \mid N) > 0.95}. For signal detection with specified
+#'   threshold parameters, see 'get_posterior_prob()'}
 #'   \item{`posterior draws`}{Posterior draws of the signal strength for each
 #'   AE-drug pair. }
 #' }
@@ -1101,7 +1105,11 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
     } else if (return == "likelihood") {
       object$loglik
     } else if (return == "detected signal") {
-      (.get_posterior_prob(object) >= 0.95)
+      message(paste0(
+        "Signal detection result with default threshold parameters is provided",
+        ". To specify threshold parameter, see 'get_posterior_prob()'."
+      ))
+      (get_posterior_prob(object) >= 0.95)
     } else if (return == "posterior draws") {
       object$posterior_draws
     } else {
@@ -1114,6 +1122,10 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
       )
     }
   } else {
+    message(paste0(
+      "Posterior probabilities with default threshold parameters is provided",
+      ". To specify threshold parameter, see 'get_posterior_prob()'."
+    ))
     res <- summary_table_pvEBayes(object)
     print(object)
     res

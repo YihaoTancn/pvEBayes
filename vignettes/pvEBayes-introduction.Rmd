@@ -91,6 +91,8 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(pvEBayes)
 library(ggplot2)
+
+set.seed(1)
 # load the SRS data
 data("statin2025_44")
 
@@ -118,8 +120,18 @@ gg_given_alpha_detected_signal <- summary(gg_given_alpha,
 sum(gg_given_alpha_detected_signal)
 ```
 
-The return argument specifies which component the summary function should return. Valid options include: “prior parameters”, “likelihood”, “detected signal”, and “posterior draws”. If it is set to NULL (default), all components will be returned in a list. In this example, we show the detected signals. 
+The return argument specifies which component the summary function should return. Valid options include: “prior parameters”, “likelihood”, “detected signal”, and “posterior draws”. If it is set to NULL (default), all components will be returned in a list. In this example, we show the detected signals. The 'summary()' method reports detected signals using the default cutoff value and threshold:
+\begin{equation}
+p(\lambda_{ij} > 1.001 \mid N_{ij}) > 0.95
+\end{equation}
+Users can customize signal detection with both the cutoff and the posterior probability threshold through the 'get_posterior_prob()' function. For example, the code below identifies signals using a cutoff value of `1.01` and a posterior
+probability threshold of `0.99`:
 
+```{r get-post, include=TRUE}
+gg_customize_detected_signal <- get_posterior_prob(gg_given_alpha,
+                                                     cutoff_signal = 1.01) > 0.99
+sum(gg_customize_detected_signal)
+```
 In this package, we suggest tuning the general-gamma model by AIC or BIC, which can be accessed through 'AIC()' or 'BIC()' functions, as shown below:
 
 ```{r tune, include=TRUE}
@@ -138,6 +150,20 @@ gg_tune_statin44 <- pvEBayes_tune(statin2025_44,
   alpha_vec = c(0, 0.1, 0.3, 0.5, 0.7, 0.9),
   use_AIC = TRUE
 )
+```
+
+The `pvEBayes_tune()` also support hyperparameter tuning for `efron` model. The `efron` model has two hyperparameters, `p` and `c0`, so tuning is performed by a two-dimensional grid search over the candidate values supplied through `p_vec` and `c0`. Because all combinations of these values are evaluated, this step can be time-consuming when large candidate grids are used.
+
+```{r e-auto-tune, include=TRUE, eval=TRUE}
+
+e_tune_statin44 <- pvEBayes_tune(statin2025_44,
+  model = "efron",
+  p_vec = c(40, 60, 80),
+  c0 = c(0.001, 0.01, 0.1),
+  use_AIC = TRUE
+)
+
+e_tune_statin44
 ```
 
 ## Visualization
@@ -191,6 +217,10 @@ https://doi.org/10.1002/sim.70195.
 Tan Y, Markatou M and Chakraborty S. pvEBayes: An R Package for Empirical Bayes 
 Methods in Pharmacovigilance. *arXiv*:2512.01057 (stat.AP). 
 https://doi.org/10.48550/arXiv.2512.01057
+
+Tan Y, Markatou M, Chakraborty S. A Review of Statistical Methods for 
+Spontaneous Reporting System Data Mining: Signal Detection and Beyond. 
+*arXiv*:2604.18898 (stat.AP). https://doi.org/10.48550/arXiv.2604.18898
 
 Koenker R, Mizera I. Convex Optimization, Shape Constraints, Compound
 Decisions, and Empirical Bayes Rules. *Journal of the American
