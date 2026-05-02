@@ -28,7 +28,7 @@ tuning_efron(
 
   vector of hyperparameter p values to be selected. p is a
   hyperparameter in "efron" model which should be a positive integer. If
-  is NULL, a default set of p values (80, 100, 120, 150, 200) will be
+  is NULL, a default set of p values (40, 60, 80, 100, 120) will be
   used.
 
 - c0_vec:

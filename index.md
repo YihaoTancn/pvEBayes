@@ -12,35 +12,35 @@ preprocessing, such as raw individual case safety reports (ICSRs)
 aggregrating. These steps should be handled before using `pvEBayes`.
 
 **Spontaneous Reporting System (SRS) Table**: An drug safety SRS dataset
-catalogs AE reports on *I* AE rows across *J* drug columns. Let $N_{ij}$
-denote the number of reported cases for the *i*-th AE and the *j*-th
-drug, where $i = 1,...,I$ and $j = 1,...,J$.
+catalogs AE reports on *I* AE rows across *J* drug columns. Let
+$`{N_{ij}}`$ denote the number of reported cases for the *i*-th AE and
+the *j*-th drug, where $`{i = 1,..., I}`$ and $`{j = 1,..., J}`$.
 
 **Empirical Bayes modeling for SRS data mining**:
 
 - Model each AE-drug count as
-  $N_{ij} \sim \text{Poisson}\left( \lambda_{ij}E_{ij} \right)$,
-  $N_{ij} = 0,1,2,\ldots$
+  $`N_{ij} \sim \text{Poisson}(\lambda_{ij} E_{ij})`$,
+  $`N_{ij} = 0, 1, 2, \dots`$
 
-- $E_{ij}$: expected baseline value assuming no AE-drug association.
+- $`E_{ij}`$: expected baseline value assuming no AE-drug association.
 
-- $\lambda_{ij} > 0$: relative reporting ratio / signal strength for the
-  (i,j)-th AE-drug pair (multiplicative deviation from the null baseline
-  value).
+- $`\lambda_{ij} > 0`$: relative reporting ratio / signal strength for
+  the (i,j)-th AE-drug pair (multiplicative deviation from the null
+  baseline value).
 
-**From signal detection to signal strength $\lambda$ estimation**
+**From signal detection to signal strength $`\lambda`$ estimation**
 
 - Traditional SRS data mining emphasizes **signal detection**: identify
   AE-drug pairs with observed counts substantially larger than its null
-  value, i.e., $\lambda_{ij} > 1$.
+  value, i.e., $`\lambda_{ij} > 1`$.
 
 - Tan et al. (*Stat. in Med.*, 2025) extend this to **signal strength
-  estimation**: estimate $\{\lambda_{ij}\}$ and quantify uncertainty via
-  flexible nonparametric empirical Bayes posterior distribution.
+  estimation**: estimate $`\{\lambda_{ij}\}`$ and quantify uncertainty
+  via flexible nonparametric empirical Bayes posterior distribution.
 
 - Signal estimation helps distinguish AE-drug pairs that look identical
-  under a binary signal detection framework (e.g., $\lambda = 1.5$ vs
-  $\lambda = 4.0$), which can have different clinical implications.
+  under a binary signal detection framework (e.g., $`\lambda=1.5`$ vs
+  $`\lambda=4.0`$), which can have different clinical implications.
 
 **Methods implemented in `pvEBayes` (differ by prior assumptions):**
 
@@ -59,8 +59,8 @@ drug, where $i = 1,...,I$ and $j = 1,...,J$.
 - GPS uses a 2 gamma mixture prior motivated by a signal/non-signal
   structure.
 
-- Real-world signal strengths $\lambda_{ij}$ can be heterogeneous, and
-  the underlying (prior) distribution over $\lambda_{ij}$ may be
+- Real-world signal strengths $`\lambda_{ij}`$ can be heterogeneous, and
+  the underlying (prior) distribution over $`\lambda_{ij}`$ may be
   multi-modal with multiple distinct peaks, making simple parametric
   priors hard to justify.
 
@@ -75,7 +75,7 @@ drug, where $i = 1,...,I$ and $j = 1,...,J$.
   reliance on the commercial Mosek solver used by `REBayes`).
 
 - Adapts Efron’s approach from `deconvolveR` to support the
-  exposure/offset $E_{ij}$ in the Poisson model (not supported in the
+  exposure/offset $`E_{ij}`$ in the Poisson model (not supported in the
   original implementation).
 
 - Implements the bi-level Expectation Conditional Maximization (ECM)
@@ -100,6 +100,7 @@ The development version is available from GitHub:
 
 Here is a minimal example analyzing the built-in FDA statin44 dataset
 with general-gamma model:
+
 
     library(pvEBayes)
 

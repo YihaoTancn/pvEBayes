@@ -36,19 +36,20 @@ numeric, AIC score for the resulting model.
 ## Examples
 
 ``` r
+
 fit <- pvEBayes(
   contin_table = statin2025_44, model = "general-gamma",
   alpha = 0.3, n_posterior_draws = NULL
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [226ms]
+#> ✔ Fitting general-gamma model... [218ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.3.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.2387 seconds.
+#> Running time of the general-gamma model fitting: 0.2306 seconds.
 #> Optimizer convergence: successful.
 #> No posterior draws were generated.
 #> 

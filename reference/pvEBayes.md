@@ -190,6 +190,7 @@ Optimization. *Journal of Statistical Software*. 2020; 94;14:1-34.
 ## Examples
 
 ``` r
+
 set.seed(1)
 ref_table <- statin2025_44
 
@@ -215,20 +216,20 @@ fit <- pvEBayes(
   maxi = NULL
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [209ms]
+#> ✔ Fitting general-gamma model... [200ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [38ms]
+#> ✔ Generating 1000 posterior draws... [36ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.3.
 #> Estimated prior is a mixture of 4 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.2165 seconds.
+#> Running time of the general-gamma model fitting: 0.2077 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0446 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.043 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -248,10 +249,10 @@ fit_Kgamma <- pvEBayes(
 #> 
 #> K-gamma model with number of gamma mixture components K = 3.
 #> 
-#> Running time of the K-gamma model fitting: 0.0302 seconds.
+#> Running time of the K-gamma model fitting: 0.0307 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0377 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0381 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -284,7 +285,7 @@ fit_gps <- pvEBayes(simu_table, model = "GPS")
 #> 
 #> GPS (2-gamma) model is fitted
 #> 
-#> Running time of the GPS model fitting: 0.0247 seconds.
+#> Running time of the GPS model fitting: 0.0253 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
 #> (1000 signal strength posterior draws per AE-drug pair):0.0379 seconds.

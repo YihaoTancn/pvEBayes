@@ -60,6 +60,7 @@ https://doi.org/10.1002/sim.70195.
 ## Examples
 
 ``` r
+
 set.seed(1)
 ref_table <- statin2025_44
 

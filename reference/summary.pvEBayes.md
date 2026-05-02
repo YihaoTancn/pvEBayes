@@ -23,9 +23,10 @@ summary(object, return = NULL, ...)
 
   a character string specifying which component the summary function
   should return.Valid options include: "prior parameters", "likelihood",
-  "detected signal" and "posterior draws". If set to NULL (default), a
-  summary table will be returned (see 'summary_table_pvEBayes()'). Note
-  that the input for 'return' is case-sensitive.
+  "detected signal", "posterior draws" and "posterior draws long
+  format". If set to NULL (default), a summary table will be returned
+  (see 'summary_table_pvEBayes()'). Note that the input for 'return' is
+  case-sensitive.
 
 - ...:
 
@@ -56,30 +57,37 @@ If `return` is specified, the function returns the requested component:
 
 - `posterior draws`:
 
-  Posterior draws of the signal strength for each AE-drug pair.
+  Posterior draws of the signal strength for each AE-drug pair in
+  default array format.
+
+- `posterior draws long format`:
+
+  Posterior draws of the signal strength for each AE-drug pair in
+  stacked long format.
 
 ## Examples
 
 ``` r
+
 obj <- pvEBayes(
   contin_table = statin2025_44, model = "general-gamma",
   alpha = 0.5, n_posterior_draws = 10000
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [322ms]
+#> ✔ Fitting general-gamma model... [320ms]
 #> 
 #> ℹ Generating 10000 posterior draws...
-#> ✔ Generating 10000 posterior draws... [448ms]
+#> ✔ Generating 10000 posterior draws... [412ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3296 seconds.
+#> Running time of the general-gamma model fitting: 0.3283 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (10000 signal strength posterior draws per AE-drug pair):0.4553 seconds.
+#> (10000 signal strength posterior draws per AE-drug pair):0.4216 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -91,10 +99,10 @@ summary(obj)
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3296 seconds.
+#> Running time of the general-gamma model fitting: 0.3283 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (10000 signal strength posterior draws per AE-drug pair):0.4553 seconds.
+#> (10000 signal strength posterior draws per AE-drug pair):0.4216 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

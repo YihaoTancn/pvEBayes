@@ -50,7 +50,7 @@ pvEBayes_tune(
 
   vector of hyperparameter p values to be selected. p is a
   hyperparameter in "efron" model which should be a positive integer. If
-  is NULL, a default set of p values (80, 100, 120, 150, 200) will be
+  is NULL, a default set of p values (40, 60, 80, 100, 120) will be
   used.
 
 - c0_vec:
@@ -124,6 +124,7 @@ https://doi.org/10.1002/sim.70195.
 ## Examples
 
 ``` r
+
 fit <- pvEBayes_tune(statin2025_44,
   model = "general-gamma",
   alpha_vec = c(0, 0.1, 0.3, 0.5, 0.7, 0.9)

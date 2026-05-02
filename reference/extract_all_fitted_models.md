@@ -28,6 +28,7 @@ process.
 ## Examples
 
 ``` r
+
 valid_matrix <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8), nrow = 2)
 rownames(valid_matrix) <- c("AE_1", "AE_2")
 colnames(valid_matrix) <- c("drug_1", "drug_2", "drug_3", "drug_4")
@@ -79,7 +80,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.
 #> Estimated prior is a mixture of 7 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0062 seconds.
+#> Running time of the general-gamma model fitting: 0.0064 seconds.
 #> Optimizer convergence: not achieved.
 #> No posterior draws were generated.
 #> 
@@ -131,7 +132,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.7.
 #> Estimated prior is a mixture of 1 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 8e-04 seconds.
+#> Running time of the general-gamma model fitting: 9e-04 seconds.
 #> Optimizer convergence: successful.
 #> No posterior draws were generated.
 #> 
@@ -144,7 +145,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.9.
 #> Estimated prior is a mixture of 3 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0012 seconds.
+#> Running time of the general-gamma model fitting: 0.0013 seconds.
 #> Optimizer convergence: successful.
 #> No posterior draws were generated.
 #> 

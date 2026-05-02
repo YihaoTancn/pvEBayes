@@ -9,7 +9,7 @@ pvEBayes. It provides a detailed summary of the fitted model."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">pvEBayes</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,8 @@ pvEBayes. It provides a detailed summary of the fitted model."></head><body>
 <dt id="arg-return">return<a class="anchor" aria-label="anchor" href="#arg-return"></a></dt>
 <dd><p>a character string specifying which component the summary
 function should return.Valid options include: "prior parameters",
-"likelihood", "detected signal" and "posterior draws". If set to NULL
+"likelihood", "detected signal", "posterior draws" and
+"posterior draws long format". If set to NULL
 (default), a summary table will be returned (see 'summary_table_pvEBayes()').
 Note that the input for 'return' is case-sensitive.</p></dd>
 
@@ -88,7 +89,11 @@ threshold parameters, see 'get_posterior_prob()'</p></dd>
 
 <dt><code>posterior draws</code></dt>
 <dd><p>Posterior draws of the signal strength for each
-AE-drug pair.</p></dd>
+AE-drug pair in default array format.</p></dd>
+
+<dt><code>posterior draws long format</code></dt>
+<dd><p>Posterior draws of the signal strength for each
+AE-drug pair in stacked long format.</p></dd>
 
 
 </dl></div>
@@ -101,20 +106,20 @@ AE-drug pair.</p></dd>
 <span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">0.5</span>, n_posterior_draws <span class="op">=</span> <span class="fl">10000</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting general-gamma model...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[322ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[320ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 10000 posterior draws...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 10000 posterior draws... <span style="color: #B2B2B2;">[448ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 10000 posterior draws... <span style="color: #B2B2B2;">[412ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.5.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 18 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.3296 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.3283 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (10000 signal strength posterior draws per AE-drug pair):0.4553 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (10000 signal strength posterior draws per AE-drug pair):0.4216 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -126,10 +131,10 @@ AE-drug pair.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.5.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 18 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.3296 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.3283 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (10000 signal strength posterior draws per AE-drug pair):0.4553 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (10000 signal strength posterior draws per AE-drug pair):0.4216 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>

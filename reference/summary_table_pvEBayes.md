@@ -33,25 +33,26 @@ percentile (q05 and q95) for each AE-drug combination.
 ## Examples
 
 ``` r
+
 fit <- pvEBayes(
   contin_table = statin2025_44, model = "general-gamma",
   alpha = 0.5, n_posterior_draws = 100
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [322ms]
+#> ✔ Fitting general-gamma model... [321ms]
 #> 
 #> ℹ Generating 100 posterior draws...
-#> ✔ Generating 100 posterior draws... [12ms]
+#> ✔ Generating 100 posterior draws... [14ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.33 seconds.
+#> Running time of the general-gamma model fitting: 0.3295 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (100 signal strength posterior draws per AE-drug pair):0.019 seconds.
+#> (100 signal strength posterior draws per AE-drug pair):0.022 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

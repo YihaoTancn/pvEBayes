@@ -7,56 +7,69 @@ collection of spontaneous reports of suspected adverse drug events from
 pharmaceutical companies, healthcare professionals, and patients. These
 reports are curated and stored in spontaneous reporting systems (SRS),
 usually organized as a large frequency table for downstream data
-analysis. We consider an SRS dataset cataloging AE reports on $I$ AE
-rows across $J$ drug columns. Let $N_{ij}$ denote the number of reported
-cases for the $i$-th AE and the $j$-th drug, where $i = 1,...,I$ and
-$j = 1,...,J$. Therefore, AE-drug pairwise occurrences from the
-AE-reports are summarized into an $I \times J$ contingency table, where
-the $(i,j)$-th cell catalogs the observed count $N_{ij}$ indicating the
-number of cases involving $i$-th AE and the $j$-th drug.
+analysis. We consider an SRS dataset cataloging AE reports on $`I`$ AE
+rows across $`J`$ drug columns. Let $`N_{ij}`$ denote the number of
+reported cases for the $`i`$-th AE and the $`j`$-th drug, where
+$`i = 1,..., I`$ and $`j = 1,..., J`$. Therefore, AE-drug pairwise
+occurrences from the AE-reports are summarized into an $`I \times J`$
+contingency table, where the $`(i,j)`$-th cell catalogs the observed
+count $`N_{ij}`$ indicating the number of cases involving $`i`$-th AE
+and the $`j`$-th drug.
 
 Current disproportionality analysis mainly focuses on *signal detection*
-which seeks to determine whether the observation $N_{ij}$ is
-substantially greater than the corresponding null baseline $E_{ij}$. Or
-equivalently, its signal strength $\lambda_{ij}$ is significantly
+which seeks to determine whether the observation $`N_{ij}`$ is
+substantially greater than the corresponding null baseline $`E_{ij}`$.
+Or equivalently, its signal strength $`\lambda_{ij}`$ is significantly
 greater than 1.
 
 In addition to *signal detection*, Tan et al. (*Stat. in Med.*, 2025)
 broaden the role of disproportionality to *signal strength estimation*.
 The use of the flexible non-parametric empirical Bayes models enables
 more nuanced empirical Bayes posterior inference (signal strength
-$\lambda$ estimation and uncertainty quantification). This allows
-researchers to distinguish AE-drug pairs that would appear similar under
-a binary signal detection framework. For example, the AE-drug pairs with
-signal strengths of 1.5 and 4.0 could both be significantly greater than
-1 and detected as a signal. Such differences in signal strength may have
-distinct implications in medical and clinical contexts.
+$`\{\lambda_{ij}\}`$ estimation and uncertainty quantification). This
+allows researchers to distinguish AE-drug pairs that would appear
+similar under a binary signal detection framework. For example, the
+AE-drug pairs with signal strengths of 1.5 and 4.0 could both be
+significantly greater than 1 and detected as a signal. Such differences
+in signal strength may have distinct implications in medical and
+clinical contexts.
 
-Methods implemented in this package assumes the observed count $N_{ij}$
-conditional on $E_{ij}$ is that
-$$N_{ij} \mid E_{ij} \sim \operatorname{Poisson}\left( E_{ij}\lambda_{ij} \right),\ N_{ij} = 0,1,2\ldots,$$
-where the parameter $\lambda_{ij} \geq 0$ is the relative reporting
-ratio, the signal strength, for the $(i,j)$-th pair measuring the ratio
-of the actual expected count arising due to dependence to the null
-baseline expected count. Therefore, $\{\lambda_{ij}\}$ are our key
-parameters of interest. A large $\lambda_{ij}$ indicates a strong
+Methods implemented in this package assumes the observed count
+$`N_{ij}`$ conditional on $`E_{ij}`$ is that
+``` math
+\begin{equation} \label{eqn:model-poisson-likelihood}
+N_{ij} \mid E_{ij} \sim \operatorname{Poisson}(E_{ij}\lambda_{ij}), \ N_{ij} = 0, 1, 2 \dots,  
+\end{equation}
+```
+where the parameter $`\lambda_{ij} \geq 0`$ is the relative reporting
+ratio, the signal strength, for the $`(i, j)`$-th pair measuring the
+ratio of the actual expected count arising due to dependence to the null
+baseline expected count. Therefore, $`\{\lambda_{ij}\}`$ are our key
+parameters of interest. A large $`\lambda_{ij}`$ indicates a strong
 association between a drug and an AE.
 
-Let $g$ be a prior density function for signal strength parameters for
-all AE-drug pairs: $\lambda_{ij} \sim g$. Then, in the context of the
-Poisson model, the marginal probability mass function of $N_{ij}$ is
+Let $`g`$ be a prior density function for signal strength parameters for
+all AE-drug pairs: $`\lambda_{ij} \sim g`$. Then, in the context of the
+Poisson model, the marginal probability mass function of $`N_{ij}`$ is
 given by:
-$$p\left( N_{ij} \right) = \int_{0}^{\infty}g\left( \lambda_{ij} \right)\ f_{\text{pois}}\left( N_{ij} \mid \lambda_{ij}E_{ij} \right)\ d\lambda_{ij},$$
-where $f_{\text{pois}}(N \mid \lambda)$ is the probability mass function
-of a Poisson random variable with mean $\lambda$ evaluated at $N$. Under
-the empirical Bayes framework, the prior distribution is consequently
-estimated from the data by maximizing the log marginal likelihood:
-$$\widehat{g} = \operatorname{argmax}\limits_{g}\sum\limits_{i = 1}^{I}\sum\limits_{j = 1}^{J}\log p\left( N_{ij} \right).$$
-Then, the estimated empirical Bayes posterior density of $\lambda$ given
-$N_{ij}$ is:
-$$\widehat{\text{p}}\left( \lambda \mid N_{ij} \right) = \frac{\widehat{g}(\lambda)f_{\text{pois}}\left( N_{ij} \mid \lambda E_{ij} \right)}{\widehat{\text{p}}\left( N_{ij} \right)},\ \lambda > 0,$$
+``` math
+p(N_{ij}) = \int_0^{\infty} g(\lambda_{ij}) \ f_{\text{pois}}(N_{ij} \mid \lambda_{ij}E_{ij}) \ d\lambda_{ij},
+```
+where $`f_{\text{pois}}(N_{ij} \mid \lambda_{ij})`$ is the probability
+mass function of a Poisson random variable with mean $`\lambda_{ij}`$
+evaluated at $`N_{ij}`$. Under the empirical Bayes framework, the prior
+distribution is consequently estimated from the data by maximizing the
+log marginal likelihood:
+``` math
+\hat g = \mathop{\arg \max}\limits_{g} \sum_{i=1}^I \sum_{j=1}^J \log p(N_{ij}).
+```
+Then, the estimated empirical Bayes posterior density of
+$`\lambda_{ij}`$ given $`N_{ij}`$ is:
+``` math
+\hat{\text{p}}(\lambda_{ij} \mid N_{ij}) = \frac{\hat g(\lambda_{ij}) f_{\text{pois}}(N_{ij} \mid \lambda_{ij} E_{ij})}{\hat{\text{p}}(N_{ij})}, \ \lambda_{ij} > 0,
+```
 where
-$\widehat{\text{p}}\left( N_{ij} \right) = \int_{0}^{\infty}\widehat{g}\left( \lambda_{ij} \right)f_{\text{pois}}\left( N_{ij} \mid \lambda_{ij}E_{ij} \right)\ d\lambda_{ij}$.
+$`\hat{\text{p}}(N_{ij}) = \int_0^{\infty} \hat g(\lambda_{ij})f_{\text{pois}}(N_{ij}\mid \lambda_{ij}E_{ij}) \ d\lambda_{ij}`$.
 
 All empirical Bayes models implemented in ‘pvEBayes’ share the structure
 described above; they differ by their assumptions on the prior
@@ -66,7 +79,7 @@ approach, the K-gamma model, and the general-gamma model. The selection
 of the prior distribution is critical in Bayesian analysis. The GPS
 model uses a gamma mixture prior by assuming the signal/non-signal
 structure in SRS data. However, in real-world setting, signal strengths
-$\left( \lambda_{ij} \right)$ are often heterogeneous and thus follows a
+$`{(\lambda_{ij})}`$ are often heterogeneous and thus follows a
 multi-modal distribution, making it difficult to assume a parametric
 prior. Non-parametric empirical Bayes models (KM, Efron, K-gamma and
 general-gamma) address this challenge by utilizing a flexible prior with
@@ -81,9 +94,9 @@ method using `CVXR`. Efron’s method also has a general nonparametric
 empirical Bayes implementation in the `deconvolveR` package; however,
 that implementation does not support an exposure or offset parameter in
 the Poisson model, which corresponds to the expected null value
-$E_{ij}$. In `pvEBayes`, the implementation of Efron’s method is adapted
-and modified from `deconvolveR` to support $E_{ij}$ in the Poisson
-model. In addition, this package implements the novel bi-level
+$`{E_{ij}}`$. In `pvEBayes`, the implementation of Efron’s method is
+adapted and modified from `deconvolveR` to support $`{E_{ij}}`$ in the
+Poisson model. In addition, this package implements the novel bi-level
 Expectation Conditional Maximization (ECM) algorithm proposed by Tan et
 al. (2025) for efficient parameter estimation in gamma mixture prior
 based models mentioned above.
@@ -99,6 +112,7 @@ borrowed from Tan et al. (*arxiv*, 2025), of SRS data analyzing with
 ### Analyzing FDA statin SRS data with pvEBayes
 
 ``` r
+
 library(pvEBayes)
 library(ggplot2)
 
@@ -142,12 +156,13 @@ dataset. Other models mentioned above could be used by modifying the
 hyperparameter value of \$ = 0.5\$ using the pvEBayes() function.
 
 ``` r
+
 gg_given_alpha <- pvEBayes(statin2025_44,
   model = "general-gamma",
   alpha = 0.5
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [347ms]
+#> ✔ Fitting general-gamma model... [334ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
 #> ✔ Generating 1000 posterior draws... [96ms]
@@ -157,10 +172,10 @@ gg_given_alpha <- pvEBayes(statin2025_44,
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3557 seconds.
+#> Running time of the general-gamma model fitting: 0.3433 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.1986 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.1901 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -179,13 +194,18 @@ should return. Valid options include: “prior parameters”, “likelihood”,
 (default), all components will be returned in a list. In this example,
 we show the detected signals. The ‘summary()’ method reports detected
 signals using the default cutoff value and threshold:
-$$p\left( \lambda_{ij} > 1.001 \mid N_{ij} \right) > 0.95$$ Users can
-customize signal detection with both the cutoff and the posterior
-probability threshold through the ‘get_posterior_prob()’ function. For
-example, the code below identifies signals using a cutoff value of
-`1.01` and a posterior probability threshold of `0.99`:
+``` math
+\begin{equation}
+p(\lambda_{ij} > 1.001 \mid N_{ij}) > 0.95
+\end{equation}
+```
+Users can customize signal detection with both the cutoff and the
+posterior probability threshold through the ‘get_posterior_prob()’
+function. For example, the code below identifies signals using a cutoff
+value of `1.01` and a posterior probability threshold of `0.99`:
 
 ``` r
+
 gg_customize_detected_signal <- get_posterior_prob(gg_given_alpha,
                                                      cutoff_signal = 1.01) > 0.99
 sum(gg_customize_detected_signal)
@@ -197,6 +217,7 @@ BIC, which can be accessed through ‘AIC()’ or ‘BIC()’ functions, as
 shown below:
 
 ``` r
+
 AIC(gg_given_alpha)
 #> [1] 3796.813
 
@@ -204,13 +225,14 @@ BIC(gg_given_alpha)
 #> [1] 3999.452
 ```
 
-In practice, one can specify a list of candidate $\alpha$ values, fit
+In practice, one can specify a list of candidate $`\alpha`$ values, fit
 the general-gamma model for each, compute the corresponding AIC or BIC,
 and select the model with the lowest AIC or BIC. Instead of manually
 doing so, one can use the ‘pvEBayes_tune()’ function, which implements
 these steps. The relevant code is given below:
 
 ``` r
+
 gg_tune_statin44 <- pvEBayes_tune(statin2025_44,
   model = "general-gamma",
   alpha_vec = c(0, 0.1, 0.3, 0.5, 0.7, 0.9),
@@ -238,6 +260,7 @@ are used.
 
 ``` r
 
+
 e_tune_statin44 <- pvEBayes_tune(statin2025_44,
   model = "efron",
   p_vec = c(40, 60, 80),
@@ -262,10 +285,10 @@ e_tune_statin44
 #> 
 #> efron model is fitted with hyperparameters (p = 80, c0 = 0.1).
 #> 
-#> Running time of the efron model fitting: 0.161 seconds.
+#> Running time of the efron model fitting: 0.1566 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0271 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0262 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -279,6 +302,7 @@ plot functions can be accessed through the ‘plot()’ with argument type =
 “heatmap” or type = “eyeplot”.
 
 ``` r
+
 heatmap_gg_tune_statin44 <- plot(gg_tune_statin44,
   type = "heatmap",
   num_top_AEs = 10,
@@ -300,6 +324,7 @@ posterior probability of being a signal are given. A deeper blue color
 indicates stronger evidence for a signal.
 
 ``` r
+
 eyeplot_gg_tune_statin44 <- plot(gg_tune_statin44,
   type = "eyeplot",
   num_top_AEs = 8,
@@ -320,15 +345,15 @@ eyeplot_gg_tune_statin44 +
 
 The above eyeplot visualizes empirical posterior inferences on 10
 prominent AEs across 6 statin drugs through computed empirical Bayesian
-posterior distributions of signal strengths $\{\lambda_{ij}\}$ obtained
-from the general-gamma model fitted on the statin2025_44 dataset. The
-points and bars represent the posterior medians and 90% equi-tailed
-credible intervals for the corresponding AE-drug pair specific
-$\{\lambda_{ij}\}$, with different colors indicating the results from
-different statin drugs. The red dotted vertical line represents the
-value ‘1’. The texts on the right provide the number of observations as
-well as the null baseline expected counts under independence for an
-AE-drug pair.
+posterior distributions of signal strengths $`\{\lambda_{ij}\}`$
+obtained from the general-gamma model fitted on the statin2025_44
+dataset. The points and bars represent the posterior medians and 90%
+equi-tailed credible intervals for the corresponding AE-drug pair
+specific $`\{\lambda_{ij}\}`$, with different colors indicating the
+results from different statin drugs. The red dotted vertical line
+represents the value ‘1’. The texts on the right provide the number of
+observations as well as the null baseline expected counts under
+independence for an AE-drug pair.
 
 ## References
 

@@ -43,6 +43,7 @@ https://doi.org/10.1002/sim.70195.
 
 ``` r
 
+
 estimate_null_expected_count(statin2025_44)
 #>                                        Atorvastatin  Fluvastatin   Lovastatin
 #> ACUTE KIDNEY INJURY                    5.327398e+02 5.091431e+01 4.967068e+00
