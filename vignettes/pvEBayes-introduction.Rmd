@@ -19,7 +19,7 @@ its signal strength $\lambda_{ij}$ is significantly greater than 1.
 In addition to *signal detection*, Tan et al. (*Stat. in Med.*, 2025) broaden 
 the role of disproportionality to *signal strength estimation*. The use of the flexible 
 non-parametric empirical Bayes models enables more nuanced empirical Bayes 
-posterior inference (signal strength $\lambda$ estimation and uncertainty quantification). This allows researchers to distinguish AE-drug pairs that would appear similar under a binary signal 
+posterior inference (signal strength $\{\lambda_{ij}\}$ estimation and uncertainty quantification). This allows researchers to distinguish AE-drug pairs that would appear similar under a binary signal 
 detection framework. For example, the AE-drug pairs with signal strengths of 
 1.5 and 4.0 could both be significantly greater than 1 and detected as a 
 signal. Such differences in signal strength may have distinct implications in 
@@ -35,13 +35,13 @@ Let $g$ be a prior density function for signal strength parameters for all AE-dr
 \[
 p(N_{ij}) = \int_0^{\infty} g(\lambda_{ij}) \ f_{\text{pois}}(N_{ij} \mid \lambda_{ij}E_{ij}) \ d\lambda_{ij},
 \]
-where $f_{\text{pois}}(N \mid \lambda)$ is the probability mass function of a Poisson random variable with mean $\lambda$ evaluated at $N$. Under the empirical Bayes framework, the prior distribution is consequently estimated from the data by maximizing the log marginal likelihood:
+where $f_{\text{pois}}(N_{ij} \mid \lambda_{ij})$ is the probability mass function of a Poisson random variable with mean $\lambda_{ij}$ evaluated at $N_{ij}$. Under the empirical Bayes framework, the prior distribution is consequently estimated from the data by maximizing the log marginal likelihood:
 \[
 \hat g = \mathop{\arg \max}\limits_{g} \sum_{i=1}^I \sum_{j=1}^J \log p(N_{ij}).
 \]
-Then, the estimated empirical Bayes posterior density of $\lambda$ given $N_{ij}$ is:
+Then, the estimated empirical Bayes posterior density of $\lambda_{ij}$ given $N_{ij}$ is:
 \[
-\hat{\text{p}}(\lambda \mid N_{ij}) = \frac{\hat g(\lambda) f_{\text{pois}}(N_{ij} \mid \lambda E_{ij})}{\hat{\text{p}}(N_{ij})}, \ \lambda > 0,
+\hat{\text{p}}(\lambda_{ij} \mid N_{ij}) = \frac{\hat g(\lambda_{ij}) f_{\text{pois}}(N_{ij} \mid \lambda_{ij} E_{ij})}{\hat{\text{p}}(N_{ij})}, \ \lambda_{ij} > 0,
 \]
 where $\hat{\text{p}}(N_{ij}) = \int_0^{\infty} \hat g(\lambda_{ij})f_{\text{pois}}(N_{ij}\mid \lambda_{ij}E_{ij}) \ d\lambda_{ij}$.
 

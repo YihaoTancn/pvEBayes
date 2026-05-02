@@ -12,7 +12,8 @@
 
 \item{return}{a character string specifying which component the summary
 function should return.Valid options include: "prior parameters",
-"likelihood", "detected signal" and "posterior draws". If set to NULL
+"likelihood", "detected signal", "posterior draws" and
+"posterior draws long format". If set to NULL
 (default), a summary table will be returned (see 'summary_table_pvEBayes()').
 Note that the input for 'return' is case-sensitive.}
 
@@ -30,7 +31,9 @@ If \code{return} is specified, the function returns the requested component:
 \eqn{P(\lambda > 1.001 \mid N) > 0.95}. For signal detection with specified
 threshold parameters, see 'get_posterior_prob()'}
 \item{\verb{posterior draws}}{Posterior draws of the signal strength for each
-AE-drug pair. }
+AE-drug pair in default array format. }
+\item{\verb{posterior draws long format}}{Posterior draws of the signal strength for each
+AE-drug pair in stacked long format. }
 }
 }
 \description{

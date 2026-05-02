@@ -181,7 +181,8 @@ posterior_draws <- function(obj,
 #' @returns a matrix
 #' @export
 #'
-get_posterior_prob <- function(obj, cutoff_signal = 1.001) {
+get_posterior_prob <- function(obj,
+                               cutoff_signal = 1.001) {
   tmp <- obj$posterior_draws
   (tmp > cutoff_signal) %>%
     apply(c(2, 3), mean)
@@ -1022,6 +1023,55 @@ summary_table_pvEBayes <- function(x, cutoff_signal = 1.001) {
 
 
 
+#' Convert posterior draws to long format
+#'
+#' @param posterior_draws an 3-d array that contains posterior draws
+#'
+#' @returns
+#' A long data.table
+#' @keywords internal
+#' @noRd
+.posterior_draws_to_long <- function(posterior_draws) {
+  if (is.null(posterior_draws)) {
+    stop(
+      "No posterior draw has been generated. See `posterior_draws()`."
+    )
+  }
+
+  value_name = "lambda"
+  d <- dim(posterior_draws)
+  dn <- dimnames(posterior_draws)
+
+  draw_names <- dn[[1L]]
+  AE_names <- dn[[2L]]
+  drug_names <- dn[[3L]]
+
+  if (is.null(draw_names)) {
+    draw_names <- as.character(seq_len(d[1L]))
+  }
+
+  if (is.null(AE_names)) {
+    AE_names <- paste0("AE", seq_len(d[2L]))
+  }
+
+  if (is.null(drug_names)) {
+    drug_names <- paste0("drug", seq_len(d[3L]))
+  }
+
+  dimnames(posterior_draws) <- list(
+    draw = draw_names,
+    AE = AE_names,
+    drug = drug_names
+  )
+
+  out <- data.table::as.data.table(as.table(posterior_draws))
+  data.table::setnames(out, c("draw", "AE", "drug", value_name))
+
+
+  out[]
+}
+
+
 #' Summary method for a pvEBayes object
 #'
 #' @description
@@ -1034,7 +1084,8 @@ summary_table_pvEBayes <- function(x, cutoff_signal = 1.001) {
 #'
 #' @param return a character string specifying which component the summary
 #'  function should return.Valid options include: "prior parameters",
-#' "likelihood", "detected signal" and "posterior draws". If set to NULL
+#' "likelihood", "detected signal", "posterior draws" and
+#' "posterior draws long format". If set to NULL
 #' (default), a summary table will be returned (see 'summary_table_pvEBayes()').
 #' Note that the input for 'return' is case-sensitive.
 #'
@@ -1053,7 +1104,9 @@ summary_table_pvEBayes <- function(x, cutoff_signal = 1.001) {
 #'   \eqn{P(\lambda > 1.001 \mid N) > 0.95}. For signal detection with specified
 #'   threshold parameters, see 'get_posterior_prob()'}
 #'   \item{`posterior draws`}{Posterior draws of the signal strength for each
-#'   AE-drug pair. }
+#'   AE-drug pair in default array format. }
+#'   \item{`posterior draws long format`}{Posterior draws of the signal strength for each
+#'   AE-drug pair in stacked long format. }
 #' }
 #'
 #' @export
@@ -1112,12 +1165,15 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
       (get_posterior_prob(object) >= 0.95)
     } else if (return == "posterior draws") {
       object$posterior_draws
+    }else if(return == "posterior draws long format"){
+      .posterior_draws_to_long(object$posterior_draws)
     } else {
       stop(
         paste0(
           "'return' must be one of the followings: ",
           "'prior parameters', 'likelihood', ",
-          "'detected signal' or 'posterior draws'."
+          "'detected signal', 'posterior draws' or ",
+          "'posterior draws long format'."
         )
       )
     }
