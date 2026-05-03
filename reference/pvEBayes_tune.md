@@ -11,7 +11,7 @@ the lowest AIC or BIC values are selected as the optimal fits.
 ``` r
 pvEBayes_tune(
   contin_table,
-  model = "general-gamma",
+  model = c("general-gamma", "efron"),
   alpha_vec = NULL,
   p_vec = NULL,
   c0_vec = NULL,

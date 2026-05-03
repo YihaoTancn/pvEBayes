@@ -74,20 +74,20 @@ obj <- pvEBayes(
   alpha = 0.5, n_posterior_draws = 10000
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [314ms]
+#> ✔ Fitting general-gamma model... [310ms]
 #> 
 #> ℹ Generating 10000 posterior draws...
-#> ✔ Generating 10000 posterior draws... [406ms]
+#> ✔ Generating 10000 posterior draws... [400ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3221 seconds.
+#> Running time of the general-gamma model fitting: 0.3174 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (10000 signal strength posterior draws per AE-drug pair):0.4142 seconds.
+#> (10000 signal strength posterior draws per AE-drug pair):0.4081 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -99,37 +99,37 @@ summary(obj)
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3221 seconds.
+#> Running time of the general-gamma model fitting: 0.3174 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (10000 signal strength posterior draws per AE-drug pair):0.4142 seconds.
+#> (10000 signal strength posterior draws per AE-drug pair):0.4081 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
 #>                       AE         drug     N      E post_prob         q05
 #>                   <char>       <char> <int>  <num>     <num>       <num>
-#>   1: Acute Kidney Injury Atorvastatin  1132 532.74    1.0000  2.09795818
-#>   2: Acute Kidney Injury  Fluvastatin    23  50.91    0.0001  0.43557502
-#>   3: Acute Kidney Injury   Lovastatin    23   4.97    1.0000  2.76796628
-#>   4: Acute Kidney Injury  Pravastatin   153  74.39    1.0000  2.09621284
-#>   5: Acute Kidney Injury Rosuvastatin  1141 424.95    1.0000  2.72908781
+#>   1: Acute Kidney Injury Atorvastatin  1132 532.74    1.0000  2.09799790
+#>   2: Acute Kidney Injury  Fluvastatin    23  50.91    0.0001  0.43548758
+#>   3: Acute Kidney Injury   Lovastatin    23   4.97    1.0000  2.76671157
+#>   4: Acute Kidney Injury  Pravastatin   153  74.39    1.0000  2.09616011
+#>   5: Acute Kidney Injury Rosuvastatin  1141 424.95    1.0000  2.72871539
 #>  ---                                                                    
-#> 311:   Tendon Discomfort   Lovastatin     0   0.01    0.6029  0.10841846
-#> 312:   Tendon Discomfort  Pravastatin     0   0.08    0.5211  0.10599733
-#> 313:   Tendon Discomfort Rosuvastatin    10   0.45    1.0000 12.26673793
-#> 314:   Tendon Discomfort  Simvastatin     0   0.31    0.4247  0.01740786
-#> 315:   Tendon Discomfort  Other_drugs   205 205.00    0.4759  0.98442177
+#> 311:   Tendon Discomfort   Lovastatin     0   0.01    0.6054  0.10802929
+#> 312:   Tendon Discomfort  Pravastatin     0   0.08    0.5315  0.10670056
+#> 313:   Tendon Discomfort Rosuvastatin    10   0.45    1.0000 12.26613417
+#> 314:   Tendon Discomfort  Simvastatin     0   0.31    0.4204  0.01736947
+#> 315:   Tendon Discomfort  Other_drugs   205 205.00    0.4755  0.98391938
 #>             q50        q95
 #>           <num>      <num>
-#>   1:  2.1180454  2.1381214
-#>   2:  0.4457780  0.4568386
-#>   3:  3.8889959  6.2793075
-#>   4:  2.1173486  2.1382683
-#>   5:  2.7494172  2.7700055
+#>   1:  2.1180498  2.1383729
+#>   2:  0.4457358  0.4567996
+#>   3:  3.8895355  6.2794709
+#>   4:  2.1174517  2.1380204
+#>   5:  2.7493931  2.7700234
 #>  ---                      
-#> 311:  1.0090958 23.2038061
-#> 312:  1.0021163  8.2764480
-#> 313: 23.2032669 23.2074881
-#> 314:  0.9968302  3.8767080
-#> 315:  1.0003792  1.0166677
+#> 311:  1.0093320 23.2037266
+#> 312:  1.0029108  8.2819277
+#> 313: 23.2031704 23.2074312
+#> 314:  0.9967243  3.8792952
+#> 315:  1.0004270  1.0167708
 ```

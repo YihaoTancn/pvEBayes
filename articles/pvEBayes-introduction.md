@@ -1,20 +1,20 @@
 # Introduction to pvEBayes
 
-### Disproportionality Analysis
+### spontaneous reporting systems data mining
 
 Contemporary drug postmarketing surveillance largely relies on the
 collection of spontaneous reports of suspected adverse drug events from
 pharmaceutical companies, healthcare professionals, and patients. These
 reports are curated and stored in spontaneous reporting systems (SRS),
 usually organized as a large frequency table for downstream data
-analysis. We consider an SRS dataset cataloging AE reports on $`I`$ AE
-rows across $`J`$ drug columns. Let $`N_{ij}`$ denote the number of
-reported cases for the $`i`$-th AE and the $`j`$-th drug, where
-$`i = 1,..., I`$ and $`j = 1,..., J`$. Therefore, AE-drug pairwise
-occurrences from the AE-reports are summarized into an $`I \times J`$
-contingency table, where the $`(i,j)`$-th cell catalogs the observed
-count $`N_{ij}`$ indicating the number of cases involving $`i`$-th AE
-and the $`j`$-th drug.
+analysis. We consider an SRS dataset cataloging adverse event (AE)
+reports on $`I`$ AE rows across $`J`$ drug columns. Let $`N_{ij}`$
+denote the number of reported cases for the $`i`$-th AE and the $`j`$-th
+drug, where $`i = 1,..., I`$ and $`j = 1,..., J`$. Therefore, AE-drug
+pairwise occurrences from the AE-reports are summarized into an
+$`I \times J`$ contingency table, where the $`(i,j)`$-th cell catalogs
+the observed count $`N_{ij}`$ indicating the number of cases involving
+$`i`$-th AE and the $`j`$-th drug.
 
 Current disproportionality analysis mainly focuses on *signal detection*
 which seeks to determine whether the observation $`N_{ij}`$ is
@@ -167,20 +167,20 @@ gg_given_alpha <- pvEBayes(statin2025_44,
   tol_ecm = 1e-4  #default value
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [335ms]
+#> ✔ Fitting general-gamma model... [332ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [92ms]
+#> ✔ Generating 1000 posterior draws... [91ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3439 seconds.
+#> Running time of the general-gamma model fitting: 0.3402 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.1866 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.1808 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -214,20 +214,20 @@ gg_given_alpha2 <- pvEBayes(statin2025_44,
   tol_ecm = 1e-8  #smaller tolerance for convergence 
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [346ms]
+#> ✔ Fitting general-gamma model... [343ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [35ms]
+#> ✔ Generating 1000 posterior draws... [33ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3544 seconds.
+#> Running time of the general-gamma model fitting: 0.3499 seconds.
 #> Optimizer convergence: not achieved.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0429 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0415 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -251,10 +251,10 @@ summary(gg_given_alpha)
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3439 seconds.
+#> Running time of the general-gamma model fitting: 0.3402 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.1866 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.1808 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -360,10 +360,10 @@ The
 [`pvEBayes_tune()`](https://yihaotancn.github.io/pvEBayes/reference/pvEBayes_tune.md)
 also support hyperparameter $`(p, c_0)`$ tuning for `efron` model. These
 two hyperparameters control the complexity of the nonparametric
-empirical Bayes model (See Efron (2016, ) for further details). As a
-result, the tuning is performed by a two-dimensional grid search over
-the candidate values supplied through `p_vec` and `c0`. Because all
-combinations of these values are evaluated, this step can be
+empirical Bayes model (See Efron (2016, *Biometrika*) for further
+details). As a result, the tuning is performed by a two-dimensional grid
+search over the candidate values supplied through `p_vec` and `c0`.
+Because all combinations of these values are evaluated, this step can be
 time-consuming when large candidate grids are used.
 
 ``` r
@@ -393,10 +393,10 @@ e_tune_statin44
 #> 
 #> efron model is fitted with hyperparameters (p = 80, c0 = 0.1).
 #> 
-#> Running time of the efron model fitting: 0.1624 seconds.
+#> Running time of the efron model fitting: 0.1605 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0308 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0326 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

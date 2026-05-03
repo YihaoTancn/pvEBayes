@@ -121,8 +121,24 @@
 <span>  n_posterior_draws <span class="op">=</span> <span class="fl">1000</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Print out a concise description of the fitted model</span></span>
-<span><span class="va">fit</span></span>
+<span><span class="co"># Expected output is given below. Note that the running time for model fitting</span></span>
+<span><span class="co"># and posterior draw generation may vary depending on the computing environment.</span></span>
+<span></span>
+<span><span class="co"># ✔ Fitting general-gamma model... [1.6s]</span></span>
+<span><span class="co"># ✔ Generating 1000 posterior draws... [75ms]</span></span>
+<span><span class="co"># Object of class 'pvEBayes'</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># General-gamma model with hyperparameter alpha = 0.3.</span></span>
+<span><span class="co"># Estimated prior is a mixture of 18 gamma distributions.</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># Running time of the general-gamma model fitting: 1.6154 seconds.</span></span>
+<span><span class="co"># Optimizer convergence: successful.</span></span>
+<span><span class="co"># Running time for posterior draws</span></span>
+<span><span class="co"># (1000 signal strength posterior draws per AE-drug pair):0.0975 seconds.</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># Extract estimated prior parameters, discovered signals</span></span>
+<span><span class="co"># and signal strength posterior draws using `summary()`.</span></span>
+<span></span>
 <span></span>
 <span><span class="co"># Obtain a logical matrix for the detected signal</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span>, return <span class="op">=</span> <span class="st">"detected signal"</span><span class="op">)</span></span>

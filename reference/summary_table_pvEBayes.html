@@ -77,7 +77,7 @@ percentile (q05 and q95) for each AE-drug combination.</p>
 <span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">0.5</span>, n_posterior_draws <span class="op">=</span> <span class="fl">100</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting general-gamma model...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[315ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[311ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 100 posterior draws...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 100 posterior draws... <span style="color: #B2B2B2;">[12ms]</span></span>
@@ -87,10 +87,10 @@ percentile (q05 and q95) for each AE-drug combination.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.5.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 18 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.3231 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.319 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (100 signal strength posterior draws per AE-drug pair):0.0198 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (100 signal strength posterior draws per AE-drug pair):0.0197 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -98,30 +98,30 @@ percentile (q05 and q95) for each AE-drug combination.</p>
 <span class="r-in"><span><span class="fu">summary_table_pvEBayes</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       AE         drug     N      E post_prob         q05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;char&gt;       &lt;char&gt; &lt;int&gt;  &lt;num&gt;     &lt;num&gt;       &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1: Acute Kidney Injury Atorvastatin  1132 532.74      1.00  2.09508991</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: Acute Kidney Injury  Fluvastatin    23  50.91      0.00  0.43487123</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3: Acute Kidney Injury   Lovastatin    23   4.97      1.00  2.77243471</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4: Acute Kidney Injury  Pravastatin   153  74.39      1.00  2.09783837</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5: Acute Kidney Injury Rosuvastatin  1141 424.95      1.00  2.72986104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: Acute Kidney Injury Atorvastatin  1132 532.74      1.00  2.10330648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: Acute Kidney Injury  Fluvastatin    23  50.91      0.00  0.43907288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3: Acute Kidney Injury   Lovastatin    23   4.97      1.00  2.76698684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: Acute Kidney Injury  Pravastatin   153  74.39      1.00  2.09668506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: Acute Kidney Injury Rosuvastatin  1141 424.95      1.00  2.72840233</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 311:   Tendon Discomfort   Lovastatin     0   0.01      0.60  0.10019963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 312:   Tendon Discomfort  Pravastatin     0   0.08      0.46  0.01778714</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 313:   Tendon Discomfort Rosuvastatin    10   0.45      1.00 12.26302820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 314:   Tendon Discomfort  Simvastatin     0   0.31      0.36  0.10689953</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 315:   Tendon Discomfort  Other_drugs   205 205.00      0.49  0.98644212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 311:   Tendon Discomfort   Lovastatin     0   0.01      0.68  0.11052454</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 312:   Tendon Discomfort  Pravastatin     0   0.08      0.48  0.01754147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 313:   Tendon Discomfort Rosuvastatin    10   0.45      1.00 12.26542377</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 314:   Tendon Discomfort  Simvastatin     0   0.31      0.41  0.10088070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 315:   Tendon Discomfort  Other_drugs   205 205.00      0.48  0.98638326</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             q50        q95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;num&gt;      &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  2.1201806  2.1370559</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  0.4442899  0.4590935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  3.8886843  6.2792590</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  2.1165735  2.1428359</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  2.7533147  2.7704806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  2.1194608  2.1421006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  0.4467718  0.4569188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  3.8841680  6.2796770</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  2.1183742  2.1374931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  2.7491346  2.7736891</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 311:  1.0087695 23.2033040</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 312:  0.9990468  6.2683075</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 313: 23.2029461 23.2070231</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 314:  0.9951408  2.7501795</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 315:  1.0009295  1.0141068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 311:  1.8514785 23.2046598</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 312:  1.0006896  6.2765374</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 313: 23.2028718 23.2073874</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 314:  0.9940386  3.8798901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 315:  1.0002403  1.0177463</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

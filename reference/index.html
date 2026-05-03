@@ -36,9 +36,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="model-fitting-and-tuning">Model fitting and tuning<a class="anchor" aria-label="anchor" href="#model-fitting-and-tuning"></a></h2>
 
-
+      <div class="section-desc"><p>Functions for fitting empirical Bayes models, tuning hyperparameters, and preparing contingency-table inputs.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -46,118 +46,6 @@
 
 
       <dl><dt>
-
-          <code><a href="AIC.pvEBayes.html">AIC(<i>&lt;pvEBayes&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Obtain Akaike Information Criterion (AIC) for a pvEBayes object</dd>
-
-        <dt>
-
-          <code><a href="BIC.pvEBayes.html">BIC(<i>&lt;pvEBayes&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Obtain Bayesian Information Criterion (BIC) for a pvEBayes object</dd>
-
-        <dt>
-
-          <code><a href="estimate_null_expected_count.html">estimate_null_expected_count()</a></code>
-
-        </dt>
-        <dd>Estimate expected null baseline count based on reference row and column</dd>
-
-        <dt>
-
-          <code><a href="extract_all_fitted_models.html">extract_all_fitted_models()</a></code>
-
-        </dt>
-        <dd>Extract all fitted models from a tuned pvEBayes Object</dd>
-
-        <dt>
-
-          <code><a href="eyeplot_pvEBayes.html">eyeplot_pvEBayes()</a></code>
-
-        </dt>
-        <dd>Generate an eyeplot showing the distribution of posterior draws for selected drugs and adverse events</dd>
-
-        <dt>
-
-          <code><a href="faers_opioid_mental.html">faers_opioid_mental</a></code>
-
-        </dt>
-        <dd>FDA opioid dataset with 243 mental-related adverse events</dd>
-
-        <dt>
-
-          <code><a href="gbca2025.html">gbca2025</a></code>
-
-        </dt>
-        <dd>FDA GBCA dataset with 1328 adverse events</dd>
-
-        <dt>
-
-          <code><a href="gbca2025_69.html">gbca2025_69</a></code>
-
-        </dt>
-        <dd>FDA GBCA dataset with 69 adverse events</dd>
-
-        <dt>
-
-          <code><a href="generate_contin_table.html">generate_contin_table()</a></code>
-
-        </dt>
-        <dd>Generate random contingency tables based on a reference table embedded signals,and possibly with zero inflation</dd>
-
-        <dt>
-
-          <code><a href="get_posterior_prob.html">get_posterior_prob()</a></code>
-
-        </dt>
-        <dd>Obtain posterior probability of being a signal</dd>
-
-        <dt>
-
-          <code><a href="heatmap_pvEBayes.html">heatmap_pvEBayes()</a></code>
-
-        </dt>
-        <dd>Generate a heatmap plot visualizing posterior probabilities for selected drugs and adverse events</dd>
-
-        <dt>
-
-          <code><a href="logLik.pvEBayes.html">logLik(<i>&lt;pvEBayes&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Extract log marginal likelihood for a pvEBayes object</dd>
-
-        <dt>
-
-          <code><a href="plot.pvEBayes.html">plot(<i>&lt;pvEBayes&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Plotting method for a pvEBayes object</dd>
-
-        <dt>
-
-          <code><a href="posterior_draws.html">posterior_draws()</a></code>
-
-        </dt>
-        <dd>Generate posterior draws for each AE-drug combination</dd>
-
-        <dt>
-
-          <code><a href="print.pvEBayes.html">print(<i>&lt;pvEBayes&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Print method for a pvEBayes object</dd>
-
-        <dt>
-
-          <code><a href="pvEBayes-package.html">pvEBayes-package</a></code>
-
-        </dt>
-        <dd>A suite of empirical Bayes methods to use in pharmacovigilance.</dd>
-
-        <dt>
 
           <code><a href="pvEBayes.html">pvEBayes()</a></code>
 
@@ -172,6 +60,140 @@
         <dd>Select hyperparameter and obtain the optimal general-gamma or efron model based on AIC and BIC</dd>
 
         <dt>
+
+          <code><a href="estimate_null_expected_count.html">estimate_null_expected_count()</a></code>
+
+        </dt>
+        <dd>Estimate expected null baseline count based on reference row and column</dd>
+
+        <dt>
+
+          <code><a href="generate_contin_table.html">generate_contin_table()</a></code>
+
+        </dt>
+        <dd>Generate random contingency tables based on a reference table embedded signals,and possibly with zero inflation</dd>
+      </dl></div><div class="section level2">
+      <h2 id="posterior-inference-and-extraction">Posterior inference and extraction<a class="anchor" aria-label="anchor" href="#posterior-inference-and-extraction"></a></h2>
+
+      <div class="section-desc"><p>Functions for generating posterior draws, computing posterior signal probabilities, and extracting fitted models.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="posterior_draws.html">posterior_draws()</a></code>
+
+        </dt>
+        <dd>Generate posterior draws for each AE-drug combination</dd>
+
+        <dt>
+
+          <code><a href="get_posterior_prob.html">get_posterior_prob()</a></code>
+
+        </dt>
+        <dd>Obtain posterior probability of being a signal</dd>
+
+        <dt>
+
+          <code><a href="extract_all_fitted_models.html">extract_all_fitted_models()</a></code>
+
+        </dt>
+        <dd>Extract all fitted models from a tuned pvEBayes Object</dd>
+      </dl></div><div class="section level2">
+      <h2 id="model-summaries-and-comparison">Model summaries and comparison<a class="anchor" aria-label="anchor" href="#model-summaries-and-comparison"></a></h2>
+
+      <div class="section-desc"><p>S3 methods and helper functions for summarizing fitted pvEBayes objects and comparing fitted models.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="summary.pvEBayes.html">summary(<i>&lt;pvEBayes&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Summary method for a pvEBayes object</dd>
+
+        <dt>
+
+          <code><a href="summary_table_pvEBayes.html">summary_table_pvEBayes()</a></code>
+
+        </dt>
+        <dd>Obtain a summary table for a pvEBayes object</dd>
+
+        <dt>
+
+          <code><a href="print.pvEBayes.html">print(<i>&lt;pvEBayes&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for a pvEBayes object</dd>
+
+        <dt>
+
+          <code><a href="logLik.pvEBayes.html">logLik(<i>&lt;pvEBayes&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Extract log marginal likelihood for a pvEBayes object</dd>
+
+        <dt>
+
+          <code><a href="AIC.pvEBayes.html">AIC(<i>&lt;pvEBayes&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Obtain Akaike Information Criterion (AIC) for a pvEBayes object</dd>
+
+        <dt>
+
+          <code><a href="BIC.pvEBayes.html">BIC(<i>&lt;pvEBayes&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Obtain Bayesian Information Criterion (BIC) for a pvEBayes object</dd>
+      </dl></div><div class="section level2">
+      <h2 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a></h2>
+
+      <div class="section-desc"><p>Functions for visualizing fitted pvEBayes models, posterior draws, and posterior signal probabilities.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="plot.pvEBayes.html">plot(<i>&lt;pvEBayes&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plotting method for a pvEBayes object</dd>
+
+        <dt>
+
+          <code><a href="eyeplot_pvEBayes.html">eyeplot_pvEBayes()</a></code>
+
+        </dt>
+        <dd>Generate an eyeplot showing the distribution of posterior draws for selected drugs and adverse events</dd>
+
+        <dt>
+
+          <code><a href="heatmap_pvEBayes.html">heatmap_pvEBayes()</a></code>
+
+        </dt>
+        <dd>Generate a heatmap plot visualizing posterior probabilities for selected drugs and adverse events</dd>
+      </dl></div><div class="section level2">
+      <h2 id="example-datasets">Example datasets<a class="anchor" aria-label="anchor" href="#example-datasets"></a></h2>
+
+      <div class="section-desc"><p>Example spontaneous reporting system datasets included with the package.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="statin2025.html">statin2025</a></code>
 
@@ -194,17 +216,24 @@
 
         <dt>
 
-          <code><a href="summary.pvEBayes.html">summary(<i>&lt;pvEBayes&gt;</i>)</a></code>
+          <code><a href="gbca2025.html">gbca2025</a></code>
 
         </dt>
-        <dd>Summary method for a pvEBayes object</dd>
+        <dd>FDA GBCA dataset with 1328 adverse events</dd>
 
         <dt>
 
-          <code><a href="summary_table_pvEBayes.html">summary_table_pvEBayes()</a></code>
+          <code><a href="gbca2025_69.html">gbca2025_69</a></code>
 
         </dt>
-        <dd>Obtain a summary table for a pvEBayes object</dd>
+        <dd>FDA GBCA dataset with 69 adverse events</dd>
+
+        <dt>
+
+          <code><a href="faers_opioid_mental.html">faers_opioid_mental</a></code>
+
+        </dt>
+        <dd>FDA opioid dataset with 243 mental-related adverse events</dd>
 
         <dt>
 
@@ -212,8 +241,25 @@
 
         </dt>
         <dd>VigiBase opioid dataset with 100 mental-related adverse events</dd>
+      </dl></div><div class="section level2">
+      <h2 id="package-overview">Package overview<a class="anchor" aria-label="anchor" href="#package-overview"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="pvEBayes-package.html">pvEBayes-package</a></code>
+
+        </dt>
+        <dd>A suite of empirical Bayes methods to use in pharmacovigilance.</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

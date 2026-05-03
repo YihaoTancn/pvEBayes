@@ -119,8 +119,24 @@ with general-gamma model:
       n_posterior_draws = 1000
     )
 
-    # Print out a concise description of the fitted model
-    fit
+    # Expected output is given below. Note that the running time for model fitting
+    # and posterior draw generation may vary depending on the computing environment.
+
+    # ✔ Fitting general-gamma model... [1.6s]
+    # ✔ Generating 1000 posterior draws... [75ms]
+    # Object of class 'pvEBayes'
+    #
+    # General-gamma model with hyperparameter alpha = 0.3.
+    # Estimated prior is a mixture of 18 gamma distributions.
+    #
+    # Running time of the general-gamma model fitting: 1.6154 seconds.
+    # Optimizer convergence: successful.
+    # Running time for posterior draws
+    # (1000 signal strength posterior draws per AE-drug pair):0.0975 seconds.
+    #
+    # Extract estimated prior parameters, discovered signals
+    # and signal strength posterior draws using `summary()`.
+
 
     # Obtain a logical matrix for the detected signal
     summary(fit, return = "detected signal")

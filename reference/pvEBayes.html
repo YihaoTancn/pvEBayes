@@ -54,7 +54,7 @@ specified hyperparameter, if is required. Supported models include the
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pvEBayes</span><span class="op">(</span></span>
 <span>  <span class="va">contin_table</span>,</span>
-<span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span>
+<span>  model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"general-gamma"</span>, <span class="st">"K-gamma"</span>, <span class="st">"GPS"</span>, <span class="st">"KM"</span>, <span class="st">"efron"</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  K <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  p <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -95,8 +95,9 @@ See Tan et al. (2025) for further details.</p></dd>
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
 <dd><p>a integer greater than or equal to 2 indicating the number of
-mixture components in the prior distribution. It is needed if "K-gamma"
-model is used. See Tan et al. (2025) for further details.</p></dd>
+mixture components in the prior distribution. It is needed if "K-gamma" model
+is used. When K is unknown, please consider its extension "general-gamma"
+instead. See Tan et al. (2025) for further details.</p></dd>
 
 
 <dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
@@ -191,8 +192,8 @@ Dirichlet distribution is an improper prior still offering a reasonable
 posterior inference that represents the strongest shrinkage of the
 "general-gamma" model.</p>
 <p>Parameter estimation for the "KM" model is formulated as a convex
-optimization problem. The objective function and constraints follow the same
-construction as in <span class="pkg">REBayes</span> (see 'REBayes::KWDual()'). Parameter
+optimization problem. The objective function and constraints are modified
+from the <span class="pkg">REBayes</span> package (see 'REBayes::KWDual()'). Parameter
 estimation is performed using the open-source convex optimization package
 <span class="pkg">CVXR</span>.</p>
 <p>The implementation of the "efron" model in this package is adapted from the
@@ -229,67 +230,52 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">ref_table</span> <span class="op">&lt;-</span> <span class="va">statin2025_44</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># set up signal matrix with one signal at entry (1,1)</span></span></span>
-<span class="r-in"><span><span class="va">sig_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ref_table</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">ref_table</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sig_mat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">simu_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_contin_table.html">generate_contin_table</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  ref_table <span class="op">=</span> <span class="va">ref_table</span>,</span></span>
-<span class="r-in"><span>  signal_mat <span class="op">=</span> <span class="va">sig_mat</span>,</span></span>
-<span class="r-in"><span>  n_table <span class="op">=</span> <span class="fl">1</span></span></span>
-<span class="r-in"><span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># fit general-gamma model with a specified alpha</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">simu_table</span>,</span></span>
+<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">statin2025_44</span>,</span></span>
 <span class="r-in"><span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span></span>
 <span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">0.3</span>,</span></span>
-<span class="r-in"><span>  n_posterior_draws <span class="op">=</span> <span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>  E <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
-<span class="r-in"><span>  maxi <span class="op">=</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span>  n_posterior_draws <span class="op">=</span> <span class="fl">1000</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting general-gamma model...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[196ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[211ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[36ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[35ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.3.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 4 gamma distributions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 18 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.2043 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.2192 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.044 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0424 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># fit K-gamma model with K = 3</span></span></span>
 <span class="r-in"><span><span class="va">fit_Kgamma</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">simu_table</span>, model <span class="op">=</span> <span class="st">"K-gamma"</span>,</span></span>
+<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">statin2025_44</span>, model <span class="op">=</span> <span class="st">"K-gamma"</span>,</span></span>
 <span class="r-in"><span>  K <span class="op">=</span> <span class="fl">3</span>, n_posterior_draws <span class="op">=</span> <span class="fl">1000</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting K-gamma model...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting K-gamma model... <span style="color: #B2B2B2;">[23ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting K-gamma model... <span style="color: #B2B2B2;">[25ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[31ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[32ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> K-gamma model with number of gamma mixture components K = 3.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the K-gamma model fitting: 0.0307 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the K-gamma model fitting: 0.0324 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0386 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0394 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -298,34 +284,49 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-in"><span><span class="co"># fit Efron model with specified hyperparameters</span></span></span>
 <span class="r-in"><span><span class="co"># p = 40, c0 = 0.05</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">fit_efron</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">simu_table</span>,</span></span>
+<span class="r-in"><span>  contin_table <span class="op">=</span> <span class="va">statin2025_44</span>,</span></span>
 <span class="r-in"><span>  model <span class="op">=</span> <span class="st">"efron"</span>,</span></span>
 <span class="r-in"><span>  p <span class="op">=</span> <span class="fl">40</span>,</span></span>
 <span class="r-in"><span>  c0 <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
 <span class="r-in"><span>  n_posterior_draws <span class="op">=</span> <span class="fl">1000</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting efron model...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting efron model... <span style="color: #B2B2B2;">[193ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[39ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> efron model is fitted with hyperparameters (p = 40, c0 = 0.05).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the efron model fitting: 0.2051 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0498 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># fit GPS model and comapre with 'openEBGM'</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">fit_gps</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span><span class="va">simu_table</span>, model <span class="op">=</span> <span class="st">"GPS"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit_gps</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span><span class="va">statin2025_44</span>, model <span class="op">=</span> <span class="st">"GPS"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting GPS model...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting GPS model... <span style="color: #B2B2B2;">[18ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting GPS model... <span style="color: #B2B2B2;">[29ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[31ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[30ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object of class 'pvEBayes'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GPS (2-gamma) model is fitted</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the GPS model fitting: 0.0255 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the GPS model fitting: 0.0403 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0387 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0373 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -337,16 +338,16 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-in"><span><span class="co">## tol_ecm is the absolute tolerance for ECM stopping rule.</span></span></span>
 <span class="r-in"><span><span class="co">## It is set to ensure comparability to `openEBGM`.</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">fit_gps</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span><span class="va">simu_table</span>, model <span class="op">=</span> <span class="st">"GPS"</span>, tol_ecm <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit_gps</span> <span class="op">&lt;-</span> <span class="fu">pvEBayes</span><span class="op">(</span><span class="va">statin2025_44</span>, model <span class="op">=</span> <span class="st">"GPS"</span>, tol_ecm <span class="op">=</span> <span class="fl">1e-2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"openEBGM"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">E</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_null_expected_count.html">estimate_null_expected_count</a></span><span class="op">(</span><span class="va">simu_table</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">simu_table_stacked</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table</a></span><span class="op">(</span><span class="va">simu_table</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">simu_table_stacked</span><span class="op">$</span><span class="va">E</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">E</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">simu_table_stacked</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"var1"</span>, <span class="st">"var2"</span>, <span class="st">"N"</span>, <span class="st">"E"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">simu_table_stacked_squash</span> <span class="op">&lt;-</span> <span class="fu">openEBGM</span><span class="fu">::</span><span class="fu">autoSquash</span><span class="op">(</span><span class="va">simu_table_stacked</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">E</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_null_expected_count.html">estimate_null_expected_count</a></span><span class="op">(</span><span class="va">statin2025_44</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">statin2025_44_stacked</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">as.table</a></span><span class="op">(</span><span class="va">statin2025_44</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">statin2025_44_stacked</span><span class="op">$</span><span class="va">E</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">E</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">statin2025_44_stacked</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"var1"</span>, <span class="st">"var2"</span>, <span class="st">"N"</span>, <span class="st">"E"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">statin2025_44_stacked_squash</span> <span class="op">&lt;-</span> <span class="fu">openEBGM</span><span class="fu">::</span><span class="fu">autoSquash</span><span class="op">(</span><span class="va">statin2025_44_stacked</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="va">hyper_estimates</span> <span class="op">&lt;-</span> <span class="fu">openEBGM</span><span class="fu">::</span><span class="fu">hyperEM</span><span class="op">(</span><span class="va">simu_table_stacked_squash</span>,</span></span>
+<span class="r-in"><span>  <span class="va">hyper_estimates</span> <span class="op">&lt;-</span> <span class="fu">openEBGM</span><span class="fu">::</span><span class="fu">hyperEM</span><span class="op">(</span><span class="va">statin2025_44_stacked_squash</span>,</span></span>
 <span class="r-in"><span>    theta_init <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    method <span class="op">=</span> <span class="st">"nlminb"</span>,</span></span>
 <span class="r-in"><span>    N_star <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
@@ -359,19 +360,19 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">theta_hat</span> <span class="op">&lt;-</span> <span class="va">hyper_estimates</span><span class="op">$</span><span class="va">estimates</span></span></span>
 <span class="r-in"><span><span class="va">qn</span> <span class="op">&lt;-</span> <span class="fu">openEBGM</span><span class="fu">::</span><span class="fu">Qn</span><span class="op">(</span><span class="va">theta_hat</span>,</span></span>
-<span class="r-in"><span>  N <span class="op">=</span> <span class="va">simu_table_stacked</span><span class="op">$</span><span class="va">N</span>,</span></span>
-<span class="r-in"><span>  E <span class="op">=</span> <span class="va">simu_table_stacked</span><span class="op">$</span><span class="va">E</span></span></span>
+<span class="r-in"><span>  N <span class="op">=</span> <span class="va">statin2025_44_stacked</span><span class="op">$</span><span class="va">N</span>,</span></span>
+<span class="r-in"><span>  E <span class="op">=</span> <span class="va">statin2025_44_stacked</span><span class="op">$</span><span class="va">E</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">simu_table_stacked</span><span class="op">$</span><span class="va">q05</span> <span class="op">&lt;-</span> <span class="fu">openEBGM</span><span class="fu">::</span><span class="fu">quantBisect</span><span class="op">(</span><span class="fl">5</span>,</span></span>
+<span class="r-in"><span><span class="va">statin2025_44_stacked</span><span class="op">$</span><span class="va">q05</span> <span class="op">&lt;-</span> <span class="fu">openEBGM</span><span class="fu">::</span><span class="fu">quantBisect</span><span class="op">(</span><span class="fl">5</span>,</span></span>
 <span class="r-in"><span>  theta_hat <span class="op">=</span> <span class="va">theta_hat</span>,</span></span>
-<span class="r-in"><span>  N <span class="op">=</span> <span class="va">simu_table_stacked</span><span class="op">$</span><span class="va">N</span>,</span></span>
-<span class="r-in"><span>  E <span class="op">=</span> <span class="va">simu_table_stacked</span><span class="op">$</span><span class="va">E</span>,</span></span>
+<span class="r-in"><span>  N <span class="op">=</span> <span class="va">statin2025_44_stacked</span><span class="op">$</span><span class="va">N</span>,</span></span>
+<span class="r-in"><span>  E <span class="op">=</span> <span class="va">statin2025_44_stacked</span><span class="op">$</span><span class="va">E</span>,</span></span>
 <span class="r-in"><span>  qn <span class="op">=</span> <span class="va">qn</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## obtain the detected signal provided by openEBGM</span></span></span>
-<span class="r-in"><span><span class="va">simu_table_stacked</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">statin2025_44_stacked</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">q05</span> <span class="op">&gt;</span> <span class="fl">1.001</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## detected signal from pvEBayes presented in the same way as openEBGM</span></span></span>
