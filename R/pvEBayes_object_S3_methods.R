@@ -1124,8 +1124,8 @@ summary_table_pvEBayes <- function(x, cutoff_signal = 1.001) {
 #' properly checked.
 #' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are
 #' explicitly described in the corresponding documentation.
-#' @srrstats {G2.3, G2.3a, G2.3b} character inputs are explicitly documented
-#' that they are strictly case-sensitive and only applicable to expected values.
+#' @srrstats {G2.3, G2.3a, G2.3b} tolower() is used to ensure input of character
+#' parameters is not case dependent.
 #'
 #'
 summary.pvEBayes <- function(object, return = NULL, ...) {
@@ -1153,6 +1153,7 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
     )
   }
   if (!is.null(return)) {
+    return <- tolower(return)
     if (return == "prior parameters") {
       estimated_prior
     } else if (return == "likelihood") {
@@ -1201,8 +1202,7 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
 #' \link{pvEBayes} or \link{pvEBayes_tune}.
 #' @param type character string determining the type of plot to show.
 #' Available choices are `"eyeplot"` which calls \link{eyeplot_pvEBayes} and
-#' `"heatmap"` which calls \link{heatmap_pvEBayes}. Note that the input for
-#' 'type' is case-sensitive.
+#' `"heatmap"` which calls \link{heatmap_pvEBayes}.
 #' @param ... additional arguments passed to heatmap_pvEBayes or
 #' eyeplot_pvEBayes.
 #'
@@ -1220,14 +1220,14 @@ summary.pvEBayes <- function(object, return = NULL, ...) {
 #' checked.
 #' @srrstats {G2.0a, G2.1a} The length of single and vector inputs are explicitly
 #' described in the corresponding documentation.
-#' @srrstats {G2.3, G2.3a, G2.3b} character inputs are explicitly documented
-#' that they are strictly case-sensitive and only applicable to expected values.
+#' @srrstats {G2.3, G2.3a, G2.3b} tolower() is used to ensure input of character
+#' parameters is not case dependent.
 #'
 plot.pvEBayes <- function(x, type = "eyeplot", ...) {
   if (!is.pvEBayes(x)) {
     stop("x must be a 'pvEBayes' object.")
   }
-
+  type <- tolower(type)
   if (
     !(type %in% c("heatmap", "eyeplot"))
   ) {

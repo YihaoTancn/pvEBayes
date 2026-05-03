@@ -73,7 +73,7 @@
 #' design matrices. As such, the notion of collinearity is not applicable in
 #' this context.
 #'
-#' @srrstatsNA {BS4.0, BS4.1, BS4.2, BS4.3, BS4.4, BS4.5, BS4.6, BS4.7}
+#' @srrstatsNA {BS4.0, BS4.1, BS4.2, BS4.6, BS4.7}
 #' The methods implemented in \pkg{pvEBayes} are parametric/nonparametric
 #' empirical Bayes approaches rely on optimizing the joint marginal likelihood
 #' with optimizers. These models do not rely on Monte Carlo sampling in full

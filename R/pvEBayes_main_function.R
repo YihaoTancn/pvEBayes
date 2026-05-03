@@ -984,8 +984,9 @@ estimate_null_expected_count <- function(contin_table) {
 #' encourages shrinkage on mixture weights of the estimated prior distribution.
 #' See Tan et al. (2025) for further details.
 #' @param K a integer greater than or equal to 2 indicating the number of
-#' mixture components in the prior distribution. It is needed if "K-gamma"
-#' model is used. See Tan et al. (2025) for further details.
+#' mixture components in the prior distribution. It is needed if "K-gamma" model
+#' is used. When K is unknown, please consider its extension "general-gamma"
+#' instead. See Tan et al. (2025) for further details.
 #' @param p a integer greater than or equal to 2. It is needed if "efron" mode
 #' is used. Larger p leads to smoother estimated prior distribution. See
 #' Narasimhan and Efron (2020) for detail.
@@ -1005,8 +1006,9 @@ estimate_null_expected_count <- function(contin_table) {
 #' Default to be 1e-6. See 'CVXR::solve' for detail.
 #' @param km_optimizer a character vector specifying the optimizer(s) in CVXR
 #' used to fit the KM model. Supported values are `"ECOS"`, `"CLARABEL"`, and
-#' `"SCS"`. If multiple optimizers are supplied, they are tried sequentially
-#' and the first successfully fitted result is returned. Defaults to
+#' `"SCS"`. Note that the input for km_optimizer is case-sensitive. If multiple
+#' optimizers are supplied, they are tried sequentially and the first
+#' successfully fitted result is returned. Defaults to
 #' c("ECOS", "CLARABEL", "SCS")`. See `CVXR::psolve` for detail.
 #' @param E A matrix of expected counts under the null model for the SRS
 #' frequency table. If `NULL` (default), the expected counts are estimated
@@ -1217,6 +1219,18 @@ estimate_null_expected_count <- function(contin_table) {
 #' integer, continuous and character inputs.
 #' @srrstats {G2.7} Tabular formats appear in Depends or Sugggests are tested.
 #' @srrstats {G3.0} The algorithm do not compare floating points for equality.
+#' @srrstats {BS4.3, BS4.4, BS4.5} The convergence status is determined by
+#' comparing the relative change in loglikelihood in consective iterations for
+#' all availible methods in `pvEBayes()` function. The optimization convergence
+#' status is explicitly captured and returned within the output object of
+#' ’pvEBayes()’.
+#' (controlled via the ’message’ parameter) and is included in the summary when
+#' calling the print() method on a pvEBayes object.
+#' @srrstats {G5.3} Log likelihood of the fitted model is tested not to contain
+#' NA, NaN or Inf values to ensure that the returned numerical objects are
+#' well-defined. For cases where model fitting fails and produces an undefined
+#' log likelihood, the package issues a warning so that users can identify
+#' potentially unreliable results.
 #' @srrstats {G5.4b} The examples field provide a comparison of implementation
 #' of GPS model showing that both implementation correctly detect the signal.
 #' @srrstats {BS5.3, BS5.5}
@@ -1413,6 +1427,12 @@ pvEBayes <- function(contin_table, model = "general-gamma",
   class(res) <- "pvEBayes"
   if (message == TRUE) {
     print(res)
+  }
+  if(is.na(res$loglik) | is.infinite(res$loglik)){
+    warning(
+      paste0("The log-likelihood is NA, NaN or Inf. ",
+             "The fitted result may be unreliable.")
+      )
   }
   res
 }

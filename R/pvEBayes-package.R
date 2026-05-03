@@ -151,14 +151,11 @@
 #' @srrstats {G5.1} Relevant datasets are provided. See 'data.R'.
 #' @srrstats {G5.2, G5.2a, G5.2b} All exported functions have sufficient checks
 #' for inputs and appropriate error/warning messages after that.
-#' @srrstats {G5.3} Functions that could potentially return objects containing
-#' (`NA`) or undefined (`NaN`, `Inf`) values are tested in
-#' 'test-pvEBayes_main_function.R'.
 #' @srrstats {G5.8, G5.8a, G5.8b, G5.8c, G5.8d}
 #' Edge condition tests are provided in 'test-pvEBayes_main_function.R'.
 #' @srrstats {BS1.0} The meaning and effect of the hyperparameters in K-gamma,
 #' general-gamma and Efron methods are carefully explained in the function
-#' documentation, README and vignette.
+#' documentation and vignette.
 #' @srrstats {BS1.1} Descriptions of how to enter data are presented in both
 #' textual and code form in documentation and vignette.
 #' @srrstats {BS1.2, BS1.2a, BS1.2b, BS1.2c}

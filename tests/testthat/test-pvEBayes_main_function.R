@@ -10,7 +10,10 @@ test_that("pvEBayes", {
   #' difference in log likelihood between two consecutive iterations to a
   #' tolerance argument "tol_ecm".
   #' @srrstats {G5.8, G5.8a, G5.8b, G5.8c, G5.8d}
-  #' Edge condition tests are provided below.
+  #' Edge condition tests are provided below. Various edge condition inputs
+  #' are considered, including zero-length data, Data of unsupported types
+  #' (character and complex numbers), data with NA, Data outside the scope of
+  #' the algorithm (negative numbers). See invalid_matrix, ..., invalid_matrix6.
 
   valid_matrix <- matrix(c(1400, 800, 880, 1000, 1040, 1200, 1400, 1600),
     nrow = 2
@@ -30,6 +33,9 @@ test_that("pvEBayes", {
   invalid_matrix3 <- valid_matrix + 0i # complex number input
   invalid_matrix4 <- valid_matrix
   invalid_matrix4[1,] <- 0
+  invalid_matrix5 <- integer(0)
+  invalid_matrix6 <- valid_matrix
+  invalid_matrix6[1,1] <- NA
   invalid_E <- E
   invalid_E[1, 1] <- -10
 
@@ -45,6 +51,12 @@ test_that("pvEBayes", {
 
   expect_error(
     .is_valid_contin_table(contin_table = invalid_matrix4)
+  )
+  expect_error(
+    .is_valid_contin_table(contin_table = invalid_matrix5)
+  )
+  expect_error(
+    .is_valid_contin_table(contin_table = invalid_matrix6)
   )
   expect_error(
     pvEBayes(contin_table = integer(0), model = "GPS")
@@ -164,13 +176,15 @@ test_that("pvEBayes", {
   expect_equal(is.pvEBayes(fit_e), TRUE)
 
   # check hyperparameter alpha selection
-  gg_selection <- pvEBayes_tune(valid_matrix, model = "general-gamma")
+  gg_selection <- pvEBayes_tune(valid_matrix, model = "general-gamma",
+                                alpha_vec = c(0.3, 0.5, 0.7))
   expect_equal(is.pvEBayes(gg_selection), TRUE)
 
   # check if the message can be suppressed
   expect_no_message(
     suppressMessages(
-      gg_selection <- pvEBayes_tune(valid_matrix, model = "general-gamma")
+      gg_selection <- pvEBayes_tune(valid_matrix, model = "general-gamma",
+                                    alpha_vec = c(0.3, 0.5, 0.7))
     )
   )
 

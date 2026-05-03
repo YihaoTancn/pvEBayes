@@ -62,8 +62,9 @@ Default to be 1e-6. See 'CVXR::solve' for detail.}
 
 \item{km_optimizer}{a character vector specifying the optimizer(s) in CVXR
 used to fit the KM model. Supported values are \code{"ECOS"}, \code{"CLARABEL"}, and
-\code{"SCS"}. If multiple optimizers are supplied, they are tried sequentially
-and the first successfully fitted result is returned. Defaults to
+\code{"SCS"}. Note that the input for km_optimizer is case-sensitive. If multiple
+optimizers are supplied, they are tried sequentially and the first
+successfully fitted result is returned. Defaults to
 c("ECOS", "CLARABEL", "SCS")\verb{. See }CVXR::psolve` for detail.}
 
 \item{n_posterior_draws}{a number of posterior draws for each AE-drug
