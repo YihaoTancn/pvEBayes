@@ -37,6 +37,7 @@ tuned_object <- pvEBayes_tune(valid_matrix,
   model = "general-gamma",
   return_all_fit = TRUE
 )
+#> Warning: The log-likelihood is NA, NaN or Inf. The fitted result may be unreliable.
 #> The alpha value selected under AIC is 0.1,
 #> The alpha value selected under BIC is 0.1.
 #>   alpha      AIC      BIC num_mixture
@@ -80,7 +81,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.
 #> Estimated prior is a mixture of 7 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.0064 seconds.
+#> Running time of the general-gamma model fitting: 0.0065 seconds.
 #> Optimizer convergence: not achieved.
 #> No posterior draws were generated.
 #> 
@@ -119,7 +120,7 @@ extract_all_fitted_models(tuned_object)
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 1 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 7e-04 seconds.
+#> Running time of the general-gamma model fitting: 8e-04 seconds.
 #> Optimizer convergence: successful.
 #> No posterior draws were generated.
 #> 

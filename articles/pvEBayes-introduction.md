@@ -152,33 +152,138 @@ estimating the corresponding signal strength of these 6 statin drugs.
 These are achieved by fitting empirical Bayes models with pvEBayes() to
 the SRS data. We begin by fitting the general-gamma model to this
 dataset. Other models mentioned above could be used by modifying the
-‘model’ argument. For illustration, we fit the model with a fixed
-hyperparameter value of \$ = 0.5\$ using the pvEBayes() function.
+‘model’ argument. “general-gamma” method has a hyperparameter
+$`\alpha \in [0,1]`$. Small $`\alpha`$ encourages shrinkage on mixture
+weights of the estimated prior distribution. See Tan et al. (2025, ) for
+further details. For illustration, we fit the model with a fixed
+hyperparameter value of $`\alpha = 0.5`$ using the pvEBayes() function.
 
 ``` r
 
 gg_given_alpha <- pvEBayes(statin2025_44,
   model = "general-gamma",
-  alpha = 0.5
+  alpha = 0.5,
+  maxi = 200,
+  tol_ecm = 1e-4  #default value
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [334ms]
+#> ✔ Fitting general-gamma model... [335ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
-#> ✔ Generating 1000 posterior draws... [96ms]
+#> ✔ Generating 1000 posterior draws... [92ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3433 seconds.
+#> Running time of the general-gamma model fitting: 0.3439 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.1901 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.1866 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
+
+gg_given_alpha$iter
+#> [1] 167
+```
+
+The convergence criterion in
+[`pvEBayes()`](https://yihaotancn.github.io/pvEBayes/reference/pvEBayes.md)
+is based on the relative change in the log likelihood between
+consecutive iterations. In this example, the algorithm stopped after
+satisfying the convergence criterion. This is also reflected in the
+printed model fitting message, where the optimizer convergence status is
+reported as successful. We can inspect the number of iterations used by
+the fitting algorithm by `gg_given_alpha\$iter`. In this fit,
+convergence was achieved after 167 iterations.
+
+The next example illustrates a case in which the algorithm stops because
+it reaches the maximum number of iterations. Here, we use a smaller
+convergence tolerance.
+
+``` r
+
+
+
+gg_given_alpha2 <- pvEBayes(statin2025_44,
+  model = "general-gamma",
+  alpha = 0.5,
+  maxi = 200,
+  tol_ecm = 1e-8  #smaller tolerance for convergence 
+)
+#> ℹ Fitting general-gamma model...
+#> ✔ Fitting general-gamma model... [346ms]
+#> 
+#> ℹ Generating 1000 posterior draws...
+#> ✔ Generating 1000 posterior draws... [35ms]
+#> 
+#> Object of class 'pvEBayes'
+#> 
+#> General-gamma model with hyperparameter alpha = 0.5.
+#> Estimated prior is a mixture of 18 gamma distributions.
+#> 
+#> Running time of the general-gamma model fitting: 0.3544 seconds.
+#> Optimizer convergence: not achieved.
+#> Running time for posterior draws 
+#> (1000 signal strength posterior draws per AE-drug pair):0.0429 seconds.
+#> 
+#> Extract estimated prior parameters, discovered signals
+#> and signal strength posterior draws using `summary()`.
+
+gg_given_alpha2$iter
+#> [1] 200
+```
+
+In this case, the algorithm stopped after reaching the specified maximum
+of 200 iterations. Accordingly, the printed model fitting message
+reports that optimizer convergence was not achieved.
+
+#### Extracting results
+
+``` r
+
+summary(gg_given_alpha)
+#> Posterior probabilities with default threshold parameters is provided. To specify threshold parameter, see 'get_posterior_prob()'.
+#> Object of class 'pvEBayes'
+#> 
+#> General-gamma model with hyperparameter alpha = 0.5.
+#> Estimated prior is a mixture of 18 gamma distributions.
+#> 
+#> Running time of the general-gamma model fitting: 0.3439 seconds.
+#> Optimizer convergence: successful.
+#> Running time for posterior draws 
+#> (1000 signal strength posterior draws per AE-drug pair):0.1866 seconds.
+#> 
+#> Extract estimated prior parameters, discovered signals
+#> and signal strength posterior draws using `summary()`.
+#>                       AE         drug     N      E post_prob        q05
+#>                   <char>       <char> <int>  <num>     <num>      <num>
+#>   1: Acute Kidney Injury Atorvastatin  1132 532.74     1.000  2.0973713
+#>   2: Acute Kidney Injury  Fluvastatin    23  50.91     0.000  0.4355592
+#>   3: Acute Kidney Injury   Lovastatin    23   4.97     1.000  2.7676163
+#>   4: Acute Kidney Injury  Pravastatin   153  74.39     1.000  2.0965864
+#>   5: Acute Kidney Injury Rosuvastatin  1141 424.95     1.000  2.7297708
+#>  ---                                                                   
+#> 311:   Tendon Discomfort   Lovastatin     0   0.01     0.607  0.1060236
+#> 312:   Tendon Discomfort  Pravastatin     0   0.08     0.522  0.1071040
+#> 313:   Tendon Discomfort Rosuvastatin    10   0.45     1.000 12.2678370
+#> 314:   Tendon Discomfort  Simvastatin     0   0.31     0.410  0.0170078
+#> 315:   Tendon Discomfort  Other_drugs   205 205.00     0.498  0.9842906
+#>             q50        q95
+#>           <num>      <num>
+#>   1:  2.1173546  2.1389235
+#>   2:  0.4464949  0.4570815
+#>   3:  3.8894362  6.2794596
+#>   4:  2.1177660  2.1379450
+#>   5:  2.7489835  2.7712210
+#>  ---                      
+#> 311:  1.0097489 23.2043456
+#> 312:  1.0021966  8.4802357
+#> 313: 23.2032496 23.2074071
+#> 314:  0.9950467  3.8685038
+#> 315:  1.0008954  1.0165167
 
 gg_given_alpha_detected_signal <- summary(gg_given_alpha,
   return = "detected signal"
@@ -190,9 +295,9 @@ sum(gg_given_alpha_detected_signal)
 
 The return argument specifies which component the summary function
 should return. Valid options include: “prior parameters”, “likelihood”,
-“detected signal”, and “posterior draws”. If it is set to NULL
-(default), all components will be returned in a list. In this example,
-we show the detected signals. The ‘summary()’ method reports detected
+“detected signal”, “posterior draws” and “posterior draws long format”.
+If it is set to NULL (default), a summary table will be returned (see
+‘summary_table_pvEBayes()’). The ‘summary()’ method reports detected
 signals using the default cutoff value and threshold:
 ``` math
 \begin{equation}
@@ -211,6 +316,8 @@ gg_customize_detected_signal <- get_posterior_prob(gg_given_alpha,
 sum(gg_customize_detected_signal)
 #> [1] 95
 ```
+
+#### Hyperparameter tuning
 
 In this package, we suggest tuning the general-gamma model by AIC or
 BIC, which can be accessed through ‘AIC()’ or ‘BIC()’ functions, as
@@ -251,12 +358,13 @@ gg_tune_statin44 <- pvEBayes_tune(statin2025_44,
 
 The
 [`pvEBayes_tune()`](https://yihaotancn.github.io/pvEBayes/reference/pvEBayes_tune.md)
-also support hyperparameter tuning for `efron` model. The `efron` model
-has two hyperparameters, `p` and `c0`, so tuning is performed by a
-two-dimensional grid search over the candidate values supplied through
-`p_vec` and `c0`. Because all combinations of these values are
-evaluated, this step can be time-consuming when large candidate grids
-are used.
+also support hyperparameter $`(p, c_0)`$ tuning for `efron` model. These
+two hyperparameters control the complexity of the nonparametric
+empirical Bayes model (See Efron (2016, ) for further details). As a
+result, the tuning is performed by a two-dimensional grid search over
+the candidate values supplied through `p_vec` and `c0`. Because all
+combinations of these values are evaluated, this step can be
+time-consuming when large candidate grids are used.
 
 ``` r
 
@@ -285,10 +393,10 @@ e_tune_statin44
 #> 
 #> efron model is fitted with hyperparameters (p = 80, c0 = 0.1).
 #> 
-#> Running time of the efron model fitting: 0.1566 seconds.
+#> Running time of the efron model fitting: 0.1624 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0262 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0308 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

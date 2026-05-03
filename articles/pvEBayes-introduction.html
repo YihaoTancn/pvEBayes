@@ -250,31 +250,132 @@ estimating the corresponding signal strength of these 6 statin drugs.
 These are achieved by fitting empirical Bayes models with pvEBayes() to
 the SRS data. We begin by fitting the general-gamma model to this
 dataset. Other models mentioned above could be used by modifying the
-‘model’ argument. For illustration, we fit the model with a fixed
-hyperparameter value of $ = 0.5$ using the pvEBayes() function.</p>
+‘model’ argument. “general-gamma” method has a hyperparameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\alpha \in [0,1]</annotation></semantics></math>.
+Small
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+encourages shrinkage on mixture weights of the estimated prior
+distribution. See Tan et al. (2025, ) for further details. For
+illustration, we fit the model with a fixed hyperparameter value of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\alpha = 0.5</annotation></semantics></math>
+using the pvEBayes() function.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gg_given_alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes.html">pvEBayes</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
 <span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  maxi <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  tol_ecm <span class="op">=</span> <span class="fl">1e-4</span>  <span class="co">#default value</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Fitting general-gamma model...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[334ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[335ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[96ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[92ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Object of class 'pvEBayes'</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; General-gamma model with hyperparameter alpha = 0.5.</span></span>
 <span><span class="co">#&gt; Estimated prior is a mixture of 18 gamma distributions.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Running time of the general-gamma model fitting: 0.3433 seconds.</span></span>
+<span><span class="co">#&gt; Running time of the general-gamma model fitting: 0.3439 seconds.</span></span>
 <span><span class="co">#&gt; Optimizer convergence: successful.</span></span>
 <span><span class="co">#&gt; Running time for posterior draws </span></span>
-<span><span class="co">#&gt; (1000 signal strength posterior draws per AE-drug pair):0.1901 seconds.</span></span>
+<span><span class="co">#&gt; (1000 signal strength posterior draws per AE-drug pair):0.1866 seconds.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Extract estimated prior parameters, discovered signals</span></span>
 <span><span class="co">#&gt; and signal strength posterior draws using `summary()`.</span></span>
+<span></span>
+<span><span class="va">gg_given_alpha</span><span class="op">$</span><span class="va">iter</span></span>
+<span><span class="co">#&gt; [1] 167</span></span></code></pre></div>
+<p>The convergence criterion in <code><a href="../reference/pvEBayes.html">pvEBayes()</a></code> is based on the
+relative change in the log likelihood between consecutive iterations. In
+this example, the algorithm stopped after satisfying the convergence
+criterion. This is also reflected in the printed model fitting message,
+where the optimizer convergence status is reported as successful. We can
+inspect the number of iterations used by the fitting algorithm by
+<code>gg_given_alpha\$iter</code>. In this fit, convergence was achieved
+after 167 iterations.</p>
+<p>The next example illustrates a case in which the algorithm stops
+because it reaches the maximum number of iterations. Here, we use a
+smaller convergence tolerance.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="va">gg_given_alpha2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes.html">pvEBayes</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
+<span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  maxi <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  tol_ecm <span class="op">=</span> <span class="fl">1e-8</span>  <span class="co">#smaller tolerance for convergence </span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Fitting general-gamma model...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[346ms]</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[35ms]</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Object of class 'pvEBayes'</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; General-gamma model with hyperparameter alpha = 0.5.</span></span>
+<span><span class="co">#&gt; Estimated prior is a mixture of 18 gamma distributions.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Running time of the general-gamma model fitting: 0.3544 seconds.</span></span>
+<span><span class="co">#&gt; Optimizer convergence: not achieved.</span></span>
+<span><span class="co">#&gt; Running time for posterior draws </span></span>
+<span><span class="co">#&gt; (1000 signal strength posterior draws per AE-drug pair):0.0429 seconds.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Extract estimated prior parameters, discovered signals</span></span>
+<span><span class="co">#&gt; and signal strength posterior draws using `summary()`.</span></span>
+<span></span>
+<span><span class="va">gg_given_alpha2</span><span class="op">$</span><span class="va">iter</span></span>
+<span><span class="co">#&gt; [1] 200</span></span></code></pre></div>
+<p>In this case, the algorithm stopped after reaching the specified
+maximum of 200 iterations. Accordingly, the printed model fitting
+message reports that optimizer convergence was not achieved.</p>
+</div>
+<div class="section level4">
+<h4 id="extracting-results">Extracting results<a class="anchor" aria-label="anchor" href="#extracting-results"></a>
+</h4>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gg_given_alpha</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Posterior probabilities with default threshold parameters is provided. To specify threshold parameter, see 'get_posterior_prob()'.</span></span>
+<span><span class="co">#&gt; Object of class 'pvEBayes'</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; General-gamma model with hyperparameter alpha = 0.5.</span></span>
+<span><span class="co">#&gt; Estimated prior is a mixture of 18 gamma distributions.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Running time of the general-gamma model fitting: 0.3439 seconds.</span></span>
+<span><span class="co">#&gt; Optimizer convergence: successful.</span></span>
+<span><span class="co">#&gt; Running time for posterior draws </span></span>
+<span><span class="co">#&gt; (1000 signal strength posterior draws per AE-drug pair):0.1866 seconds.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Extract estimated prior parameters, discovered signals</span></span>
+<span><span class="co">#&gt; and signal strength posterior draws using `summary()`.</span></span>
+<span><span class="co">#&gt;                       AE         drug     N      E post_prob        q05</span></span>
+<span><span class="co">#&gt;                   &lt;char&gt;       &lt;char&gt; &lt;int&gt;  &lt;num&gt;     &lt;num&gt;      &lt;num&gt;</span></span>
+<span><span class="co">#&gt;   1: Acute Kidney Injury Atorvastatin  1132 532.74     1.000  2.0973713</span></span>
+<span><span class="co">#&gt;   2: Acute Kidney Injury  Fluvastatin    23  50.91     0.000  0.4355592</span></span>
+<span><span class="co">#&gt;   3: Acute Kidney Injury   Lovastatin    23   4.97     1.000  2.7676163</span></span>
+<span><span class="co">#&gt;   4: Acute Kidney Injury  Pravastatin   153  74.39     1.000  2.0965864</span></span>
+<span><span class="co">#&gt;   5: Acute Kidney Injury Rosuvastatin  1141 424.95     1.000  2.7297708</span></span>
+<span><span class="co">#&gt;  ---                                                                   </span></span>
+<span><span class="co">#&gt; 311:   Tendon Discomfort   Lovastatin     0   0.01     0.607  0.1060236</span></span>
+<span><span class="co">#&gt; 312:   Tendon Discomfort  Pravastatin     0   0.08     0.522  0.1071040</span></span>
+<span><span class="co">#&gt; 313:   Tendon Discomfort Rosuvastatin    10   0.45     1.000 12.2678370</span></span>
+<span><span class="co">#&gt; 314:   Tendon Discomfort  Simvastatin     0   0.31     0.410  0.0170078</span></span>
+<span><span class="co">#&gt; 315:   Tendon Discomfort  Other_drugs   205 205.00     0.498  0.9842906</span></span>
+<span><span class="co">#&gt;             q50        q95</span></span>
+<span><span class="co">#&gt;           &lt;num&gt;      &lt;num&gt;</span></span>
+<span><span class="co">#&gt;   1:  2.1173546  2.1389235</span></span>
+<span><span class="co">#&gt;   2:  0.4464949  0.4570815</span></span>
+<span><span class="co">#&gt;   3:  3.8894362  6.2794596</span></span>
+<span><span class="co">#&gt;   4:  2.1177660  2.1379450</span></span>
+<span><span class="co">#&gt;   5:  2.7489835  2.7712210</span></span>
+<span><span class="co">#&gt;  ---                      </span></span>
+<span><span class="co">#&gt; 311:  1.0097489 23.2043456</span></span>
+<span><span class="co">#&gt; 312:  1.0021966  8.4802357</span></span>
+<span><span class="co">#&gt; 313: 23.2032496 23.2074071</span></span>
+<span><span class="co">#&gt; 314:  0.9950467  3.8685038</span></span>
+<span><span class="co">#&gt; 315:  1.0008954  1.0165167</span></span>
 <span></span>
 <span><span class="va">gg_given_alpha_detected_signal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gg_given_alpha</span>,</span>
 <span>  return <span class="op">=</span> <span class="st">"detected signal"</span></span>
@@ -284,9 +385,9 @@ hyperparameter value of $ = 0.5$ using the pvEBayes() function.</p>
 <span><span class="co">#&gt; [1] 107</span></span></code></pre></div>
 <p>The return argument specifies which component the summary function
 should return. Valid options include: “prior parameters”, “likelihood”,
-“detected signal”, and “posterior draws”. If it is set to NULL
-(default), all components will be returned in a list. In this example,
-we show the detected signals. The ‘summary()’ method reports detected
+“detected signal”, “posterior draws” and “posterior draws long format”.
+If it is set to NULL (default), a summary table will be returned (see
+‘summary_table_pvEBayes()’). The ‘summary()’ method reports detected
 signals using the default cutoff value and threshold:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>λ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&gt;</mo><mn>1.001</mn><mo>∣</mo><msub><mi>N</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mn>0.95</mn></mrow><annotation encoding="application/x-tex">\begin{equation}
 p(\lambda_{ij} &gt; 1.001 \mid N_{ij}) &gt; 0.95
@@ -295,15 +396,19 @@ signal detection with both the cutoff and the posterior probability
 threshold through the ‘get_posterior_prob()’ function. For example, the
 code below identifies signals using a cutoff value of <code>1.01</code>
 and a posterior probability threshold of <code>0.99</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gg_customize_detected_signal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_posterior_prob.html">get_posterior_prob</a></span><span class="op">(</span><span class="va">gg_given_alpha</span>,</span>
 <span>                                                     cutoff_signal <span class="op">=</span> <span class="fl">1.01</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.99</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">gg_customize_detected_signal</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 95</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="hyperparameter-tuning">Hyperparameter tuning<a class="anchor" aria-label="anchor" href="#hyperparameter-tuning"></a>
+</h4>
 <p>In this package, we suggest tuning the general-gamma model by AIC or
 BIC, which can be accessed through ‘AIC()’ or ‘BIC()’ functions, as
 shown below:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">gg_given_alpha</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3796.813</span></span>
 <span></span>
@@ -315,7 +420,7 @@ values, fit the general-gamma model for each, compute the corresponding
 AIC or BIC, and select the model with the lowest AIC or BIC. Instead of
 manually doing so, one can use the ‘pvEBayes_tune()’ function, which
 implements these steps. The relevant code is given below:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes_tune.html">pvEBayes_tune</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
 <span>  model <span class="op">=</span> <span class="st">"general-gamma"</span>,</span>
 <span>  alpha_vec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span><span class="op">)</span>,</span>
@@ -330,14 +435,16 @@ implements these steps. The relevant code is given below:</p>
 <span><span class="co">#&gt; 4   0.5 3796.813 3999.452          18</span></span>
 <span><span class="co">#&gt; 5   0.7 3824.280 4083.208          23</span></span>
 <span><span class="co">#&gt; 6   0.9 3912.529 4340.322          38</span></span></code></pre></div>
-<p>The <code><a href="../reference/pvEBayes_tune.html">pvEBayes_tune()</a></code> also support hyperparameter tuning
-for <code>efron</code> model. The <code>efron</code> model has two
-hyperparameters, <code>p</code> and <code>c0</code>, so tuning is
-performed by a two-dimensional grid search over the candidate values
-supplied through <code>p_vec</code> and <code>c0</code>. Because all
-combinations of these values are evaluated, this step can be
-time-consuming when large candidate grids are used.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>The <code><a href="../reference/pvEBayes_tune.html">pvEBayes_tune()</a></code> also support hyperparameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo>,</mo><msub><mi>c</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(p, c_0)</annotation></semantics></math>
+tuning for <code>efron</code> model. These two hyperparameters control
+the complexity of the nonparametric empirical Bayes model (See Efron
+(2016, ) for further details). As a result, the tuning is performed by a
+two-dimensional grid search over the candidate values supplied through
+<code>p_vec</code> and <code>c0</code>. Because all combinations of
+these values are evaluated, this step can be time-consuming when large
+candidate grids are used.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">e_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pvEBayes_tune.html">pvEBayes_tune</a></span><span class="op">(</span><span class="va">statin2025_44</span>,</span>
 <span>  model <span class="op">=</span> <span class="st">"efron"</span>,</span>
@@ -363,10 +470,10 @@ time-consuming when large candidate grids are used.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; efron model is fitted with hyperparameters (p = 80, c0 = 0.1).</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Running time of the efron model fitting: 0.1566 seconds.</span></span>
+<span><span class="co">#&gt; Running time of the efron model fitting: 0.1624 seconds.</span></span>
 <span><span class="co">#&gt; Optimizer convergence: successful.</span></span>
 <span><span class="co">#&gt; Running time for posterior draws </span></span>
-<span><span class="co">#&gt; (1000 signal strength posterior draws per AE-drug pair):0.0262 seconds.</span></span>
+<span><span class="co">#&gt; (1000 signal strength posterior draws per AE-drug pair):0.0308 seconds.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Extract estimated prior parameters, discovered signals</span></span>
 <span><span class="co">#&gt; and signal strength posterior draws using `summary()`.</span></span></code></pre></div>
@@ -379,7 +486,7 @@ time-consuming when large candidate grids are used.</p>
 both signal detection and estimation, which are heatmap and eyeplot.
 These plot functions can be accessed through the ‘plot()’ with argument
 type = “heatmap” or type = “eyeplot”.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">heatmap_gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg_tune_statin44</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"heatmap"</span>,</span>
 <span>  num_top_AEs <span class="op">=</span> <span class="fl">10</span>,</span>
@@ -396,7 +503,7 @@ fitted general-gamma model. For each AE-drug combination, the number of
 reports (N), the estimated null value (E), and the estimated empirical
 Bayes posterior probability of being a signal are given. A deeper blue
 color indicates stronger evidence for a signal.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eyeplot_gg_tune_statin44</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg_tune_statin44</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"eyeplot"</span>,</span>
 <span>  num_top_AEs <span class="op">=</span> <span class="fl">8</span>,</span>

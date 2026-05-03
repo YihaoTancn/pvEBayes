@@ -89,9 +89,10 @@ pvEBayes(
 - km_optimizer:
 
   a character vector specifying the optimizer(s) in CVXR used to fit the
-  KM model. Supported values are `"ECOS"`, `"CLARABEL"`, and `"SCS"`. If
-  multiple optimizers are supplied, they are tried sequentially and the
-  first successfully fitted result is returned. Defaults to c("ECOS",
+  KM model. Supported values are `"ECOS"`, `"CLARABEL"`, and `"SCS"`.
+  Note that the input for km_optimizer is case-sensitive. If multiple
+  optimizers are supplied, they are tried sequentially and the first
+  successfully fitted result is returned. Defaults to c("ECOS",
   "CLARABEL", "SCS")`. See `CVXR::psolve\` for detail.
 
 - n_posterior_draws:
@@ -216,7 +217,7 @@ fit <- pvEBayes(
   maxi = NULL
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [200ms]
+#> ✔ Fitting general-gamma model... [196ms]
 #> 
 #> ℹ Generating 1000 posterior draws...
 #> ✔ Generating 1000 posterior draws... [36ms]
@@ -226,10 +227,10 @@ fit <- pvEBayes(
 #> General-gamma model with hyperparameter alpha = 0.3.
 #> Estimated prior is a mixture of 4 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.2077 seconds.
+#> Running time of the general-gamma model fitting: 0.2043 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.043 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.044 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -252,7 +253,7 @@ fit_Kgamma <- pvEBayes(
 #> Running time of the K-gamma model fitting: 0.0307 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0381 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0386 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.
@@ -285,10 +286,10 @@ fit_gps <- pvEBayes(simu_table, model = "GPS")
 #> 
 #> GPS (2-gamma) model is fitted
 #> 
-#> Running time of the GPS model fitting: 0.0253 seconds.
+#> Running time of the GPS model fitting: 0.0255 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0379 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0387 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

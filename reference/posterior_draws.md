@@ -44,7 +44,7 @@ fit <- pvEBayes(
   alpha = 0.3, n_posterior_draws = NULL
 )
 #> ℹ Fitting general-gamma model...
-#> ✔ Fitting general-gamma model... [212ms]
+#> ✔ Fitting general-gamma model... [211ms]
 #> 
 #> Object of class 'pvEBayes'
 #> 

@@ -82,6 +82,10 @@ the *j*-th drug, where $`{i = 1,..., I}`$ and $`{j = 1,..., J}`$.
   algorithm from Tan et al. (*Stat. in Med.*, 2025) for prior estimation
   for gamma-mixture prior based models (GPS, K-gamma, general-gamma).
 
+- Supports AIC/BIC-based hyperparameter tuning for $`\alpha`$ in the
+  general-gamma model and $`(p, c_0)`$ in Efron’s approach (see Tan et
+  al.  (*Stat. in Med.*, 2025) for further detail).
+
 For a detailed methodological description, see Tan et al.  (*Stat. in
 Med.*, 2025).
 

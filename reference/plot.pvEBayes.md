@@ -26,7 +26,6 @@ plot(x, type = "eyeplot", ...)
   [eyeplot_pvEBayes](https://yihaotancn.github.io/pvEBayes/reference/eyeplot_pvEBayes.md)
   and `"heatmap"` which calls
   [heatmap_pvEBayes](https://yihaotancn.github.io/pvEBayes/reference/heatmap_pvEBayes.md).
-  Note that the input for 'type' is case-sensitive.
 
 - ...:
 
@@ -52,10 +51,10 @@ obj <- pvEBayes(statin2025_44, model = "general-gamma", alpha = 0.5)
 #> General-gamma model with hyperparameter alpha = 0.5.
 #> Estimated prior is a mixture of 18 gamma distributions.
 #> 
-#> Running time of the general-gamma model fitting: 0.3222 seconds.
+#> Running time of the general-gamma model fitting: 0.3223 seconds.
 #> Optimizer convergence: successful.
 #> Running time for posterior draws 
-#> (1000 signal strength posterior draws per AE-drug pair):0.0422 seconds.
+#> (1000 signal strength posterior draws per AE-drug pair):0.0423 seconds.
 #> 
 #> Extract estimated prior parameters, discovered signals
 #> and signal strength posterior draws using `summary()`.

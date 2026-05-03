@@ -135,8 +135,9 @@ Default to be 1e-6. See 'CVXR::solve' for detail.</p></dd>
 <dt id="arg-km-optimizer">km_optimizer<a class="anchor" aria-label="anchor" href="#arg-km-optimizer"></a></dt>
 <dd><p>a character vector specifying the optimizer(s) in CVXR
 used to fit the KM model. Supported values are <code>"ECOS"</code>, <code>"CLARABEL"</code>, and
-<code>"SCS"</code>. If multiple optimizers are supplied, they are tried sequentially
-and the first successfully fitted result is returned. Defaults to
+<code>"SCS"</code>. Note that the input for km_optimizer is case-sensitive. If multiple
+optimizers are supplied, they are tried sequentially and the first
+successfully fitted result is returned. Defaults to
 c("ECOS", "CLARABEL", "SCS")<code>. See </code>CVXR::psolve` for detail.</p></dd>
 
 
@@ -252,7 +253,7 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-in"><span>  maxi <span class="op">=</span> <span class="cn">NULL</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting general-gamma model...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[200ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting general-gamma model... <span style="color: #B2B2B2;">[196ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating 1000 posterior draws...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating 1000 posterior draws... <span style="color: #B2B2B2;">[36ms]</span></span>
@@ -262,10 +263,10 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> General-gamma model with hyperparameter alpha = 0.3.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Estimated prior is a mixture of 4 gamma distributions.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.2077 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the general-gamma model fitting: 0.2043 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.043 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.044 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -288,7 +289,7 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the K-gamma model fitting: 0.0307 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0381 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0386 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
@@ -321,10 +322,10 @@ Optimization. <em>Journal of Statistical Software</em>. 2020; 94;14:1-34.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> GPS (2-gamma) model is fitted</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the GPS model fitting: 0.0253 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running time of the GPS model fitting: 0.0255 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Optimizer convergence: successful.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running time for posterior draws </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0379 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (1000 signal strength posterior draws per AE-drug pair):0.0387 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Extract estimated prior parameters, discovered signals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and signal strength posterior draws using `summary()`.</span>
