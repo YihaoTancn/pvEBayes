@@ -2,3 +2,59 @@ url: https://yihaotancn.github.io/pvEBayes/
 template:
   bootstrap: 5
 
+reference:
+- title: "Model fitting and tuning"
+  desc: >
+    Functions for fitting empirical Bayes models, tuning hyperparameters,
+    and preparing contingency-table inputs.
+  contents:
+  - pvEBayes
+  - pvEBayes_tune
+  - estimate_null_expected_count
+  - generate_contin_table
+
+- title: "Posterior inference and extraction"
+  desc: >
+    Functions for generating posterior draws, computing posterior signal
+    probabilities, and extracting fitted models.
+  contents:
+  - posterior_draws
+  - get_posterior_prob
+  - extract_all_fitted_models
+
+- title: "Model summaries and comparison"
+  desc: >
+    S3 methods and helper functions for summarizing fitted pvEBayes objects
+    and comparing fitted models.
+  contents:
+  - summary.pvEBayes
+  - summary_table_pvEBayes
+  - print.pvEBayes
+  - logLik.pvEBayes
+  - AIC.pvEBayes
+  - BIC.pvEBayes
+
+- title: "Visualization"
+  desc: >
+    Functions for visualizing fitted pvEBayes models, posterior draws, and
+    posterior signal probabilities.
+  contents:
+  - plot.pvEBayes
+  - eyeplot_pvEBayes
+  - heatmap_pvEBayes
+
+- title: "Example datasets"
+  desc: >
+    Example spontaneous reporting system datasets included with the package.
+  contents:
+  - statin2025
+  - statin2025_44
+  - statin42
+  - gbca2025
+  - gbca2025_69
+  - faers_opioid_mental
+  - vigi_opioid_mental
+
+- title: "Package overview"
+  contents:
+  - pvEBayes-package

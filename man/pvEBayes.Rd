@@ -6,7 +6,7 @@
 \usage{
 pvEBayes(
   contin_table,
-  model = "general-gamma",
+  model = c("general-gamma", "K-gamma", "GPS", "KM", "efron"),
   alpha = NULL,
   K = NULL,
   p = NULL,
@@ -36,8 +36,9 @@ encourages shrinkage on mixture weights of the estimated prior distribution.
 See Tan et al. (2025) for further details.}
 
 \item{K}{a integer greater than or equal to 2 indicating the number of
-mixture components in the prior distribution. It is needed if "K-gamma"
-model is used. See Tan et al. (2025) for further details.}
+mixture components in the prior distribution. It is needed if "K-gamma" model
+is used. When K is unknown, please consider its extension "general-gamma"
+instead. See Tan et al. (2025) for further details.}
 
 \item{p}{a integer greater than or equal to 2. It is needed if "efron" mode
 is used. Larger p leads to smoother estimated prior distribution. See
@@ -117,8 +118,8 @@ posterior inference that represents the strongest shrinkage of the
 "general-gamma" model.
 
 Parameter estimation for the "KM" model is formulated as a convex
-optimization problem. The objective function and constraints follow the same
-construction as in \pkg{REBayes} (see 'REBayes::KWDual()'). Parameter
+optimization problem. The objective function and constraints are modified
+from the \pkg{REBayes} package (see 'REBayes::KWDual()'). Parameter
 estimation is performed using the open-source convex optimization package
 \pkg{CVXR}.
 
@@ -136,33 +137,18 @@ See \code{\link{pvEBayes_tune}} for details.
 \examples{
 
 set.seed(1)
-ref_table <- statin2025_44
-
-# set up signal matrix with one signal at entry (1,1)
-sig_mat <- matrix(1, nrow(ref_table), ncol(ref_table))
-sig_mat[c(1, 5), 1] <- 2
-
-
-simu_table <- generate_contin_table(
-  ref_table = ref_table,
-  signal_mat = sig_mat,
-  n_table = 1
-)[[1]]
-
 
 # fit general-gamma model with a specified alpha
 fit <- pvEBayes(
-  contin_table = simu_table,
+  contin_table = statin2025_44,
   model = "general-gamma",
   alpha = 0.3,
-  n_posterior_draws = 1000,
-  E = NULL,
-  maxi = NULL
+  n_posterior_draws = 1000
 )
 
 # fit K-gamma model with K = 3
 fit_Kgamma <- pvEBayes(
-  contin_table = simu_table, model = "K-gamma",
+  contin_table = statin2025_44, model = "K-gamma",
   K = 3, n_posterior_draws = 1000
 )
 
@@ -170,20 +156,18 @@ fit_Kgamma <- pvEBayes(
 # fit Efron model with specified hyperparameters
 # p = 40, c0 = 0.05
 
-\dontrun{
 fit_efron <- pvEBayes(
-  contin_table = simu_table,
+  contin_table = statin2025_44,
   model = "efron",
   p = 40,
   c0 = 0.05,
   n_posterior_draws = 1000
 )
-}
 
 # fit GPS model and comapre with 'openEBGM'
 
 
-fit_gps <- pvEBayes(simu_table, model = "GPS")
+fit_gps <- pvEBayes(statin2025_44, model = "GPS")
 
 \dontrun{
 
@@ -192,16 +176,16 @@ fit_gps <- pvEBayes(simu_table, model = "GPS")
 ## tol_ecm is the absolute tolerance for ECM stopping rule.
 ## It is set to ensure comparability to `openEBGM`.
 
-fit_gps <- pvEBayes(simu_table, model = "GPS", tol_ecm = 1e-2)
+fit_gps <- pvEBayes(statin2025_44, model = "GPS", tol_ecm = 1e-2)
 
 if (requireNamespace("openEBGM", quietly = TRUE)) {
-  E <- estimate_null_expected_count(simu_table)
-  simu_table_stacked <- as.data.frame(as.table(simu_table))
-  simu_table_stacked$E <- as.vector(E)
-  colnames(simu_table_stacked) <- c("var1", "var2", "N", "E")
-  simu_table_stacked_squash <- openEBGM::autoSquash(simu_table_stacked)
+  E <- estimate_null_expected_count(statin2025_44)
+  statin2025_44_stacked <- as.data.frame(as.table(statin2025_44))
+  statin2025_44_stacked$E <- as.vector(E)
+  colnames(statin2025_44_stacked) <- c("var1", "var2", "N", "E")
+  statin2025_44_stacked_squash <- openEBGM::autoSquash(statin2025_44_stacked)
 
-  hyper_estimates <- openEBGM::hyperEM(simu_table_stacked_squash,
+  hyper_estimates <- openEBGM::hyperEM(statin2025_44_stacked_squash,
     theta_init = c(2, 1, 2, 2, 0.2),
     method = "nlminb",
     N_star = NULL,
@@ -214,19 +198,19 @@ if (requireNamespace("openEBGM", quietly = TRUE)) {
 
 theta_hat <- hyper_estimates$estimates
 qn <- openEBGM::Qn(theta_hat,
-  N = simu_table_stacked$N,
-  E = simu_table_stacked$E
+  N = statin2025_44_stacked$N,
+  E = statin2025_44_stacked$E
 )
 
-simu_table_stacked$q05 <- openEBGM::quantBisect(5,
+statin2025_44_stacked$q05 <- openEBGM::quantBisect(5,
   theta_hat = theta_hat,
-  N = simu_table_stacked$N,
-  E = simu_table_stacked$E,
+  N = statin2025_44_stacked$N,
+  E = statin2025_44_stacked$E,
   qn = qn
 )
 
 ## obtain the detected signal provided by openEBGM
-simu_table_stacked \%>\%
+statin2025_44_stacked \%>\%
   subset(q05 > 1.001)
 
 ## detected signal from pvEBayes presented in the same way as openEBGM

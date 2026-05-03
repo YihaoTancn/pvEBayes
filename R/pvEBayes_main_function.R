@@ -398,6 +398,15 @@ estimate_null_expected_count <- function(contin_table) {
 #' @param ... additional parameters to be passed to optimizer for 'KM' model.
 #' See 'CVXR::solve' for detail.
 #'
+#' @details
+#'
+#' Parameter estimation for the "KM" model is formulated as a convex
+#' optimization problem. The objective function and constraints are modified
+#' from the \pkg{REBayes} package (see 'REBayes::KWDual()'). Parameter
+#' estimation is performed using the open-source convex optimization package
+#' \pkg{CVXR}.
+#'
+#'
 #' @returns a list of CVXR optimizer outputs
 #' @keywords internal
 #' @noRd
@@ -1042,8 +1051,8 @@ estimate_null_expected_count <- function(contin_table) {
 #' "general-gamma" model.
 #'
 #' Parameter estimation for the "KM" model is formulated as a convex
-#' optimization problem. The objective function and constraints follow the same
-#' construction as in \pkg{REBayes} (see 'REBayes::KWDual()'). Parameter
+#' optimization problem. The objective function and constraints are modified
+#' from the \pkg{REBayes} package (see 'REBayes::KWDual()'). Parameter
 #' estimation is performed using the open-source convex optimization package
 #' \pkg{CVXR}.
 #'
@@ -1103,33 +1112,18 @@ estimate_null_expected_count <- function(contin_table) {
 #' @examples
 #'
 #' set.seed(1)
-#' ref_table <- statin2025_44
-#'
-#' # set up signal matrix with one signal at entry (1,1)
-#' sig_mat <- matrix(1, nrow(ref_table), ncol(ref_table))
-#' sig_mat[c(1, 5), 1] <- 2
-#'
-#'
-#' simu_table <- generate_contin_table(
-#'   ref_table = ref_table,
-#'   signal_mat = sig_mat,
-#'   n_table = 1
-#' )[[1]]
-#'
 #'
 #' # fit general-gamma model with a specified alpha
 #' fit <- pvEBayes(
-#'   contin_table = simu_table,
+#'   contin_table = statin2025_44,
 #'   model = "general-gamma",
 #'   alpha = 0.3,
-#'   n_posterior_draws = 1000,
-#'   E = NULL,
-#'   maxi = NULL
+#'   n_posterior_draws = 1000
 #' )
 #'
 #' # fit K-gamma model with K = 3
 #' fit_Kgamma <- pvEBayes(
-#'   contin_table = simu_table, model = "K-gamma",
+#'   contin_table = statin2025_44, model = "K-gamma",
 #'   K = 3, n_posterior_draws = 1000
 #' )
 #'
@@ -1137,20 +1131,18 @@ estimate_null_expected_count <- function(contin_table) {
 #' # fit Efron model with specified hyperparameters
 #' # p = 40, c0 = 0.05
 #'
-#' \dontrun{
 #' fit_efron <- pvEBayes(
-#'   contin_table = simu_table,
+#'   contin_table = statin2025_44,
 #'   model = "efron",
 #'   p = 40,
 #'   c0 = 0.05,
 #'   n_posterior_draws = 1000
 #' )
-#' }
 #'
 #' # fit GPS model and comapre with 'openEBGM'
 #'
 #'
-#' fit_gps <- pvEBayes(simu_table, model = "GPS")
+#' fit_gps <- pvEBayes(statin2025_44, model = "GPS")
 #'
 #' \dontrun{
 #'
@@ -1159,16 +1151,16 @@ estimate_null_expected_count <- function(contin_table) {
 #' ## tol_ecm is the absolute tolerance for ECM stopping rule.
 #' ## It is set to ensure comparability to `openEBGM`.
 #'
-#' fit_gps <- pvEBayes(simu_table, model = "GPS", tol_ecm = 1e-2)
+#' fit_gps <- pvEBayes(statin2025_44, model = "GPS", tol_ecm = 1e-2)
 #'
 #' if (requireNamespace("openEBGM", quietly = TRUE)) {
-#'   E <- estimate_null_expected_count(simu_table)
-#'   simu_table_stacked <- as.data.frame(as.table(simu_table))
-#'   simu_table_stacked$E <- as.vector(E)
-#'   colnames(simu_table_stacked) <- c("var1", "var2", "N", "E")
-#'   simu_table_stacked_squash <- openEBGM::autoSquash(simu_table_stacked)
+#'   E <- estimate_null_expected_count(statin2025_44)
+#'   statin2025_44_stacked <- as.data.frame(as.table(statin2025_44))
+#'   statin2025_44_stacked$E <- as.vector(E)
+#'   colnames(statin2025_44_stacked) <- c("var1", "var2", "N", "E")
+#'   statin2025_44_stacked_squash <- openEBGM::autoSquash(statin2025_44_stacked)
 #'
-#'   hyper_estimates <- openEBGM::hyperEM(simu_table_stacked_squash,
+#'   hyper_estimates <- openEBGM::hyperEM(statin2025_44_stacked_squash,
 #'     theta_init = c(2, 1, 2, 2, 0.2),
 #'     method = "nlminb",
 #'     N_star = NULL,
@@ -1181,19 +1173,19 @@ estimate_null_expected_count <- function(contin_table) {
 #'
 #' theta_hat <- hyper_estimates$estimates
 #' qn <- openEBGM::Qn(theta_hat,
-#'   N = simu_table_stacked$N,
-#'   E = simu_table_stacked$E
+#'   N = statin2025_44_stacked$N,
+#'   E = statin2025_44_stacked$E
 #' )
 #'
-#' simu_table_stacked$q05 <- openEBGM::quantBisect(5,
+#' statin2025_44_stacked$q05 <- openEBGM::quantBisect(5,
 #'   theta_hat = theta_hat,
-#'   N = simu_table_stacked$N,
-#'   E = simu_table_stacked$E,
+#'   N = statin2025_44_stacked$N,
+#'   E = statin2025_44_stacked$E,
 #'   qn = qn
 #' )
 #'
 #' ## obtain the detected signal provided by openEBGM
-#' simu_table_stacked %>%
+#' statin2025_44_stacked %>%
 #'   subset(q05 > 1.001)
 #'
 #' ## detected signal from pvEBayes presented in the same way as openEBGM
@@ -1241,7 +1233,9 @@ estimate_null_expected_count <- function(contin_table) {
 #' This is ensured by monotonically increased log joint marginal likelihood,
 #' as proved by Tan et al. (*Stat. in Med*, 2025).
 #'
-pvEBayes <- function(contin_table, model = "general-gamma",
+pvEBayes <- function(contin_table,
+                     model = c("general-gamma",
+                               "K-gamma", "GPS", "KM", "efron"),
                      alpha = NULL, K = NULL,
                      p = NULL, c0 = NULL,
                      maxi = NULL,
@@ -1254,6 +1248,7 @@ pvEBayes <- function(contin_table, model = "general-gamma",
                      message = TRUE,
                      ...) {
   h <- NULL
+  model <- match.arg(model)
   contin_table <- as.matrix(contin_table)
 
   .is_valid_contin_table(contin_table)
@@ -1523,7 +1518,8 @@ pvEBayes <- function(contin_table, model = "general-gamma",
 #' @srrstats {G2.4, G2.4a, G2.4b, G2.4c, G2.8} explicit conversion is used for
 #' integer, continuous and character inputs.
 #' @srrstats {G2.6} one-dimensinoal inputs are appropriately pre-processed.
-pvEBayes_tune <- function(contin_table, model = "general-gamma",
+pvEBayes_tune <- function(contin_table,
+                          model = c("general-gamma", "efron"),
                           alpha_vec = NULL,
                           p_vec = NULL, c0_vec = NULL,
                           use_AIC = TRUE,
@@ -1534,6 +1530,7 @@ pvEBayes_tune <- function(contin_table, model = "general-gamma",
                           tol_ecm = 1e-4,
                           rtol_efron = 1e-10,
                           E = NULL) {
+  model <- match.arg(model)
   contin_table <- as.matrix(contin_table)
   .is_valid_contin_table(contin_table)
 

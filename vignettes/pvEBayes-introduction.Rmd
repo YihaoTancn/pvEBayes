@@ -7,9 +7,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Disproportionality Analysis
+## spontaneous reporting systems data mining
 
-Contemporary drug postmarketing surveillance largely relies on the collection of spontaneous reports of suspected adverse drug events from pharmaceutical companies, healthcare professionals, and patients. These reports are curated and stored in spontaneous reporting systems (SRS), usually organized as a large frequency table for downstream data analysis. We consider an SRS dataset cataloging AE reports on $I$ AE rows across $J$ drug columns. Let $N_{ij}$ denote the number of reported cases for the $i$-th AE and the $j$-th drug, where $i = 1,..., I$ and $j = 1,..., J$. Therefore, AE-drug pairwise occurrences from the AE-reports are summarized into an $I \times J$ contingency table, where the $(i,j)$-th cell catalogs the observed count $N_{ij}$ indicating the number of cases involving $i$-th AE and the $j$-th drug. 
+Contemporary drug postmarketing surveillance largely relies on the collection of spontaneous reports of suspected adverse drug events from pharmaceutical companies, healthcare professionals, and patients. These reports are curated and stored in spontaneous reporting systems (SRS), usually organized as a large frequency table for downstream data analysis. We consider an SRS dataset cataloging adverse event (AE) reports on $I$ AE rows across $J$ drug columns. Let $N_{ij}$ denote the number of reported cases for the $i$-th AE and the $j$-th drug, where $i = 1,..., I$ and $j = 1,..., J$. Therefore, AE-drug pairwise occurrences from the AE-reports are summarized into an $I \times J$ contingency table, where the $(i,j)$-th cell catalogs the observed count $N_{ij}$ indicating the number of cases involving $i$-th AE and the $j$-th drug. 
 
 Current disproportionality analysis mainly focuses on *signal detection* 
 which seeks to determine whether the observation $N_{ij}$ is substantially 
@@ -182,7 +182,7 @@ gg_tune_statin44 <- pvEBayes_tune(statin2025_44,
 )
 ```
 
-The `pvEBayes_tune()` also support hyperparameter $(p, c_0)$ tuning for `efron` model. These two hyperparameters control the complexity of the nonparametric empirical Bayes model (See Efron (2016, \textit{Biometrika}) for further details). As a result, the tuning is performed by a two-dimensional grid search over the candidate values supplied through `p_vec` and `c0`. Because all combinations of these values are evaluated, this step can be time-consuming when large candidate grids are used.
+The `pvEBayes_tune()` also support hyperparameter $(p, c_0)$ tuning for `efron` model. These two hyperparameters control the complexity of the nonparametric empirical Bayes model (See Efron (2016, *Biometrika*) for further details). As a result, the tuning is performed by a two-dimensional grid search over the candidate values supplied through `p_vec` and `c0`. Because all combinations of these values are evaluated, this step can be time-consuming when large candidate grids are used.
 
 ```{r e-auto-tune, include=TRUE, eval=TRUE}
 

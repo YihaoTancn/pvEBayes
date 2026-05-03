@@ -7,7 +7,7 @@ based on AIC and BIC}
 \usage{
 pvEBayes_tune(
   contin_table,
-  model = "general-gamma",
+  model = c("general-gamma", "efron"),
   alpha_vec = NULL,
   p_vec = NULL,
   c0_vec = NULL,
