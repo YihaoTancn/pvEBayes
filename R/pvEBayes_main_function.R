@@ -792,6 +792,7 @@ estimate_null_expected_count <- function(contin_table) {
     alpha <- 1
     if (K == 2) {
       grid <- c(1, 2)
+      h <- c(1e-7, 0.5)
     }
     if (K == 3) {
       grid <- c(0, 1, 2)
