@@ -19,14 +19,16 @@
 Source:
 [`inst/CITATION`](https://github.com/YihaoTancn/pvEBayes/blob/main/inst/CITATION)
 
-Tan Y, Chakraborty S, Markatou M, Mukhopadhyay R (2025). *pvEBayes:
-Empirical Bayes Models for Pharmacovigilance*. R package version 0.2.0,
-<https://CRAN.R-project.org/package=pvEBayes>.
+Tan Y, Markatou M, Chakraborty S (2025). “pvEBayes: An R Package for
+Empirical Bayes Methods in Pharmacovigilance.” 2512.01057,
+<https://arxiv.org/abs/2512.01057>.
 
-    @Manual{,
-      title = {pvEBayes: Empirical Bayes Models for Pharmacovigilance},
-      author = {Yihao Tan and Saptarshi Chakraborty and Marianthi Markatou and Raktim Mukhopadhyay},
+    @Misc{,
+      title = {pvEBayes: An R Package for Empirical Bayes Methods in Pharmacovigilance},
+      author = {Yihao Tan and Marianthi Markatou and Saptarshi Chakraborty},
       year = {2025},
-      note = {R package version 0.2.0},
-      url = {https://CRAN.R-project.org/package=pvEBayes},
+      eprint = {2512.01057},
+      archiveprefix = {arXiv},
+      primaryclass = {stat.AP},
+      url = {https://arxiv.org/abs/2512.01057},
     }
